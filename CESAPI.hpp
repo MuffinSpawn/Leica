@@ -8,6 +8,8 @@
 #include "ES_C_API_Def.h"
 #include "ES_CPP_API_Def.h"
 
+#define DEFAULT_BUFLEN 512
+
 /*** Class Declarations ***/
 
 class
@@ -50,17 +52,21 @@ public:
 /*** Connection Class Definition ***/
 
 class Connection {
+  friend class CommandAsync;
 private:
-   SOCKET _socket;
+   mutable SOCKET _socket;
+   mutable char _receive_buffer[DEFAULT_BUFLEN];
    CommandAsync const * _commandAsync;
    CommandSync const * _commandSync;
+   void SendPacket(void const * const packet) const;
+   void const * ReceivePacket() const;
 
 public:
    Connection();
    Connection::~Connection();
-   void Connect();  // uses default address and port
-   void Connect(const std::string address, const uint16_t port);
-   void Disconnect();
+   void Connect() const;  // uses default address and port
+   void Connect(const std::string address, const uint16_t port) const;
+   void Disconnect() const;
 };
 
 
@@ -68,6 +74,7 @@ public:
 
 class CommandAsync : public CESAPICommand {
 	friend class Connection;
+  friend class CommandSync;
 private:
 	Connection const * _connection;
 	std::list<CESAPIReceive *> _receivers;

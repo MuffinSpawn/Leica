@@ -18,12 +18,55 @@
 #pragma comment (lib, "Mswsock.lib")
 #pragma comment (lib, "AdvApi32.lib")
 
-#define DEFAULT_BUFLEN 512
 #define DEFAULT_ADDRESS "192.168.0.1"
 #define DEFAULT_PORT 700
 
 
 /*** Connection Class Member Definitions ***/
+void Connection::SendPacket(void const * const packet) const {
+  PacketHeaderT const * const header = reinterpret_cast<PacketHeaderT const * const>(_receive_buffer);
+  const long packetSize = header->lPacketSize;
+
+  const char * packet_ptr = static_cast<char const *>(packet);
+  int iResult = send(_socket, packet_ptr, packetSize, 0);
+  if (iResult == SOCKET_ERROR) {
+    throw ConnectionException(std::string("send failed with error: ") + std::to_string(WSAGetLastError()));
+  }
+}
+
+void const * Connection::ReceivePacket() const {
+  uint16_t bytesRequested = sizeof(PacketHeaderT);
+  uint16_t bytesReceived = 0;
+
+  int iResult = recv(_socket, _receive_buffer, bytesRequested, 0);
+  while (iResult > 0 && bytesReceived < bytesRequested) {
+    iResult = recv(_socket, (_receive_buffer + bytesReceived), (bytesRequested - bytesReceived), 0);
+    if (iResult == 0) {
+      Disconnect();
+      throw ConnectionException(std::string("Socket was closed."));
+    } else if (iResult < 0) {
+      throw ConnectionException(std::string("Socket error: ") + std::to_string(iResult));
+    }
+    bytesReceived += iResult;
+  }
+
+  PacketHeaderT const * const header = reinterpret_cast<PacketHeaderT const * const>(_receive_buffer);
+  bytesRequested = header->lPacketSize;
+
+  while (iResult > 0 && bytesReceived < bytesRequested) {
+    iResult = recv(_socket, (_receive_buffer + bytesReceived), (bytesRequested - bytesReceived), 0);
+    if (iResult == 0) {
+      Disconnect();
+      throw ConnectionException(std::string("Socket was closed."));
+    }
+    else if (iResult < 0) {
+      throw ConnectionException(std::string("Socket error: ") + std::to_string(iResult));
+    }
+    bytesReceived += iResult;
+  }
+
+  return _receive_buffer;
+}
 
 Connection::Connection() :_socket(INVALID_SOCKET), _commandAsync(NULL), _commandSync(NULL) {
     _commandAsync = new CommandAsync(this);
@@ -39,11 +82,11 @@ Connection::~Connection() {
     Disconnect();
 }
 
-void Connection::Connect() {
+void Connection::Connect() const {
   Connect(DEFAULT_ADDRESS, DEFAULT_PORT);
 }
 
-void Connection::Connect(const std::string address, const uint16_t port) {
+void Connection::Connect(const std::string address, const uint16_t port) const {
     WSADATA wsaData;
     _socket = INVALID_SOCKET;
     struct addrinfo *result = NULL,
@@ -101,10 +144,11 @@ void Connection::Connect(const std::string address, const uint16_t port) {
 }
 
 
-void Connection::Disconnect() {
+void Connection::Disconnect() const {
     if (_socket != INVALID_SOCKET) {
         closesocket(_socket);
         WSACleanup();
+        _socket = INVALID_SOCKET;
     }
 }
 
@@ -112,6 +156,7 @@ void Connection::Disconnect() {
 /*** CommandAsync Class Member Definitions ***/
 
 bool CommandAsync::SendPacket(void const * const PacketStart, const long PacketSize) const {
+  _connection->SendPacket(PacketStart);
   return true;
 }
 
@@ -137,6 +182,7 @@ void CommandAsync::UnregisterReceiver(CESAPIReceive * receiver) {
 /*** CommandSync Class Member Definitions ***/
 
 bool CommandSync::SendPacket(void const * const PacketStart, const long PacketSize) const {
+  _commandAsync->SendPacket(PacketStart, PacketSize);
   return true;
 }
 

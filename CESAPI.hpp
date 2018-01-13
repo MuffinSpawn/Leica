@@ -2,16 +2,39 @@
 #include <atomic>
 #include <exception>
 #include <string>
-#include <vector>
+#include <list>
+#include<winsock2.h>
 
 #include "ES_C_API_Def.h"
 #include "ES_CPP_API_Def.h"
+
+/*** Class Declarations ***/
 
 class
 #ifdef _CPP_API_EXT_DLL
    AFX_EXT_CLASS
 #endif
-ConnectionException : public std::exception {
+ConnectionException;
+class
+#ifdef _CPP_API_EXT_DLL
+   AFX_EXT_CLASS
+#endif
+Connection;
+class
+#ifdef _CPP_API_EXT_DLL
+   AFX_EXT_CLASS
+#endif
+CommandAsync;
+class
+#ifdef _CPP_API_EXT_DLL
+   AFX_EXT_CLASS
+#endif
+CommandSync;
+
+
+/*** ConnectionException Class Definition ***/
+
+class ConnectionException : public std::exception {
 private:
 	std::string _what;
 
@@ -19,62 +42,67 @@ public:
 	ConnectionException() : _what("") {}
 	ConnectionException(std::string what) : _what(what) {}
     const char * what () const throw () {
-      return _what;
+      return _what.c_str();
    }
 };
 
-class
-#ifdef _CPP_API_EXT_DLL
-   AFX_EXT_CLASS
-#endif
-Connection
-{
+
+/*** Connection Class Definition ***/
+
+class Connection {
 private:
    SOCKET _socket;
+   CommandAsync const * _commandAsync;
+   CommandSync const * _commandSync;
 
 public:
    Connection();
-   Connection(const std::string address, const uint16_t port)
-   	: _address(address), _port(port), _socket(INVALID_SOCKET);
    Connection::~Connection();
+   void Connect();  // uses default address and port
+   void Connect(const std::string address, const uint16_t port);
+   void Disconnect();
 };
 
 
-class
-#ifdef _CPP_API_EXT_DLL
-   AFX_EXT_CLASS
-#endif
-CommandAsync : public CESAPICommand
-{
+/*** CommandAsync Class Definition ***/
+
+class CommandAsync : public CESAPICommand {
 	friend class Connection;
 private:
 	Connection const * _connection;
-	std::vector<CESAPIReceive const *> _receivers;
-	CommandAsync() {}
-	CommandAsync(Connection const * connection) : _connection(connection);
+	std::list<CESAPIReceive *> _receivers;
+	CommandAsync() {}  // not used
+
+	/* functions invoked only by Connection */
+	CommandAsync(Connection const * connection) : _connection(connection) {}
+	void StartReceiving() const;
+	void StopReceiving() const;
+
+	/* functions invoked internally */
+  bool SendPacket(void const * const PacketStart, const long PacketSize) const;
+  void NotifyReceivers(void const * const packet, long packetSize);
 
 public:
-	void RegisterReceiver(CESAPIReceive const * receiver);
-	void UnregisterReceiver(CESAPIReceive const * receiver);
+	void RegisterReceiver(CESAPIReceive * receiver);
+	void UnregisterReceiver(CESAPIReceive * receiver);
 };
 
-class
-#ifdef _CPP_API_EXT_DLL
-   AFX_EXT_CLASS
-#endif
-CommandSync : public CESAPICommand, CESAPIReceive
-{
-	friend class CommandAsync;
+
+/*** CommandSync Class Definition ***/
+
+class CommandSync : public CESAPICommand, CESAPIReceive {
+  friend class Connection;
+  friend class CommandAsync;
 private:
 	CommandAsync const * _commandAsync;
 	void * _packet;
-	mutable std::atomic<bool> _monitor;
+	mutable std::atomic<bool> _monitoring;
 	ES_DataType _targetType;
 	ES_Command _targetCommand;
 
 	CommandSync() {}
-	CommandSync(CommandAsync const * commandAsync) : _commandAsync(commandAsync), _packet(NULL), _monitor(true) {}
-	bool SendPacket(void* PacketStart, long PacketSize);
+	CommandSync(CommandAsync const * commandAsync) : _commandAsync(commandAsync), _packet(NULL), _monitoring(true) {}
+	bool SendPacket(void const * const PacketStart, const long PacketSize) const;
 	// bool ProcessData(void *pDataArrived, long lBytes);
 	void StopMonitoringIfTarget(const ES_DataType targetType);
 	void StopMonitoringIfTargetCommand(const ES_DataType targetType, const ES_Command targetCommand);
@@ -276,88 +304,88 @@ private:
 	void WaitWhileMonitoring();
 
 public:
-   InitializeRT const * Initialize();
-   ActivateCameraViewRT const * ActivateCameraView();
-   ParkRT const * Park();
-   GoLastMeasuredPointRT const * GoLastMeasuredPoint();
-   GetSystemStatusRT const * GetSystemStatus();
-   GetTrackerStatusRT const * GetTrackerStatus();
-   SetCoordinateSystemTypeRT const * SetCoordinateSystemType(ES_CoordinateSystemType sysType);
-   GetCoordinateSystemTypeRT const * GetCoordinateSystemType();
-   SetMeasurementModeRT const * SetMeasurementMode(ES_MeasMode mode);
-   GetMeasurementModeRT const * GetMeasurementMode();
-   SetStationaryModeParamsRT const * SetStationaryModeParams(long lMeasTime, bool bUseADM);
-   SetStationaryModeParamsRT const * SetStationaryModeParams(StationaryModeDataT stationaryModeData);
-   GetStationaryModeParamsRT const * GetStationaryModeParams();
-   GetReflectorsRT const * GetReflectors();
-   GetReflectorRT const * GetReflector();
-   SetReflectorRT const * SetReflector(int iInternalReflectorId);
-   SetUnitsRT const * SetUnits(SystemUnitsDataT unitsSettings);
-   SetUnitsRT const * SetUnits(ES_LengthUnit lenUnitType, ES_AngleUnit angUnitType, ES_TemperatureUnit tempUnitType, ES_PressureUnit pressUnitType, ES_HumidityUnit humUnitType);
-   GetUnitsRT const * GetUnits();
-   SetSystemSettingsRT const * SetSystemSettings(SystemSettingsDataT settings);
-   GetSystemSettingsRT const * GetSystemSettings();
-   SetEnvironmentParamsRT const * SetEnvironmentParams(double dTemperature, double dPressure, double dHumidity);
-   SetEnvironmentParamsRT const * SetEnvironmentParams(EnvironmentDataT environmentData);
-   GetEnvironmentParamsRT const * GetEnvironmentParams();
-   GetRefractionParamsRT const * GetRefractionParams();
-   SetRefractionParamsRT const * SetRefractionParams(double ifmIndex, double admIndex);
-   GetSearchParamsRT const * GetSearchParams();
-   SetSearchParamsRT const * SetSearchParams(SearchParamsDataT searchParams);
-   SetStationOrientationParamsRT const * SetStationOrientationParams(double dVal1, double dVal2, double dVal3, double dRot1, double dRot2, double dRot3);
-   SetStationOrientationParamsRT const * SetStationOrientationParams(StationOrientationDataT stationOrientation);
-   GetStationOrientationParamsRT const * GetStationOrientationParams();
-   SetTransformationParamsRT const * SetTransformationParams(double dVal1, double dVal2, double dVal3, double dRot1, double dRot2, double dRot3, double dScale);
-   SetTransformationParamsRT const * SetTransformationParams(TransformationDataT transformationData);
-   GetTransformationParamsRT const * GetTransformationParams();
-   GoPositionRT const * GoPosition(double dVal1, double dVal2, double dVal3, bool bUseADM);
-   GoPositionHVDRT const * GoPositionHVD(double dHzAngle, double dVtAngle, double dDistance, bool bUseADM);
-   PointLaserRT const * PointLaser(double dVal1, double dVal2, double dVal3);
-   PointLaserHVDRT const * PointLaserHVD(double dHzAngle, double dVtAngle, double dDistance);
-   GoNivelPositionRT const * GoNivelPosition(ES_NivelPosition position);
-   MoveHVRT const * MoveHV(long lHzSpeed, long lVtSpeed);
-   PositionRelativeHVRT const * PositionRelativeHV(double dHz, double dVt);
-   GoBirdBathRT const * GoBirdBath();
-   ChangeFaceRT const * ChangeFace();
-   FindReflectorRT const * FindReflector(double dAproxDistance);
-   StartMeasurementRT const * StartMeasurement();
-   StartNivelMeasurementRT const * StartNivelMeasurement();
-   StopMeasurementRT const * StopMeasurement();
-   ExitApplicationRT const * ExitApplication();
-   GetDirectionRT const * GetDirection();
-   CallOrientToGravityRT const * CallOrientToGravity();
-   SetCompensationRT const * SetCompensation(int iInternalCompensationId);
-   SetStatisticModeRT const * SetStatisticMode(ES_StatisticMode stationaryMeasurements, ES_StatisticMode continuousMeasurements);
-   GetStatisticModeRT const * GetStatisticMode();
-   GetCameraParamsRT const * GetCameraParams();
-   SetCameraParamsRT const * SetCameraParams(CameraParamsDataT cameraParams);
-   SetCameraParamsRT const * SetCameraParams(int iContrast, int iBrightness, int iSaturation);
-   GetCompensationRT const * GetCompensation();
-   GetCompensationsRT const * GetCompensations();
-   GetCompensations2RT const * GetCompensations2();
-   GetTPInfoRT const * GetTPInfo();
-   GetNivelInfoRT const * GetNivelInfo();
-   GetLaserOnTimerRT const * GetLaserOnTimer();
-   SetLaserOnTimerRT const * SetLaserOnTimer(int iTimeOffsetHour, int iTimeOffsetMinute);
-   GoBirdBath2RT const * GoBirdBath2(bool bClockwise);
-   GetFaceRT const * GetFace();
-   SetLongSystemParameterRT const * SetLongSystemParameter(ES_SystemParameter systemParam, long lParameter);
-   GetLongSystemParameterRT const * GetLongSystemParameter(ES_SystemParameter systemParam);
-   GetMeasurementStatusInfoRT const * GetMeasurementStatusInfo();
-   SetDoubleSystemParameterRT const * SetDoubleSystemParameter(ES_SystemParameter systemParam, double dParameter);
-   GetDoubleSystemParameterRT const * GetDoubleSystemParameter(ES_SystemParameter systemParam);
-   GetObjectTemperatureRT const * GetObjectTemperature();
-   GetOverviewCameraInfoRT const * GetOverviewCameraInfo();
-   ClearCommandQueueRT const * ClearCommandQueue(ES_ClearCommandQueueType ccqType);
-   GetADMInfo2RT const * GetADMInfo2();
-   GetTrackerInfoRT const * GetTrackerInfo();
-   GetNivelInfo2RT const * GetNivelInfo2();
-   RestoreStartupConditionsRT const * RestoreStartupConditions();
-   GoAndMeasureRT const * GoAndMeasure(double dval1, double dval2, double dval3);
-   GetATRInfoRT const * GetATRInfo();
-   GetMeteoStationInfoRT const * GetMeteoStationInfo();
-   GetAT4xxInfoRT const * GetAT4xxInfo();
-   GetSystemSoftwareVersionRT const * GetSystemSoftwareVersion();
+  InitializeRT const * Initialize();
+  ActivateCameraViewRT const * ActivateCameraView();
+  ParkRT const * Park();
+  GoLastMeasuredPointRT const * GoLastMeasuredPoint();
+  GetSystemStatusRT const * GetSystemStatus();
+  GetTrackerStatusRT const * GetTrackerStatus();
+  SetCoordinateSystemTypeRT const * SetCoordinateSystemType(ES_CoordinateSystemType sysType);
+  GetCoordinateSystemTypeRT const * GetCoordinateSystemType();
+  SetMeasurementModeRT const * SetMeasurementMode(ES_MeasMode mode);
+  GetMeasurementModeRT const * GetMeasurementMode();
+  SetStationaryModeParamsRT const * SetStationaryModeParams(long lMeasTime, bool bUseADM);
+  SetStationaryModeParamsRT const * SetStationaryModeParams(StationaryModeDataT stationaryModeData);
+  GetStationaryModeParamsRT const * GetStationaryModeParams();
+  GetReflectorsRT const * GetReflectors();
+  GetReflectorRT const * GetReflector();
+  SetReflectorRT const * SetReflector(int iInternalReflectorId);
+  SetUnitsRT const * SetUnits(SystemUnitsDataT unitsSettings);
+  SetUnitsRT const * SetUnits(ES_LengthUnit lenUnitType, ES_AngleUnit angUnitType, ES_TemperatureUnit tempUnitType, ES_PressureUnit pressUnitType, ES_HumidityUnit humUnitType);
+  GetUnitsRT const * GetUnits();
+  SetSystemSettingsRT const * SetSystemSettings(SystemSettingsDataT settings);
+  GetSystemSettingsRT const * GetSystemSettings();
+  SetEnvironmentParamsRT const * SetEnvironmentParams(double dTemperature, double dPressure, double dHumidity);
+  SetEnvironmentParamsRT const * SetEnvironmentParams(EnvironmentDataT environmentData);
+  GetEnvironmentParamsRT const * GetEnvironmentParams();
+  GetRefractionParamsRT const * GetRefractionParams();
+  SetRefractionParamsRT const * SetRefractionParams(double ifmIndex, double admIndex);
+  GetSearchParamsRT const * GetSearchParams();
+  SetSearchParamsRT const * SetSearchParams(SearchParamsDataT searchParams);
+  SetStationOrientationParamsRT const * SetStationOrientationParams(double dVal1, double dVal2, double dVal3, double dRot1, double dRot2, double dRot3);
+  SetStationOrientationParamsRT const * SetStationOrientationParams(StationOrientationDataT stationOrientation);
+  GetStationOrientationParamsRT const * GetStationOrientationParams();
+  SetTransformationParamsRT const * SetTransformationParams(double dVal1, double dVal2, double dVal3, double dRot1, double dRot2, double dRot3, double dScale);
+  SetTransformationParamsRT const * SetTransformationParams(TransformationDataT transformationData);
+  GetTransformationParamsRT const * GetTransformationParams();
+  GoPositionRT const * GoPosition(double dVal1, double dVal2, double dVal3, bool bUseADM);
+  GoPositionHVDRT const * GoPositionHVD(double dHzAngle, double dVtAngle, double dDistance, bool bUseADM);
+  PointLaserRT const * PointLaser(double dVal1, double dVal2, double dVal3);
+  PointLaserHVDRT const * PointLaserHVD(double dHzAngle, double dVtAngle, double dDistance);
+  GoNivelPositionRT const * GoNivelPosition(ES_NivelPosition position);
+  MoveHVRT const * MoveHV(long lHzSpeed, long lVtSpeed);
+  PositionRelativeHVRT const * PositionRelativeHV(double dHz, double dVt);
+  GoBirdBathRT const * GoBirdBath();
+  ChangeFaceRT const * ChangeFace();
+  FindReflectorRT const * FindReflector(double dAproxDistance);
+  StartMeasurementRT const * StartMeasurement();
+  StartNivelMeasurementRT const * StartNivelMeasurement();
+  StopMeasurementRT const * StopMeasurement();
+  ExitApplicationRT const * ExitApplication();
+  GetDirectionRT const * GetDirection();
+  CallOrientToGravityRT const * CallOrientToGravity();
+  SetCompensationRT const * SetCompensation(int iInternalCompensationId);
+  SetStatisticModeRT const * SetStatisticMode(ES_StatisticMode stationaryMeasurements, ES_StatisticMode continuousMeasurements);
+  GetStatisticModeRT const * GetStatisticMode();
+  GetCameraParamsRT const * GetCameraParams();
+  SetCameraParamsRT const * SetCameraParams(CameraParamsDataT cameraParams);
+  SetCameraParamsRT const * SetCameraParams(int iContrast, int iBrightness, int iSaturation);
+  GetCompensationRT const * GetCompensation();
+  GetCompensationsRT const * GetCompensations();
+  GetCompensations2RT const * GetCompensations2();
+  GetTPInfoRT const * GetTPInfo();
+  GetNivelInfoRT const * GetNivelInfo();
+  GetLaserOnTimerRT const * GetLaserOnTimer();
+  SetLaserOnTimerRT const * SetLaserOnTimer(int iTimeOffsetHour, int iTimeOffsetMinute);
+  GoBirdBath2RT const * GoBirdBath2(bool bClockwise);
+  GetFaceRT const * GetFace();
+  SetLongSystemParamRT const * SetLongSystemParameter(ES_SystemParameter systemParam, long lParameter);
+  GetLongSystemParamRT const * GetLongSystemParameter(ES_SystemParameter systemParam);
+  GetMeasurementStatusInfoRT const * GetMeasurementStatusInfo();
+  SetDoubleSystemParamRT const * SetDoubleSystemParameter(ES_SystemParameter systemParam, double dParameter);
+  GetDoubleSystemParamRT const * GetDoubleSystemParameter(ES_SystemParameter systemParam);
+  GetObjectTemperatureRT const * GetObjectTemperature();
+  GetOverviewCameraInfoRT const * GetOverviewCameraInfo();
+  ClearCommandQueueRT const * ClearCommandQueue(ES_ClearCommandQueueType ccqType);
+  GetADMInfo2RT const * GetADMInfo2();
+  GetTrackerInfoRT const * GetTrackerInfo();
+  GetNivelInfo2RT const * GetNivelInfo2();
+  RestoreStartupConditionsRT const * RestoreStartupConditions();
+  GoAndMeasureRT const * GoAndMeasure(double dval1, double dval2, double dval3);
+  GetATRInfoRT const * GetATRInfo();
+  GetMeteoStationInfoRT const * GetMeteoStationInfo();
+  GetAT4xxInfoRT const * GetAT4xxInfo();
+  GetSystemSoftwareVersionRT const * GetSystemSoftwareVersion();
 };
 
 /*

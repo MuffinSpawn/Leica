@@ -1333,92 +1333,92 @@ public:
    inline CESAPICommand() {TRACE(_T("CESAPICommand()\n"));}
 
    // pure virtual function - MUST be overriden in derived class
-   virtual bool SendPacket(void* PacketStart, long PacketSize) = 0;
+   virtual bool SendPacket(void const * const PacketStart, const long PacketSize) const = 0;
 
 public:
    // Send commands to embedded system
-   bool inline Initialize() {CInitialize Data; return SendPacket(ES_DATA_PACKET);}
-   bool inline ActivateCameraView() {CActivateCameraView Data; return SendPacket(ES_DATA_PACKET);}
-   bool inline Park() {CPark Data; return SendPacket(ES_DATA_PACKET);}
-   bool inline GoLastMeasuredPoint() {CGoLastMeasuredPoint Data; return SendPacket(ES_DATA_PACKET);}
-   bool inline GetSystemStatus() {CGetSystemStatus Data; return SendPacket(ES_DATA_PACKET);}
-   bool inline GetTrackerStatus() {CGetTrackerStatus Data; return SendPacket(ES_DATA_PACKET);}
-   bool inline SetCoordinateSystemType(ES_CoordinateSystemType sysType) {CSetCoordinateSystemType Data(sysType); return SendPacket(ES_DATA_PACKET);}
-   bool inline GetCoordinateSystemType() {CGetCoordinateSystemType Data; return SendPacket(ES_DATA_PACKET);}
-   bool inline SetMeasurementMode(ES_MeasMode mode) {CSetMeasurementMode Data(mode); return SendPacket(ES_DATA_PACKET);}
-   bool inline GetMeasurementMode() {CGetMeasurementMode Data; return SendPacket(ES_DATA_PACKET);}
-   bool inline SetStationaryModeParams(long lMeasTime, bool bUseADM) {CSetStationaryModeParams Data(lMeasTime, bUseADM); return SendPacket(ES_DATA_PACKET);}
-   bool inline SetStationaryModeParams(StationaryModeDataT stationaryModeData) {CSetStationaryModeParams Data(stationaryModeData); return SendPacket(ES_DATA_PACKET);}
-   bool inline GetStationaryModeParams() {CGetStationaryModeParams Data; return SendPacket(ES_DATA_PACKET);}
-   bool inline GetReflectors() {CGetReflectors Data; return SendPacket(ES_DATA_PACKET);}
-   bool inline GetReflector() {CGetReflector Data; return SendPacket(ES_DATA_PACKET);}
-   bool inline SetReflector(int iInternalReflectorId) {CSetReflector Data(iInternalReflectorId); return SendPacket(ES_DATA_PACKET);}
-   bool inline SetUnits(SystemUnitsDataT unitsSettings) {CSetUnits Data(unitsSettings); return SendPacket(ES_DATA_PACKET);}
-   bool inline SetUnits(ES_LengthUnit lenUnitType, ES_AngleUnit angUnitType, ES_TemperatureUnit tempUnitType, ES_PressureUnit pressUnitType, ES_HumidityUnit humUnitType) {CSetUnits Data(lenUnitType, angUnitType, tempUnitType, pressUnitType, humUnitType); return SendPacket(ES_DATA_PACKET);}
-   bool inline GetUnits() {CGetUnits Data; return SendPacket(ES_DATA_PACKET);}
-   bool inline SetSystemSettings(SystemSettingsDataT settings) {CSetSystemSettings Data(settings); return SendPacket(ES_DATA_PACKET);}
-   bool inline GetSystemSettings() {CGetSystemSettings Data; return SendPacket(ES_DATA_PACKET);}
-   bool inline SetEnvironmentParams(double dTemperature, double dPressure, double dHumidity) {CSetEnvironmentParams Data(dTemperature, dPressure, dHumidity); return SendPacket(ES_DATA_PACKET);}
-   bool inline SetEnvironmentParams(EnvironmentDataT environmentData) {CSetEnvironmentParams Data(environmentData); return SendPacket(ES_DATA_PACKET);}
-   bool inline GetEnvironmentParams() {CGetEnvironmentParams Data; return SendPacket(ES_DATA_PACKET);}
-   bool inline GetRefractionParams() {CGetRefractionParams Data; return SendPacket(ES_DATA_PACKET);}
-   bool inline SetRefractionParams(double ifmIndex, double admIndex) {CSetRefractionParams Data(ifmIndex, admIndex); return SendPacket(ES_DATA_PACKET);}
-   bool inline GetSearchParams() {CGetSearchParams Data; return SendPacket(ES_DATA_PACKET);}
-   bool inline SetSearchParams(SearchParamsDataT searchParams) {CSetSearchParams Data(searchParams); return SendPacket(ES_DATA_PACKET);}
-   bool inline SetStationOrientationParams(double dVal1, double dVal2, double dVal3, double dRot1, double dRot2, double dRot3) {CSetStationOrientationParams Data(dVal1, dVal2, dVal3, dRot1, dRot2, dRot3); return SendPacket(ES_DATA_PACKET);}
-   bool inline SetStationOrientationParams(StationOrientationDataT stationOrientation) {CSetStationOrientationParams Data(stationOrientation); return SendPacket(ES_DATA_PACKET);}
-   bool inline GetStationOrientationParams() {CGetStationOrientationParams Data; return SendPacket(ES_DATA_PACKET);}
-   bool inline SetTransformationParams(double dVal1, double dVal2, double dVal3, double dRot1, double dRot2, double dRot3, double dScale) {CSetTransformationParams Data(dVal1, dVal2, dVal3, dRot1, dRot2, dRot3, dScale); return SendPacket(ES_DATA_PACKET);}
-   bool inline SetTransformationParams(TransformationDataT transformationData) {CSetTransformationParams Data(transformationData); return SendPacket(ES_DATA_PACKET);}
-   bool inline GetTransformationParams() {CGetTransformationParams Data; return SendPacket(ES_DATA_PACKET);}
-   bool inline GoPosition(double dVal1, double dVal2, double dVal3, bool bUseADM) {CGoPosition Data(dVal1, dVal2, dVal3, bUseADM); return SendPacket(ES_DATA_PACKET);}
-   bool inline GoPositionHVD(double dHzAngle, double dVtAngle, double dDistance, bool bUseADM) {CGoPositionHVD Data(dHzAngle, dVtAngle, dDistance, bUseADM); return SendPacket(ES_DATA_PACKET);}
-   bool inline PointLaser(double dVal1, double dVal2, double dVal3) {CPointLaser Data(dVal1, dVal2, dVal3); return SendPacket(ES_DATA_PACKET);}
-   bool inline PointLaserHVD(double dHzAngle, double dVtAngle, double dDistance) {CPointLaserHVD Data(dHzAngle, dVtAngle, dDistance); return SendPacket(ES_DATA_PACKET);}
-   bool inline GoNivelPosition(ES_NivelPosition position) {CGoNivelPosition Data(position); return SendPacket(ES_DATA_PACKET);}
-   bool inline MoveHV(long lHzSpeed, long lVtSpeed) {CMoveHV Data(lHzSpeed, lVtSpeed); return SendPacket(ES_DATA_PACKET);}
-   bool inline PositionRelativeHV(double dHz, double dVt) {CPositionRelativeHV Data(dHz, dVt); return SendPacket(ES_DATA_PACKET);}
-   bool inline GoBirdBath() {CGoBirdBath Data; return SendPacket(ES_DATA_PACKET);}
-   bool inline ChangeFace() {CChangeFace Data; return SendPacket(ES_DATA_PACKET);}
-   bool inline FindReflector(double dAproxDistance) {CFindReflector Data(dAproxDistance); return SendPacket(ES_DATA_PACKET);}
-   bool inline StartMeasurement() {CStartMeasurement Data; return SendPacket(ES_DATA_PACKET);}
-   bool inline StartNivelMeasurement() {CStartNivelMeasurement Data; return SendPacket(ES_DATA_PACKET);}
-   bool inline StopMeasurement() {CStopMeasurement Data; return SendPacket(ES_DATA_PACKET);}
-   bool inline ExitApplication() {CExitApplication Data; return SendPacket(ES_DATA_PACKET);}
-   bool inline GetDirection() {CGetDirection Data; return SendPacket(ES_DATA_PACKET);}
-   bool inline CallOrientToGravity() {CCallOrientToGravity Data; return SendPacket(ES_DATA_PACKET);}
-   bool inline SetCompensation(int iInternalCompensationId) {CSetCompensation Data(iInternalCompensationId); return SendPacket(ES_DATA_PACKET);}
-   bool inline SetStatisticMode(ES_StatisticMode stationaryMeasurements, ES_StatisticMode continuousMeasurements) {CSetStatisticMode Data(stationaryMeasurements, continuousMeasurements); return SendPacket(ES_DATA_PACKET);}
-   bool inline GetStatisticMode() {CGetStatisticMode Data; return SendPacket(ES_DATA_PACKET);}
-   bool inline GetCameraParams() {CGetCameraParams Data; return SendPacket(ES_DATA_PACKET);}
-   bool inline SetCameraParams(CameraParamsDataT cameraParams) {CSetCameraParams Data(cameraParams); return SendPacket(ES_DATA_PACKET);}
-   bool inline SetCameraParams(int iContrast, int iBrightness, int iSaturation) {CSetCameraParams Data(iContrast, iBrightness, iSaturation); return SendPacket(ES_DATA_PACKET);}
-   bool inline GetCompensation() {CGetCompensation Data; return SendPacket(ES_DATA_PACKET);}
-   bool inline GetCompensations() {CGetCompensations Data; return SendPacket(ES_DATA_PACKET);}
-   bool inline GetCompensations2() {CGetCompensations2 Data; return SendPacket(ES_DATA_PACKET);}
-   bool inline GetTPInfo() {CGetTPInfo Data; return SendPacket(ES_DATA_PACKET);}
-   bool inline GetNivelInfo() {CGetNivelInfo Data; return SendPacket(ES_DATA_PACKET);}
-   bool inline GetLaserOnTimer() {CGetLaserOnTimer Data; return SendPacket(ES_DATA_PACKET);}
-   bool inline SetLaserOnTimer(int iTimeOffsetHour, int iTimeOffsetMinute) {CSetLaserOnTimer Data(iTimeOffsetHour, iTimeOffsetMinute); return SendPacket(ES_DATA_PACKET);}
-   bool inline GoBirdBath2(bool bClockwise) {CGoBirdBath2 Data(bClockwise); return SendPacket(ES_DATA_PACKET);}
-   bool inline GetFace() {CGetFace Data; return SendPacket(ES_DATA_PACKET);}
-   bool inline SetLongSystemParameter(ES_SystemParameter systemParam, long lParameter) {CSetLongSystemParam Data(systemParam, lParameter); return SendPacket(ES_DATA_PACKET);}
-   bool inline GetLongSystemParameter(ES_SystemParameter systemParam) {CGetLongSystemParam Data(systemParam); return SendPacket(ES_DATA_PACKET);}
-   bool inline GetMeasurementStatusInfo() {CGetMeasurementStatusInfo Data; return SendPacket(ES_DATA_PACKET);}
-   bool inline SetDoubleSystemParameter(ES_SystemParameter systemParam, double dParameter) {CSetDoubleSystemParam Data(systemParam, dParameter); return SendPacket(ES_DATA_PACKET);}
-   bool inline GetDoubleSystemParameter(ES_SystemParameter systemParam) {CGetDoubleSystemParam Data(systemParam); return SendPacket(ES_DATA_PACKET);}
-   bool inline GetObjectTemperature() {CGetObjectTemperature Data; return SendPacket(ES_DATA_PACKET);}
-   bool inline GetOverviewCameraInfo() {CGetOverviewCameraInfo Data; return SendPacket(ES_DATA_PACKET);}
-   bool inline ClearCommandQueue(ES_ClearCommandQueueType ccqType) {CClearCommandQueue Data(ccqType); return SendPacket(ES_DATA_PACKET);}
-   bool inline GetADMInfo2() {CGetADMInfo2 Data; return SendPacket(ES_DATA_PACKET);}
-   bool inline GetTrackerInfo() {CGetTrackerInfo Data; return SendPacket(ES_DATA_PACKET);}
-   bool inline GetNivelInfo2() {CGetNivelInfo2 Data; return SendPacket(ES_DATA_PACKET);}
-   bool inline RestoreStartupConditions() {CRestoreStartupConditions Data; return SendPacket(ES_DATA_PACKET);}
-   bool inline GoAndMeasure(double dval1, double dval2, double dval3) {CGoAndMeasure Data(dval1, dval2, dval3); return SendPacket(ES_DATA_PACKET);}
-   bool inline GetATRInfo() {CGetATRInfo Data; return SendPacket(ES_DATA_PACKET);}
-   bool inline GetMeteoStationInfo() {CGetMeteoStationInfo Data; return SendPacket(ES_DATA_PACKET);}
-   bool inline GetAT4xxInfo() {CGetAT4xxInfo Data; return SendPacket(ES_DATA_PACKET);}
-   bool inline GetSystemSoftwareVersion() {CGetSystemSoftwareVersion Data; return SendPacket(ES_DATA_PACKET);}
+   bool inline Initialize() const {CInitialize Data; return SendPacket(ES_DATA_PACKET);}
+   bool inline ActivateCameraView() const {CActivateCameraView Data; return SendPacket(ES_DATA_PACKET);}
+   bool inline Park() const {CPark Data; return SendPacket(ES_DATA_PACKET);}
+   bool inline GoLastMeasuredPoint() const {CGoLastMeasuredPoint Data; return SendPacket(ES_DATA_PACKET);}
+   bool inline GetSystemStatus() const {CGetSystemStatus Data; return SendPacket(ES_DATA_PACKET);}
+   bool inline GetTrackerStatus() const {CGetTrackerStatus Data; return SendPacket(ES_DATA_PACKET);}
+   bool inline SetCoordinateSystemType(ES_CoordinateSystemType sysType) const {CSetCoordinateSystemType Data(sysType); return SendPacket(ES_DATA_PACKET);}
+   bool inline GetCoordinateSystemType() const {CGetCoordinateSystemType Data; return SendPacket(ES_DATA_PACKET);}
+   bool inline SetMeasurementMode(ES_MeasMode mode) const {CSetMeasurementMode Data(mode); return SendPacket(ES_DATA_PACKET);}
+   bool inline GetMeasurementMode() const {CGetMeasurementMode Data; return SendPacket(ES_DATA_PACKET);}
+   bool inline SetStationaryModeParams(long lMeasTime, bool bUseADM) const {CSetStationaryModeParams Data(lMeasTime, bUseADM); return SendPacket(ES_DATA_PACKET);}
+   bool inline SetStationaryModeParams(StationaryModeDataT stationaryModeData) const {CSetStationaryModeParams Data(stationaryModeData); return SendPacket(ES_DATA_PACKET);}
+   bool inline GetStationaryModeParams() const {CGetStationaryModeParams Data; return SendPacket(ES_DATA_PACKET);}
+   bool inline GetReflectors() const {CGetReflectors Data; return SendPacket(ES_DATA_PACKET);}
+   bool inline GetReflector() const {CGetReflector Data; return SendPacket(ES_DATA_PACKET);}
+   bool inline SetReflector(int iInternalReflectorId) const {CSetReflector Data(iInternalReflectorId); return SendPacket(ES_DATA_PACKET);}
+   bool inline SetUnits(SystemUnitsDataT unitsSettings) const {CSetUnits Data(unitsSettings); return SendPacket(ES_DATA_PACKET);}
+   bool inline SetUnits(ES_LengthUnit lenUnitType, ES_AngleUnit angUnitType, ES_TemperatureUnit tempUnitType, ES_PressureUnit pressUnitType, ES_HumidityUnit humUnitType) const {CSetUnits Data(lenUnitType, angUnitType, tempUnitType, pressUnitType, humUnitType); return SendPacket(ES_DATA_PACKET);}
+   bool inline GetUnits() const {CGetUnits Data; return SendPacket(ES_DATA_PACKET);}
+   bool inline SetSystemSettings(SystemSettingsDataT settings) const {CSetSystemSettings Data(settings); return SendPacket(ES_DATA_PACKET);}
+   bool inline GetSystemSettings() const {CGetSystemSettings Data; return SendPacket(ES_DATA_PACKET);}
+   bool inline SetEnvironmentParams(double dTemperature, double dPressure, double dHumidity) const {CSetEnvironmentParams Data(dTemperature, dPressure, dHumidity); return SendPacket(ES_DATA_PACKET);}
+   bool inline SetEnvironmentParams(EnvironmentDataT environmentData) const {CSetEnvironmentParams Data(environmentData); return SendPacket(ES_DATA_PACKET);}
+   bool inline GetEnvironmentParams() const {CGetEnvironmentParams Data; return SendPacket(ES_DATA_PACKET);}
+   bool inline GetRefractionParams() const {CGetRefractionParams Data; return SendPacket(ES_DATA_PACKET);}
+   bool inline SetRefractionParams(double ifmIndex, double admIndex) const {CSetRefractionParams Data(ifmIndex, admIndex); return SendPacket(ES_DATA_PACKET);}
+   bool inline GetSearchParams() const {CGetSearchParams Data; return SendPacket(ES_DATA_PACKET);}
+   bool inline SetSearchParams(SearchParamsDataT searchParams) const {CSetSearchParams Data(searchParams); return SendPacket(ES_DATA_PACKET);}
+   bool inline SetStationOrientationParams(double dVal1, double dVal2, double dVal3, double dRot1, double dRot2, double dRot3) const {CSetStationOrientationParams Data(dVal1, dVal2, dVal3, dRot1, dRot2, dRot3); return SendPacket(ES_DATA_PACKET);}
+   bool inline SetStationOrientationParams(StationOrientationDataT stationOrientation) const {CSetStationOrientationParams Data(stationOrientation); return SendPacket(ES_DATA_PACKET);}
+   bool inline GetStationOrientationParams() const {CGetStationOrientationParams Data; return SendPacket(ES_DATA_PACKET);}
+   bool inline SetTransformationParams(double dVal1, double dVal2, double dVal3, double dRot1, double dRot2, double dRot3, double dScale) const {CSetTransformationParams Data(dVal1, dVal2, dVal3, dRot1, dRot2, dRot3, dScale); return SendPacket(ES_DATA_PACKET);}
+   bool inline SetTransformationParams(TransformationDataT transformationData) const {CSetTransformationParams Data(transformationData); return SendPacket(ES_DATA_PACKET);}
+   bool inline GetTransformationParams() const {CGetTransformationParams Data; return SendPacket(ES_DATA_PACKET);}
+   bool inline GoPosition(double dVal1, double dVal2, double dVal3, bool bUseADM) const {CGoPosition Data(dVal1, dVal2, dVal3, bUseADM); return SendPacket(ES_DATA_PACKET);}
+   bool inline GoPositionHVD(double dHzAngle, double dVtAngle, double dDistance, bool bUseADM) const {CGoPositionHVD Data(dHzAngle, dVtAngle, dDistance, bUseADM); return SendPacket(ES_DATA_PACKET);}
+   bool inline PointLaser(double dVal1, double dVal2, double dVal3) const {CPointLaser Data(dVal1, dVal2, dVal3); return SendPacket(ES_DATA_PACKET);}
+   bool inline PointLaserHVD(double dHzAngle, double dVtAngle, double dDistance) const {CPointLaserHVD Data(dHzAngle, dVtAngle, dDistance); return SendPacket(ES_DATA_PACKET);}
+   bool inline GoNivelPosition(ES_NivelPosition position) const {CGoNivelPosition Data(position); return SendPacket(ES_DATA_PACKET);}
+   bool inline MoveHV(long lHzSpeed, long lVtSpeed) const {CMoveHV Data(lHzSpeed, lVtSpeed); return SendPacket(ES_DATA_PACKET);}
+   bool inline PositionRelativeHV(double dHz, double dVt) const {CPositionRelativeHV Data(dHz, dVt); return SendPacket(ES_DATA_PACKET);}
+   bool inline GoBirdBath() const {CGoBirdBath Data; return SendPacket(ES_DATA_PACKET);}
+   bool inline ChangeFace() const {CChangeFace Data; return SendPacket(ES_DATA_PACKET);}
+   bool inline FindReflector(double dAproxDistance) const {CFindReflector Data(dAproxDistance); return SendPacket(ES_DATA_PACKET);}
+   bool inline StartMeasurement() const {CStartMeasurement Data; return SendPacket(ES_DATA_PACKET);}
+   bool inline StartNivelMeasurement() const {CStartNivelMeasurement Data; return SendPacket(ES_DATA_PACKET);}
+   bool inline StopMeasurement() const {CStopMeasurement Data; return SendPacket(ES_DATA_PACKET);}
+   bool inline ExitApplication() const {CExitApplication Data; return SendPacket(ES_DATA_PACKET);}
+   bool inline GetDirection() const {CGetDirection Data; return SendPacket(ES_DATA_PACKET);}
+   bool inline CallOrientToGravity() const {CCallOrientToGravity Data; return SendPacket(ES_DATA_PACKET);}
+   bool inline SetCompensation(int iInternalCompensationId) const {CSetCompensation Data(iInternalCompensationId); return SendPacket(ES_DATA_PACKET);}
+   bool inline SetStatisticMode(ES_StatisticMode stationaryMeasurements, ES_StatisticMode continuousMeasurements) const {CSetStatisticMode Data(stationaryMeasurements, continuousMeasurements); return SendPacket(ES_DATA_PACKET);}
+   bool inline GetStatisticMode() const {CGetStatisticMode Data; return SendPacket(ES_DATA_PACKET);}
+   bool inline GetCameraParams() const {CGetCameraParams Data; return SendPacket(ES_DATA_PACKET);}
+   bool inline SetCameraParams(CameraParamsDataT cameraParams) const {CSetCameraParams Data(cameraParams); return SendPacket(ES_DATA_PACKET);}
+   bool inline SetCameraParams(int iContrast, int iBrightness, int iSaturation) const {CSetCameraParams Data(iContrast, iBrightness, iSaturation); return SendPacket(ES_DATA_PACKET);}
+   bool inline GetCompensation() const {CGetCompensation Data; return SendPacket(ES_DATA_PACKET);}
+   bool inline GetCompensations() const {CGetCompensations Data; return SendPacket(ES_DATA_PACKET);}
+   bool inline GetCompensations2() const {CGetCompensations2 Data; return SendPacket(ES_DATA_PACKET);}
+   bool inline GetTPInfo() const {CGetTPInfo Data; return SendPacket(ES_DATA_PACKET);}
+   bool inline GetNivelInfo() const {CGetNivelInfo Data; return SendPacket(ES_DATA_PACKET);}
+   bool inline GetLaserOnTimer() const {CGetLaserOnTimer Data; return SendPacket(ES_DATA_PACKET);}
+   bool inline SetLaserOnTimer(int iTimeOffsetHour, int iTimeOffsetMinute) const {CSetLaserOnTimer Data(iTimeOffsetHour, iTimeOffsetMinute); return SendPacket(ES_DATA_PACKET);}
+   bool inline GoBirdBath2(bool bClockwise) const {CGoBirdBath2 Data(bClockwise); return SendPacket(ES_DATA_PACKET);}
+   bool inline GetFace() const {CGetFace Data; return SendPacket(ES_DATA_PACKET);}
+   bool inline SetLongSystemParameter(ES_SystemParameter systemParam, long lParameter) const {CSetLongSystemParam Data(systemParam, lParameter); return SendPacket(ES_DATA_PACKET);}
+   bool inline GetLongSystemParameter(ES_SystemParameter systemParam) const {CGetLongSystemParam Data(systemParam); return SendPacket(ES_DATA_PACKET);}
+   bool inline GetMeasurementStatusInfo() const {CGetMeasurementStatusInfo Data; return SendPacket(ES_DATA_PACKET);}
+   bool inline SetDoubleSystemParameter(ES_SystemParameter systemParam, double dParameter) const {CSetDoubleSystemParam Data(systemParam, dParameter); return SendPacket(ES_DATA_PACKET);}
+   bool inline GetDoubleSystemParameter(ES_SystemParameter systemParam) const {CGetDoubleSystemParam Data(systemParam); return SendPacket(ES_DATA_PACKET);}
+   bool inline GetObjectTemperature() const {CGetObjectTemperature Data; return SendPacket(ES_DATA_PACKET);}
+   bool inline GetOverviewCameraInfo() const {CGetOverviewCameraInfo Data; return SendPacket(ES_DATA_PACKET);}
+   bool inline ClearCommandQueue(ES_ClearCommandQueueType ccqType) const {CClearCommandQueue Data(ccqType); return SendPacket(ES_DATA_PACKET);}
+   bool inline GetADMInfo2() const {CGetADMInfo2 Data; return SendPacket(ES_DATA_PACKET);}
+   bool inline GetTrackerInfo() const {CGetTrackerInfo Data; return SendPacket(ES_DATA_PACKET);}
+   bool inline GetNivelInfo2() const {CGetNivelInfo2 Data; return SendPacket(ES_DATA_PACKET);}
+   bool inline RestoreStartupConditions() const {CRestoreStartupConditions Data; return SendPacket(ES_DATA_PACKET);}
+   bool inline GoAndMeasure(double dval1, double dval2, double dval3) const {CGoAndMeasure Data(dval1, dval2, dval3); return SendPacket(ES_DATA_PACKET);}
+   bool inline GetATRInfo() const {CGetATRInfo Data; return SendPacket(ES_DATA_PACKET);}
+   bool inline GetMeteoStationInfo() const {CGetMeteoStationInfo Data; return SendPacket(ES_DATA_PACKET);}
+   bool inline GetAT4xxInfo() const {CGetAT4xxInfo Data; return SendPacket(ES_DATA_PACKET);}
+   bool inline GetSystemSoftwareVersion() const {CGetSystemSoftwareVersion Data; return SendPacket(ES_DATA_PACKET);}
 };
 
 
@@ -1452,7 +1452,7 @@ public:
    // Programmers of course may change this class or derive / implement their own 
    // receiver class is this behaviour is not suitable
 
-   bool inline ReceiveData(void* packetStart, long packetSize) 
+   bool inline ReceiveData(void const * const packetStart, const long packetSize) 
    { 
       //TRACE(_T("ReceiveData()\n"));
        
@@ -1717,7 +1717,7 @@ protected:
    // packet is being passed to this function.
    // Parameter 'lBytes' just passed for diagnostics purpose
    //
-   virtual bool ProcessData(void *pDataArrived, long lBytes)
+   virtual bool ProcessData(void const * const pDataArrived, const long lBytes)
    {
       // ProcessData() is a parser for the incoming data. When ProcessData()
       // is being called, we can assume that 'm_vtData.parray->pvData' points

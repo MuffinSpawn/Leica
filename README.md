@@ -1,2 +1,9 @@
 # Leica
+
 Code for working with Leica laser trackers.
+
+## LTControl.dll CLSIDs
+
+LTConnect: E73780A3-025C-11D5-BBB7-00508B35B332
+LTControlAsync: 58DB5620-0186-11D5-BBB6-00508B35B332
+LTControlSync: 58DB561E-0186-11D5-BBB6-00508B35B332

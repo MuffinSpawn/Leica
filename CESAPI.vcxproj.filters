@@ -33,6 +33,15 @@
     <ClInclude Include="Include\ES_CPP_API_PyDef.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CESAPI.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\ES_C_API_Def.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\ES_CPP_API_Def.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="CESAPI.i">
@@ -40,13 +49,16 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <None Include="CESAPI.py">
-      <Filter>Source Files</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="CESAPI_wrap.cxx">
       <Filter>Generated Files</Filter>
     </ClCompile>
+    <ClCompile Include="CESAPI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CESAPI.py">
+      <Filter>Generated Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

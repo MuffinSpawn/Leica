@@ -131,12 +131,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CESAPI.cpp">
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Program Files\Anaconda3\include;C:\Users\peter\Development\Leica\Include</AdditionalIncludeDirectories>
+    </ClCompile>
     <ClCompile Include="CESAPI_wrap.cxx" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CESAPI.hpp" />
     <ClInclude Include="include\Constant.h" />
     <ClInclude Include="include\Enum.h" />
+    <ClInclude Include="Include\ES_CPP_API_Def.h" />
     <ClInclude Include="Include\ES_CPP_API_PyDef.h" />
+    <ClInclude Include="Include\ES_C_API_Def.h" />
     <ClInclude Include="Include\ES_C_API_PyDef.h" />
     <ClInclude Include="include\ES_MCPP_API_Def.h" />
   </ItemGroup>

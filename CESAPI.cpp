@@ -20,18 +20,36 @@
 
 #define DEFAULT_BUFLEN 512
 #define DEFAULT_ADDRESS "192.168.0.1"
-#define DEFAULT_PORT "700"
+#define DEFAULT_PORT 700
 
-Connection::Connection() {
-    this->Connection(DEFAULT_ADDRESS, DEFAULT_PORT)
+
+/*** Connection Class Member Definitions ***/
+
+Connection::Connection() :_socket(INVALID_SOCKET), _commandAsync(NULL), _commandSync(NULL) {
+    _commandAsync = new CommandAsync(this);
+    _commandSync = new CommandSync(_commandAsync);
 }
 
-Connection::Connection(const std::string address, const uint16_t port) {
+Connection::~Connection() {
+    delete _commandSync;
+
+    _commandAsync->StopReceiving();
+    delete _commandAsync;
+
+    Disconnect();
+}
+
+void Connection::Connect() {
+  Connect(DEFAULT_ADDRESS, DEFAULT_PORT);
+}
+
+void Connection::Connect(const std::string address, const uint16_t port) {
     WSADATA wsaData;
     _socket = INVALID_SOCKET;
     struct addrinfo *result = NULL,
                     *ptr = NULL,
                     hints;
+    int iResult;
 
     // Initialize Winsock
     iResult = WSAStartup(MAKEWORD(2,2), &wsaData);
@@ -45,7 +63,7 @@ Connection::Connection(const std::string address, const uint16_t port) {
     hints.ai_protocol = IPPROTO_TCP;
 
     // Resolve the server address and port
-    iResult = getaddrinfo(argv[1], DEFAULT_PORT, &hints, &result);
+    iResult = getaddrinfo(address.c_str(), std::to_string(port).c_str(), &hints, &result);
     if ( iResult != 0 ) {
         WSACleanup();
         throw ConnectionException(std::string("getaddrinfo failed with error: ") + std::to_string(iResult));
@@ -78,11 +96,48 @@ Connection::Connection(const std::string address, const uint16_t port) {
         WSACleanup();
         throw ConnectionException(std::string("getaddrinfo failed with error: ") + std::to_string(iResult));
     }
+
+    _commandAsync->StartReceiving();
 }
 
-Connection::~Connection() {
-    closesocket(_socket);
-    WSACleanup();
+
+void Connection::Disconnect() {
+    if (_socket != INVALID_SOCKET) {
+        closesocket(_socket);
+        WSACleanup();
+    }
+}
+
+
+/*** CommandAsync Class Member Definitions ***/
+
+bool CommandAsync::SendPacket(void const * const PacketStart, const long PacketSize) const {
+  return true;
+}
+
+void CommandAsync::StartReceiving() const {}
+void CommandAsync::StopReceiving() const {}
+
+void CommandAsync::NotifyReceivers(void const * const packet, long packetSize) {
+    std::list<CESAPIReceive *>::const_iterator receiver;
+    for (receiver=_receivers.begin(); receiver!=_receivers.end(); ++receiver) {
+        (*receiver)->ReceiveData(packet, packetSize);
+    }
+}
+
+void CommandAsync::RegisterReceiver(CESAPIReceive * receiver) {
+    UnregisterReceiver(receiver);  // just in case
+    _receivers.push_back(receiver);
+}
+
+void CommandAsync::UnregisterReceiver(CESAPIReceive * receiver) {
+    _receivers.remove(receiver);
+}
+
+/*** CommandSync Class Member Definitions ***/
+
+bool CommandSync::SendPacket(void const * const PacketStart, const long PacketSize) const {
+  return true;
 }
 
 /*
@@ -104,7 +159,7 @@ void CommandSync::StopMonitoringIfTargetCommand(const ES_DataType targetType, co
 }
 
 void CommandSync::OnInitializeAnswer() {
-    StopMonitoringIfTarget(ES_DT_Command, ES_C_Initialize);
+    StopMonitoringIfTargetCommand(ES_DT_Command, ES_C_Initialize);
 }
 
 void CommandSync::StartMonitoring(const ES_DataType targetType, const ES_Command targetCommand) {
@@ -121,9 +176,9 @@ void CommandSync::WaitWhileMonitoring() {
 
 InitializeRT const * CommandSync::Initialize() {
     StartMonitoring(ES_DT_Command, ES_C_Initialize);
-    _commandAsync.Initialize();
+    _commandAsync->Initialize();
     WaitWhileMonitoring();
-    return reinterpret_case<InitializeRT const *> _packet;
+    return reinterpret_cast<InitializeRT const *>(_packet);
 }
 
 

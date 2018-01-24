@@ -9,7 +9,8 @@
 #include <stdio.h>
 
 #include <chrono>
-#include<exception>
+#include <cstring>
+#include <exception>
 #include <string>
 #include <thread>
 
@@ -22,6 +23,111 @@
 #define DEFAULT_PORT 700
 
 
+Message::Message(void const * const packet) {
+    PacketHeaderT const * const header = reinterpret_cast<PacketHeaderT const * const>(packet);
+    packet_ = new char[header.lPacketSize];
+    std::memcpy(packet_, packet, header.lPacketSize);
+}
+
+Message::~Message() {
+    delete[] packet_;
+}
+
+template<typename T>
+T Message::packet() {
+    T test;
+    char const * type_name = typeid(test).name();
+    if (std::strcmp(type_name, "PacketHeaderT") != 0 &&
+        std::strcmp(type_name, "ReturnDataT") != 0 &&
+        std::strcmp(type_name, "BasicCommandRT") != 0 &&
+        std::strcmp(type_name, "NivelResultT") != 0 &&
+        std::strcmp(type_name, "ReflectorPosResultT") != 0 &&
+        std::strcmp(type_name, "SingleMeasResultT") != 0 &&
+        std::strcmp(type_name, "SingleMeasResult2T") != 0 &&
+        std::strcmp(type_name, "SystemStatusChangeT") != 0 &&
+        std::strcmp(type_name, "ErrorResponseT") != 0 &&
+        std::strcmp(type_name, "InitializeRT") != 0 &&
+        std::strcmp(type_name, "ActivateCameraViewRT") != 0 &&
+        std::strcmp(type_name, "ParkRT") != 0 &&
+        std::strcmp(type_name, "GoBirdBathRT") != 0 &&
+        std::strcmp(type_name, "GoBirdBath2RT") != 0 &&
+        std::strcmp(type_name, "ChangeFaceRT") != 0 &&
+        std::strcmp(type_name, "StartNivelMeasurementRT") != 0 &&
+        std::strcmp(type_name, "StartMeasurementRT") != 0 &&
+        std::strcmp(type_name, "StopMeasurementRT") != 0 &&
+        std::strcmp(type_name, "ExitApplicationRT") != 0 &&
+        std::strcmp(type_name, "GoLastMeasuredPointRT") != 0 &&
+        std::strcmp(type_name, "FindReflectorRT") != 0 &&
+        std::strcmp(type_name, "SetCoordinateSystemTypeRT") != 0 &&
+        std::strcmp(type_name, "GetCoordinateSystemTypeRT") != 0 &&
+        std::strcmp(type_name, "SetMeasurementModeRT") != 0 &&
+        std::strcmp(type_name, "GetMeasurementModeRT") != 0 &&
+        std::strcmp(type_name, "SetSearchParamsRT") != 0 &&
+        std::strcmp(type_name, "GetSearchParamsRT") != 0 &&
+        std::strcmp(type_name, "SetStationaryModeParamsRT") != 0 &&
+        std::strcmp(type_name, "GetStationaryModeParamsRT") != 0 &&
+        std::strcmp(type_name, "SetSystemSettingsRT") != 0 &&
+        std::strcmp(type_name, "GetSystemSettingsRT") != 0 &&
+        std::strcmp(type_name, "SetUnitsRT") != 0 &&
+        std::strcmp(type_name, "GetUnitsRT") != 0 &&
+        std::strcmp(type_name, "GetSystemStatusRT") != 0 &&
+        std::strcmp(type_name, "GetMeasurementStatusInfoRT") != 0 &&
+        std::strcmp(type_name, "GetTrackerStatusRT") != 0 &&
+        std::strcmp(type_name, "SetReflectorRT") != 0 &&
+        std::strcmp(type_name, "GetReflectorsRT") != 0 &&
+        std::strcmp(type_name, "GetReflectorRT") != 0 &&
+        std::strcmp(type_name, "SetEnvironmentParamsRT") != 0 &&
+        std::strcmp(type_name, "GetEnvironmentParamsRT") != 0 &&
+        std::strcmp(type_name, "SetRefractionParamsRT") != 0 &&
+        std::strcmp(type_name, "GetRefractionParamsRT") != 0 &&
+        std::strcmp(type_name, "SetStationOrientationParamsRT") != 0 &&
+        std::strcmp(type_name, "GetStationOrientationParamsRT") != 0 &&
+        std::strcmp(type_name, "SetTransformationParamsRT") != 0 &&
+        std::strcmp(type_name, "GetTransformationParamsRT") != 0 &&
+        std::strcmp(type_name, "GoPositionRT") != 0 &&
+        std::strcmp(type_name, "GetDirectionRT") != 0 &&
+        std::strcmp(type_name, "GoPositionHVDRT") != 0 &&
+        std::strcmp(type_name, "PointLaserRT") != 0 &&
+        std::strcmp(type_name, "PositionRelativeHVRT") != 0 &&
+        std::strcmp(type_name, "PointLaserHVDRT") != 0 &&
+        std::strcmp(type_name, "MoveHVRT") != 0 &&
+        std::strcmp(type_name, "GoNivelPositionRT") != 0 &&
+        std::strcmp(type_name, "CallOrientToGravityRT") != 0 &&
+        std::strcmp(type_name, "SetCompensationRT") != 0 &&
+        std::strcmp(type_name, "GetCompensationRT") != 0 &&
+        std::strcmp(type_name, "GetCompensationsRT") != 0 &&
+        std::strcmp(type_name, "GetCompensations2RT") != 0 &&
+        std::strcmp(type_name, "SetStatisticModeRT") != 0 &&
+        std::strcmp(type_name, "GetStatisticModeRT") != 0 &&
+        std::strcmp(type_name, "SetCameraParamsRT") != 0 &&
+        std::strcmp(type_name, "GetCameraParamsRT") != 0 &&
+        std::strcmp(type_name, "GetADMInfo2RT") != 0 &&
+        std::strcmp(type_name, "GetNivelInfoRT") != 0 &&
+        std::strcmp(type_name, "GetNivelInfo2RT") != 0 &&
+        std::strcmp(type_name, "GetTPInfoRT") != 0 &&
+        std::strcmp(type_name, "GetTrackerInfoRT") != 0 &&
+        std::strcmp(type_name, "GetATRInfoRT") != 0 &&
+        std::strcmp(type_name, "SetLaserOnTimerRT") != 0 &&
+        std::strcmp(type_name, "GetLaserOnTimerRT") != 0 &&
+        std::strcmp(type_name, "GetFaceRT") != 0 &&
+        std::strcmp(type_name, "SetLongSystemParamRT") != 0 &&
+        std::strcmp(type_name, "GetLongSystemParamRT") != 0 &&
+        std::strcmp(type_name, "GetObjectTemperatureRT") != 0 &&
+        std::strcmp(type_name, "ClearCommandQueueRT") != 0 &&
+        std::strcmp(type_name, "GetOverviewCameraInfoRT") != 0 &&
+        std::strcmp(type_name, "GetDoubleSystemParamRT") != 0 &&
+        std::strcmp(type_name, "SetDoubleSystemParamRT") != 0 &&
+        std::strcmp(type_name, "RestoreStartupConditionsRT") != 0 &&
+        std::strcmp(type_name, "GoAndMeasureRT") != 0 &&
+        std::strcmp(type_name, "GetMeteoStationInfoRT") != 0 &&
+        std::strcmp(type_name, "GetAT4xxInfoRT") != 0 &&
+        std::strcmp(type_name, "GetSystemSoftwareVersionRT") != 0)
+    {
+        throw LTException("Invalid laser tracker packet type \"" + type_name + "\".");
+    }
+    return reinterpret_cast<T const *>(packet_); 
+}
+
 /*** Connection Class Member Definitions ***/
 void Connection::SendPacket(void const * const packet) const {
   PacketHeaderT const * const header = reinterpret_cast<PacketHeaderT const * const>(_receive_buffer);
@@ -30,7 +136,7 @@ void Connection::SendPacket(void const * const packet) const {
   const char * packet_ptr = static_cast<char const *>(packet);
   int iResult = send(_socket, packet_ptr, packetSize, 0);
   if (iResult == SOCKET_ERROR) {
-    throw ConnectionException(std::string("send failed with error: ") + std::to_string(WSAGetLastError()));
+    throw LTException(std::string("send failed with error: ") + std::to_string(WSAGetLastError()));
   }
 }
 
@@ -43,9 +149,9 @@ void const * Connection::ReceivePacket() const {
     iResult = recv(_socket, (_receive_buffer + bytesReceived), (bytesRequested - bytesReceived), 0);
     if (iResult == 0) {
       Disconnect();
-      throw ConnectionException(std::string("Socket was closed."));
+      throw LTException(std::string("Socket was closed."));
     } else if (iResult < 0) {
-      throw ConnectionException(std::string("Socket error: ") + std::to_string(iResult));
+      throw LTException(std::string("Socket error: ") + std::to_string(iResult));
     }
     bytesReceived += iResult;
   }
@@ -57,10 +163,10 @@ void const * Connection::ReceivePacket() const {
     iResult = recv(_socket, (_receive_buffer + bytesReceived), (bytesRequested - bytesReceived), 0);
     if (iResult == 0) {
       Disconnect();
-      throw ConnectionException(std::string("Socket was closed."));
+      throw LTException(std::string("Socket was closed."));
     }
     else if (iResult < 0) {
-      throw ConnectionException(std::string("Socket error: ") + std::to_string(iResult));
+      throw LTException(std::string("Socket error: ") + std::to_string(iResult));
     }
     bytesReceived += iResult;
   }
@@ -97,7 +203,7 @@ void Connection::Connect(const std::string address, const uint16_t port) const {
     // Initialize Winsock
     iResult = WSAStartup(MAKEWORD(2,2), &wsaData);
     if (iResult != 0) {
-        throw ConnectionException(std::string("WSAStartup failed with error: ") + std::to_string(iResult));
+        throw LTException(std::string("WSAStartup failed with error: ") + std::to_string(iResult));
     }
 
     ZeroMemory( &hints, sizeof(hints) );
@@ -109,7 +215,7 @@ void Connection::Connect(const std::string address, const uint16_t port) const {
     iResult = getaddrinfo(address.c_str(), std::to_string(port).c_str(), &hints, &result);
     if ( iResult != 0 ) {
         WSACleanup();
-        throw ConnectionException(std::string("getaddrinfo failed with error: ") + std::to_string(iResult));
+        throw LTException(std::string("getaddrinfo failed with error: ") + std::to_string(iResult));
     }
 
     // Attempt to connect to an address until one succeeds
@@ -120,7 +226,7 @@ void Connection::Connect(const std::string address, const uint16_t port) const {
             ptr->ai_protocol);
         if (_socket == INVALID_SOCKET) {
             WSACleanup();
-            throw ConnectionException(std::string("socket failed with error: ") + std::to_string(WSAGetLastError()));
+            throw LTException(std::string("socket failed with error: ") + std::to_string(WSAGetLastError()));
         }
 
         // Connect to server.
@@ -137,7 +243,7 @@ void Connection::Connect(const std::string address, const uint16_t port) const {
 
     if (_socket == INVALID_SOCKET) {
         WSACleanup();
-        throw ConnectionException(std::string("getaddrinfo failed with error: ") + std::to_string(iResult));
+        throw LTException(std::string("getaddrinfo failed with error: ") + std::to_string(iResult));
     }
 
     _commandAsync->StartReceiving();

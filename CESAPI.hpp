@@ -10,13 +10,15 @@
 
 #define DEFAULT_BUFLEN 512
 
+namespace CESAPI {
+
 /*** Class Declarations ***/
 
 class
 #ifdef _CPP_API_EXT_DLL
    AFX_EXT_CLASS
 #endif
-ConnectionException;
+LTException;
 class
 #ifdef _CPP_API_EXT_DLL
    AFX_EXT_CLASS
@@ -34,18 +36,30 @@ class
 CommandSync;
 
 
-/*** ConnectionException Class Definition ***/
+/*** LTException Class Definition ***/
 
-class ConnectionException : public std::exception {
+class LTException : public std::exception {
 private:
 	std::string _what;
 
 public:
-	ConnectionException() : _what("") {}
-	ConnectionException(std::string what) : _what(what) {}
+	LTException() : _what("") {}
+	LTException(std::string what) : _what(what) {}
     const char * what () const throw () {
       return _what.c_str();
    }
+};  // class LTException
+
+
+class Message {
+private:
+	void * packet_;
+	Message() { };
+
+public:
+	Message(void const * const packet);
+	~Message();
+	template<typename T> T const * packet();
 };
 
 
@@ -67,7 +81,7 @@ public:
    void Connect() const;  // uses default address and port
    void Connect(const std::string address, const uint16_t port) const;
    void Disconnect() const;
-};
+};  // class Connection
 
 
 /*** CommandAsync Class Definition ***/
@@ -92,7 +106,7 @@ private:
 public:
 	void RegisterReceiver(CESAPIReceive * receiver);
 	void UnregisterReceiver(CESAPIReceive * receiver);
-};
+};  // class CommandAsync
 
 
 /*** CommandSync Class Definition ***/
@@ -393,7 +407,7 @@ public:
   GetMeteoStationInfoRT const * GetMeteoStationInfo();
   GetAT4xxInfoRT const * GetAT4xxInfo();
   GetSystemSoftwareVersionRT const * GetSystemSoftwareVersion();
-};
+};  // class CommandSync
 
 /*
 Connection -> CommandAsync
@@ -407,3 +421,5 @@ Connection -> CommandAsync
 	- getters for all of the command result types
 - CommandSync: Uses CommandAsync to provide blocking LT command functions
 */
+
+};  // namespace CESAPI

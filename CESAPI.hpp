@@ -3,7 +3,7 @@
 #include <exception>
 #include <string>
 #include <list>
-#include<winsock2.h>
+#include <winsock2.h>
 
 #include "ES_C_API_Def.h"
 #include "ES_CPP_API_Def.h"
@@ -40,13 +40,13 @@ CommandSync;
 
 class LTException : public std::exception {
 private:
-	std::string _what;
+	std::string what_;
 
 public:
-	LTException() : _what("") {}
-	LTException(std::string what) : _what(what) {}
+	LTException() : what_("") {}
+	LTException(std::string what) : what_(what) {}
     const char * what () const throw () {
-      return _what.c_str();
+      return what_.c_str();
    }
 };  // class LTException
 

@@ -15,6 +15,11 @@ struct BasicCommandRT
     enum ES_ResultStatus status;
 };
 '''
+class BasicCommandRT(object):
+    def __init__(self):
+        c_struct = struct.Struct('L I I I')
+
+
 
 def main():
     fh = open('packet.bin', 'rb')

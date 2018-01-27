@@ -105,6 +105,353 @@ class SingleMeasResult2T(object):
 		self.dVal2 = dPressure[23]
 		self.dVal2 = dHumidity[24]
 
+class SimpleCommandRT(object):
+	def __init__(self, packet_info):
+		self.packetInfo = packet_info
+
+class ExitApplicationRT(SimpleCommandRT): pass
+class SetUnitsRT(SimpleCommandRT): pass
+class InitializeRT(SimpleCommandRT): pass
+class ActivateCameraViewRT(SimpleCommandRT): pass
+class ParkRT(SimpleCommandRT): pass
+class SetStationOrientationParamsRT(SimpleCommandRT): pass
+class SetTransformationParamsRT(SimpleCommandRT): pass
+class SetTransformationParamsRT(SimpleCommandRT): pass
+class SetEnvironmentParamsRT(SimpleCommandRT): pass
+class SetRefractionParamsRT(SimpleCommandRT): pass
+class SetMeasurementModeRT(SimpleCommandRT): pass
+class SetCoordinateSystemTypeRT(SimpleCommandRT): pass
+class SetStationaryModeParamsRT(SimpleCommandRT): pass
+class SetReflectorRT(SimpleCommandRT): pass
+class SetSearchParamsRT(SimpleCommandRT): pass
+class SetSystemSettingsRT(SimpleCommandRT): pass
+class StartMeasurementRT(SimpleCommandRT): pass
+class StartNivelMeasurementRT(SimpleCommandRT): pass
+class StopMeasurementRT(SimpleCommandRT): pass
+class ChangeFaceRT(SimpleCommandRT): pass
+class GoBirdBathRT(SimpleCommandRT): pass
+class GoPositionRT(SimpleCommandRT): pass
+class GoPositionHVDRT(SimpleCommandRT): pass
+class PositionRelativeHVRT(SimpleCommandRT): pass
+class PointLaserRT(SimpleCommandRT): pass
+class PointLaserHVDRT(SimpleCommandRT): pass
+class MoveHVRT(SimpleCommandRT): pass
+class GoNivelPositionRT(SimpleCommandRT): pass
+class GoLastMeasuredPointRT(SimpleCommandRT): pass
+class FindReflectorRT(SimpleCommandRT): pass
+class CallOrientToGravityRT(SimpleCommandRT): pass
+class SetCompensationRT(SimpleCommandRT): pass
+class SetStatisticModeRT(SimpleCommandRT): pass
+class SetCameraParamsRT(SimpleCommandRT): pass
+class SetLaserOnTimerRT(SimpleCommandRT): pass
+class GoBirdBath2RT(SimpleCommandRT): pass
+class SetLongSystemParameterRT(SimpleCommandRT): pass
+class ClearCommandQueueRT(SimpleCommandRT): pass
+class RestoreStartupConditionsRT(SimpleCommandRT): pass
+class GoAndMeasureRT(SimpleCommandRT): pass
+
+class ESVersionNumberT(object):
+	def __init__(self, body_data):
+		body = struct.Struct('i i i').unpack(body_data)
+		self.iMajorVersionNumber = body[0]
+		self.iMinorVersionNumber = body[1]
+		self.iBuildNumber = body[1]
+
+class GetSystemStatusRT(object):
+	def __init__(self, packet_info, body_data):
+		self.packetInfo = packet_info
+		body = struct.Struct('I I I I').unpack(body_data[:16])
+		self.lastResultStatus = body[0]
+		self.trackerProcessorStatus = body[1]
+		self.laserStatus = body[2]
+		self.admStatus = body[3]
+		self.weatherMonitorStatus = ESVersionNumberT(body_data[16:28])
+		body = struct.Struct('l l').unpack(body_data[28:])
+		self.lFlagsValue = body[0]
+		self.lTrackerSerialNumber = body[1]
+
+class GetTrackerStatusRT(object):
+	def __init__(self, packet_info, body_data):
+		self.packetInfo = packet_info
+		body = struct.Struct('I').unpack(body_data)
+		self.trackerStatus = body[0]
+
+class SystemUnitsDataT(object):
+	def __init__(self, body_data):
+		body = struct.Struct('I I I I I').unpack(body_data)
+		self.lenUnitType = body[0]
+		self.angUnitType = body[1]
+		self.tempUnitType = body[2]
+		self.pressUnitType = body[3]
+		self.humUnitType = body[4]
+
+class GetUnitsRT(object):
+	def __init__(self, packet_info, body_data):
+		self.packetInfo = packet_info
+		self.unitsSettings = SystemUnitsDataT(body_data)
+
+class StationOrientationDataT(object):
+	def __init__(self, body_data):
+		body = struct.Struct('d d d d d d').unpack(body_data)
+		self.dVal1 = body[0]
+		self.dVal2 = body[1]
+		self.dVal3 = body[2]
+		self.dRot1 = body[3]
+		self.dRot2 = body[4]
+		self.dRot3 = body[5]
+
+class GetStationOrientationParamsRT(object):
+	def __init__(self, packet_info, body_data):
+		self.packetInfo = packet_info
+		self.stationOrientation = StationOrientationDataT(body_data)
+
+class TransformationDataT(object):
+	def __init__(self, body_data):
+		body = struct.Struct('d d d d d d').unpack(body_data)
+		self.dVal1 = body[0]
+		self.dVal2 = body[1]
+		self.dVal3 = body[2]
+		self.dRot1 = body[3]
+		self.dRot2 = body[4]
+		self.dRot3 = body[5]
+
+class GetTransformationParamsRT(object):
+	def __init__(self, packet_info, body_data):
+		self.packetInfo = packet_info
+		self.transformationData = TransformationDataT(body_data)
+
+class EnvironmentDataT(object):
+	def __init__(self, body_data):
+		body = struct.Struct('d d d').unpack(body_data)
+		self.dTemperature = body[0]
+		self.dPressure = body[1]
+		self.dHumidity = body[2]
+
+class GetEnvironmentParamsRT(object):
+	def __init__(self, packet_info, body_data):
+		self.packetInfo = packet_info
+		self.environmentData = TransformationDataT(body_data)
+
+class EnvironmentDataT(object):
+	def __init__(self, body_data):
+		body = struct.Struct('d d').unpack(body_data)
+		self.dIfmRefractionIndex = body[0]
+		self.dAdmRefractionIndex = body[1]
+
+class GetRefractionParamsRT(object):
+	def __init__(self, packet_info, body_data):
+		self.packetInfo = packet_info
+		self.refractionData = TransformationDataT(body_data)
+
+class GetMeasurementModeRT(object):
+	def __init__(self, packet_info, body_data):
+		self.packetInfo = packet_info
+		body = struct.Struct('I').unpack(body_data)
+		self.measMode = body[0]
+
+    ES_C_GetCoordinateSystemType = 27,
+coordSysType
+class GetCoordinateSystemTypeRT(object):
+	def __init__(self, packet_info, body_data):
+		self.packetInfo = packet_info
+		self.transformationData = TransformationDataT(body_data)
+
+    ES_C_GetStationaryModeParams = 29,
+
+class GetStationaryModeParamsRT(object):
+	def __init__(self, packet_info, body_data):
+		self.packetInfo = packet_info
+		self.transformationData = TransformationDataT(body_data)
+
+    ES_C_GetReflector = 41,
+
+class GetReflectorRT(object):
+	def __init__(self, packet_info, body_data):
+		self.packetInfo = packet_info
+		self.transformationData = TransformationDataT(body_data)
+
+    ES_C_GetReflectors = 42,
+
+class GetReflectorsRT(object):
+	def __init__(self, packet_info, body_data):
+		self.packetInfo = packet_info
+		self.transformationData = TransformationDataT(body_data)
+
+    ES_C_GetSearchParams = 44,
+
+class GetSearchParamsRT(object):
+	def __init__(self, packet_info, body_data):
+		self.packetInfo = packet_info
+		self.transformationData = TransformationDataT(body_data)
+
+    ES_C_GetSystemSettings = 48,
+
+class GetSystemSettingsRT(object):
+	def __init__(self, packet_info, body_data):
+		self.packetInfo = packet_info
+		self.transformationData = TransformationDataT(body_data)
+
+    ES_C_GetDirection = 66,                        // get direction even without reflector locked on
+
+class GetDirectionRT(object):
+	def __init__(self, packet_info, body_data):
+		self.packetInfo = packet_info
+		self.transformationData = TransformationDataT(body_data)
+
+    ES_C_GetStatisticMode = 81,                    // get's the statistical setting
+
+class GetStatisticModeRT(object):
+	def __init__(self, packet_info, body_data):
+		self.packetInfo = packet_info
+		self.transformationData = TransformationDataT(body_data)
+
+    ES_C_GetCameraParams = 84,                     // read the current video camera parameters            
+
+class GetCameraParamsRT(object):
+	def __init__(self, packet_info, body_data):
+		self.packetInfo = packet_info
+		self.transformationData = TransformationDataT(body_data)
+
+    ES_C_GetCompensation = 85,                     // read the currently active compensation ID
+
+class GetCompensationRT(object):
+	def __init__(self, packet_info, body_data):
+		self.packetInfo = packet_info
+		self.transformationData = TransformationDataT(body_data)
+
+    ES_C_GetCompensations = 86,                    // read all compensations stored in the database
+
+class GetCompensationsRT(object):
+	def __init__(self, packet_info, body_data):
+		self.packetInfo = packet_info
+		self.transformationData = TransformationDataT(body_data)
+
+    ES_C_GetTPInfo = 90,
+
+class GetTPInfoRT(object):
+	def __init__(self, packet_info, body_data):
+		self.packetInfo = packet_info
+		self.transformationData = TransformationDataT(body_data)
+
+    ES_C_GetNivelInfo = 91,
+
+class GetNivelInfoRT(object):
+	def __init__(self, packet_info, body_data):
+		self.packetInfo = packet_info
+		self.transformationData = TransformationDataT(body_data)
+
+    ES_C_SetLaserOnTimer = 92,                     // switch the laser on in ... time
+
+class SetLaserOnTimerRT(object):
+	def __init__(self, packet_info, body_data):
+		self.packetInfo = packet_info
+		self.transformationData = TransformationDataT(body_data)
+
+    ES_C_GetLaserOnTimer = 93,                     // read the remining time until it is switched on
+
+class GetLaserOnTimerRT(object):
+	def __init__(self, packet_info, body_data):
+		self.packetInfo = packet_info
+		self.transformationData = TransformationDataT(body_data)
+
+    ES_C_GetFace = 98,                             // returns the current face (Face1 / Face2)
+
+class GetFaceRT(object):
+	def __init__(self, packet_info, body_data):
+		self.packetInfo = packet_info
+		self.transformationData = TransformationDataT(body_data)
+
+    ES_C_GetLongSystemParameter = 121,
+
+class GetLongSystemParameterRT(object):
+	def __init__(self, packet_info, body_data):
+		self.packetInfo = packet_info
+		self.transformationData = TransformationDataT(body_data)
+
+    ES_C_GetMeasurementStatusInfo = 122,
+
+class GetMeasurementStatusInfoRT(object):
+	def __init__(self, packet_info, body_data):
+		self.packetInfo = packet_info
+		self.transformationData = TransformationDataT(body_data)
+
+    ES_C_GetCompensations2 = 123,                  // enhanced read all compensations stored in the database
+
+class GetCompensations2RT(object):
+	def __init__(self, packet_info, body_data):
+		self.packetInfo = packet_info
+		self.transformationData = TransformationDataT(body_data)
+
+    ES_C_GetDoubleSystemParameter = 126,
+
+class GetDoubleSystemParameterRT(object):
+	def __init__(self, packet_info, body_data):
+		self.packetInfo = packet_info
+		self.transformationData = TransformationDataT(body_data)
+
+    ES_C_GetObjectTemperature = 127,               // read the object temperature
+
+class GetObjectTemperatureT(object):
+	def __init__(self, packet_info, body_data):
+		self.packetInfo = packet_info
+		self.transformationData = TransformationDataT(body_data)
+
+    ES_C_GetOverviewCameraInfo = 129,                   
+
+class GetOverviewCameraInfoRT(object):
+	def __init__(self, packet_info, body_data):
+		self.packetInfo = packet_info
+		self.transformationData = TransformationDataT(body_data)
+
+    ES_C_GetADMInfo2 = 131, 
+
+class GetADMInfo2RT(object):
+	def __init__(self, packet_info, body_data):
+		self.packetInfo = packet_info
+		self.transformationData = TransformationDataT(body_data)
+
+    ES_C_GetTrackerInfo = 132,
+
+class GetTrackerInfoRT(object):
+	def __init__(self, packet_info, body_data):
+		self.packetInfo = packet_info
+		self.transformationData = TransformationDataT(body_data)
+
+    ES_C_GetNivelInfo2 = 133,
+
+class GetNivelInfo2RT(object):
+	def __init__(self, packet_info, body_data):
+		self.packetInfo = packet_info
+		self.transformationData = TransformationDataT(body_data)
+
+    ES_C_GetATRInfo = 138,
+
+class GetATRInfoRT(object):
+	def __init__(self, packet_info, body_data):
+		self.packetInfo = packet_info
+		self.transformationData = TransformationDataT(body_data)
+
+    ES_C_GetMeteoStationInfo = 139,    
+
+class GetMeteoStationInfoRT(object):
+	def __init__(self, packet_info, body_data):
+		self.packetInfo = packet_info
+		self.transformationData = TransformationDataT(body_data)
+
+    ES_C_GetAT4xxInfo = 140,
+
+class GetAT4xxInfoRT(object):
+	def __init__(self, packet_info, body_data):
+		self.packetInfo = packet_info
+		self.transformationData = TransformationDataT(body_data)
+
+    ES_C_GetSystemSoftwareVersion = 142,           
+
+class GetSystemSoftwareVersionRT(object):
+	def __init__(self, packet_info, body_data):
+		self.packetInfo = packet_info
+		self.transformationData = TransformationDataT(body_data)
+
 class LTPacketFactory(object):
 	def __init__(self):
 		self.PACKET_HEADER_SIZE = 12
@@ -118,6 +465,9 @@ class LTPacketFactory(object):
 		if packet_header.type == ES_DT_Command:
 			packet_info = BasicCommandRT(packet_header, body_data[:self.BASIC_COMMAND_BODY_SIZE])
 			# instantiate specific command type
+			command = packet_info.command
+			if command == ES_C_Initialize:
+				packet = InitializeRT(packet_info)
 		elif packet_header.type == ES_DT_Error:
 			packet = ErrorResponseT(packet_header, body_data)
 		elif packet_header.type == ES_DT_SingleMeasResult:

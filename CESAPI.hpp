@@ -3,7 +3,7 @@
 #include <exception>
 #include <string>
 #include <list>
-#include<winsock2.h>
+#include <winsock2.h>
 
 #include "ES_C_API_Def.h"
 #include "ES_CPP_API_Def.h"
@@ -12,14 +12,16 @@
 
 namespace CESAPI {
 
+/*** Class Declarations ***/
+
   /*** Class Declarations ***/
 
   class
 #ifdef _CPP_API_EXT_DLL
     AFX_EXT_CLASS
 #endif
-    ConnectionException;
-  class
+LTException;
+class
 #ifdef _CPP_API_EXT_DLL
     AFX_EXT_CLASS
 #endif
@@ -36,20 +38,31 @@ namespace CESAPI {
     CommandSync;
 
 
-  /*** ConnectionException Class Definition ***/
+/*** LTException Class Definition ***/
 
-  class ConnectionException : public std::exception {
-  private:
-    std::string _what;
+class LTException : public std::exception {
+private:
+	std::string what_;
 
-  public:
-    ConnectionException() : _what("") {}
-    ConnectionException(std::string what) : _what(what) {}
-    const char * what() const throw () {
-      return _what.c_str();
-    }
-  };
+public:
+	LTException() : what_("") {}
+	LTException(std::string what) : what_(what) {}
+    const char * what () const throw () {
+      return what_.c_str();
+   }
+};  // class LTException
 
+
+class Message {
+private:
+	void * packet_;
+	Message() { };
+
+public:
+	Message(void const * const packet);
+	~Message();
+	template<typename T> T const * packet();
+};
 
   /*** Connection Class Definition ***/
 
@@ -71,6 +84,13 @@ namespace CESAPI {
     void Disconnect() const;
   };
 
+public:
+   Connection();
+   Connection::~Connection();
+   void Connect() const;  // uses default address and port
+   void Connect(const std::string address, const uint16_t port) const;
+   void Disconnect() const;
+};  // class Connection
 
   /*** CommandAsync Class Definition ***/
 
@@ -96,6 +116,10 @@ namespace CESAPI {
     void UnregisterReceiver(CESAPIReceive * receiver);
   };
 
+public:
+	void RegisterReceiver(CESAPIReceive * receiver);
+	void UnregisterReceiver(CESAPIReceive * receiver);
+};  // class CommandAsync
 
   /*** CommandSync Class Definition ***/
 
@@ -421,17 +445,99 @@ namespace CESAPI {
     GetSystemSoftwareVersionRT const * GetSystemSoftwareVersion();
   };
 
-  /*
-  Connection -> CommandAsync
-             -> CommandSync
+public:
+  InitializeRT const * Initialize();
+  ActivateCameraViewRT const * ActivateCameraView();
+  ParkRT const * Park();
+  GoLastMeasuredPointRT const * GoLastMeasuredPoint();
+  GetSystemStatusRT const * GetSystemStatus();
+  GetTrackerStatusRT const * GetTrackerStatus();
+  SetCoordinateSystemTypeRT const * SetCoordinateSystemType(ES_CoordinateSystemType sysType);
+  GetCoordinateSystemTypeRT const * GetCoordinateSystemType();
+  SetMeasurementModeRT const * SetMeasurementMode(ES_MeasMode mode);
+  GetMeasurementModeRT const * GetMeasurementMode();
+  SetStationaryModeParamsRT const * SetStationaryModeParams(long lMeasTime, bool bUseADM);
+  SetStationaryModeParamsRT const * SetStationaryModeParams(StationaryModeDataT stationaryModeData);
+  GetStationaryModeParamsRT const * GetStationaryModeParams();
+  GetReflectorsRT const * GetReflectors();
+  GetReflectorRT const * GetReflector();
+  SetReflectorRT const * SetReflector(int iInternalReflectorId);
+  SetUnitsRT const * SetUnits(SystemUnitsDataT unitsSettings);
+  SetUnitsRT const * SetUnits(ES_LengthUnit lenUnitType, ES_AngleUnit angUnitType, ES_TemperatureUnit tempUnitType, ES_PressureUnit pressUnitType, ES_HumidityUnit humUnitType);
+  GetUnitsRT const * GetUnits();
+  SetSystemSettingsRT const * SetSystemSettings(SystemSettingsDataT settings);
+  GetSystemSettingsRT const * GetSystemSettings();
+  SetEnvironmentParamsRT const * SetEnvironmentParams(double dTemperature, double dPressure, double dHumidity);
+  SetEnvironmentParamsRT const * SetEnvironmentParams(EnvironmentDataT environmentData);
+  GetEnvironmentParamsRT const * GetEnvironmentParams();
+  GetRefractionParamsRT const * GetRefractionParams();
+  SetRefractionParamsRT const * SetRefractionParams(double ifmIndex, double admIndex);
+  GetSearchParamsRT const * GetSearchParams();
+  SetSearchParamsRT const * SetSearchParams(SearchParamsDataT searchParams);
+  SetStationOrientationParamsRT const * SetStationOrientationParams(double dVal1, double dVal2, double dVal3, double dRot1, double dRot2, double dRot3);
+  SetStationOrientationParamsRT const * SetStationOrientationParams(StationOrientationDataT stationOrientation);
+  GetStationOrientationParamsRT const * GetStationOrientationParams();
+  SetTransformationParamsRT const * SetTransformationParams(double dVal1, double dVal2, double dVal3, double dRot1, double dRot2, double dRot3, double dScale);
+  SetTransformationParamsRT const * SetTransformationParams(TransformationDataT transformationData);
+  GetTransformationParamsRT const * GetTransformationParams();
+  GoPositionRT const * GoPosition(double dVal1, double dVal2, double dVal3, bool bUseADM);
+  GoPositionHVDRT const * GoPositionHVD(double dHzAngle, double dVtAngle, double dDistance, bool bUseADM);
+  PointLaserRT const * PointLaser(double dVal1, double dVal2, double dVal3);
+  PointLaserHVDRT const * PointLaserHVD(double dHzAngle, double dVtAngle, double dDistance);
+  GoNivelPositionRT const * GoNivelPosition(ES_NivelPosition position);
+  MoveHVRT const * MoveHV(long lHzSpeed, long lVtSpeed);
+  PositionRelativeHVRT const * PositionRelativeHV(double dHz, double dVt);
+  GoBirdBathRT const * GoBirdBath();
+  ChangeFaceRT const * ChangeFace();
+  FindReflectorRT const * FindReflector(double dAproxDistance);
+  StartMeasurementRT const * StartMeasurement();
+  StartNivelMeasurementRT const * StartNivelMeasurement();
+  StopMeasurementRT const * StopMeasurement();
+  ExitApplicationRT const * ExitApplication();
+  GetDirectionRT const * GetDirection();
+  CallOrientToGravityRT const * CallOrientToGravity();
+  SetCompensationRT const * SetCompensation(int iInternalCompensationId);
+  SetStatisticModeRT const * SetStatisticMode(ES_StatisticMode stationaryMeasurements, ES_StatisticMode continuousMeasurements);
+  GetStatisticModeRT const * GetStatisticMode();
+  GetCameraParamsRT const * GetCameraParams();
+  SetCameraParamsRT const * SetCameraParams(CameraParamsDataT cameraParams);
+  SetCameraParamsRT const * SetCameraParams(int iContrast, int iBrightness, int iSaturation);
+  GetCompensationRT const * GetCompensation();
+  GetCompensationsRT const * GetCompensations();
+  GetCompensations2RT const * GetCompensations2();
+  GetTPInfoRT const * GetTPInfo();
+  GetNivelInfoRT const * GetNivelInfo();
+  GetLaserOnTimerRT const * GetLaserOnTimer();
+  SetLaserOnTimerRT const * SetLaserOnTimer(int iTimeOffsetHour, int iTimeOffsetMinute);
+  GoBirdBath2RT const * GoBirdBath2(bool bClockwise);
+  GetFaceRT const * GetFace();
+  SetLongSystemParamRT const * SetLongSystemParameter(ES_SystemParameter systemParam, long lParameter);
+  GetLongSystemParamRT const * GetLongSystemParameter(ES_SystemParameter systemParam);
+  GetMeasurementStatusInfoRT const * GetMeasurementStatusInfo();
+  SetDoubleSystemParamRT const * SetDoubleSystemParameter(ES_SystemParameter systemParam, double dParameter);
+  GetDoubleSystemParamRT const * GetDoubleSystemParameter(ES_SystemParameter systemParam);
+  GetObjectTemperatureRT const * GetObjectTemperature();
+  GetOverviewCameraInfoRT const * GetOverviewCameraInfo();
+  ClearCommandQueueRT const * ClearCommandQueue(ES_ClearCommandQueueType ccqType);
+  GetADMInfo2RT const * GetADMInfo2();
+  GetTrackerInfoRT const * GetTrackerInfo();
+  GetNivelInfo2RT const * GetNivelInfo2();
+  RestoreStartupConditionsRT const * RestoreStartupConditions();
+  GoAndMeasureRT const * GoAndMeasure(double dval1, double dval2, double dval3);
+  GetATRInfoRT const * GetATRInfo();
+  GetMeteoStationInfoRT const * GetMeteoStationInfo();
+  GetAT4xxInfoRT const * GetAT4xxInfo();
+  GetSystemSoftwareVersionRT const * GetSystemSoftwareVersion();
+};  // class CommandSync
 
-  - Connection: Sets up a socket connection to the LT
-  - CommandAsync: 1. Sends command packets to the LT
-          2. Packet dispatcher loop in seperate thread
-    - Callbacks: CommandCompleted, Error, SingleMeasurement, NivelMeasurement, ReflectorPosition,
-           SystemStatusChange
-    - getters for all of the command result types
-  - CommandSync: Uses CommandAsync to provide blocking LT command functions
-  */
+/*
+- Connection: Sets up a socket connection to the LT
+- CommandAsync: 1. Sends command packets to the LT
+				2. Packet dispatcher loop in seperate thread
+	- Callbacks: CommandCompleted, Error, SingleMeasurement, NivelMeasurement, ReflectorPosition,
+				 SystemStatusChange
+	- getters for all of the command result types
+- CommandSync: Uses CommandAsync to provide blocking LT command functions
+*/
 
-}  // namespace CESAPI
+};  // namespace CESAPI

@@ -56,7 +56,7 @@ def main(argv):
                             type_formats += ["('"]
                             new_subformat = False
                             type_format_index += 1
-                            member_unpacks += ['    packet_elements = struct.Struct(self.__formats[{0}]).unpack(packet[:self._size[{0}]])'.format(type_format_index)]
+                            member_unpacks += ['    packet_elements = struct.Struct(self.__formats[{0}]).unpack(packet[:self.__sizes[{0}]])'.format(type_format_index)]
                             member_packs += ['    packet_elements = ()']
                             pack_index = 0
                         if member_type_name == 'int':
@@ -68,7 +68,7 @@ def main(argv):
                             packet_size += 8
                             pack_sizes[-1] += 8
                             member_inits += ['    self.{} = {}(0)'.format(member_name, 'int')]
-                            type_formats[-1] += "L "
+                            type_formats[-1] += "q "
                         elif member_type_name == 'double':
                             packet_size += 8
                             pack_sizes[-1] += 8
@@ -83,7 +83,7 @@ def main(argv):
                             type_formats += ["('"]
                             new_subformat = False
                             type_format_index += 1
-                            member_unpacks += ['    packet_elements = struct.Struct(self.__formats[{0}]).unpack(packet[:self._size[{0}]])'.format(type_format_index)]
+                            member_unpacks += ['    packet_elements = struct.Struct(self.__formats[{0}]).unpack(packet[:self.__sizes[{0}]])'.format(type_format_index)]
                             member_packs += ['    packet_elements = ()']
                             pack_index = 0
                         packet_size += 4
@@ -97,7 +97,7 @@ def main(argv):
                         if not new_subformat:
                             type_formats[-1] += "')"
                             new_subformat = True
-                            member_packs += ['    packet += struct.Struct(self.__formats[{}]).pack(packet_elements)'.format(type_format_index)]
+                            member_packs += ['    packet += struct.Struct(self.__formats[{}]).pack(*packet_elements)'.format(type_format_index)]
                         packet_size += packet_size_lookup[member_type.type.name]
                         member_inits += ['    self.{} = {}()'.format(member_name, member_type.type.name)]
                         if member_name == 'packetInfo':
@@ -137,7 +137,7 @@ def main(argv):
                         type_formats += ["('"]
                         new_subformat = False
                         type_format_index += 1
-                        member_unpacks += ['    packet_elements = struct.Struct(self.__formats[{0}]).unpack(packet[:self._size[{0}]])'.format(type_format_index)]
+                        member_unpacks += ['    packet_elements = struct.Struct(self.__formats[{0}]).unpack(packet[:self.__sizes[{0}]])'.format(type_format_index)]
                         member_packs += ['    packet_elements = ()']
                         pack_index = 0
                     packet_size += array_dim
@@ -150,7 +150,7 @@ def main(argv):
             packet_size_lookup[node_type.name] = packet_size
             if not new_subformat:
                 type_formats[-1] += "')"
-                member_packs += ['    packet += struct.Struct(self.__formats[{}]).pack(packet_elements)'.format(type_format_index)]
+                member_packs += ['    packet += struct.Struct(self.__formats[{}]).pack(*packet_elements)'.format(type_format_index)]
 
             print('class {}(object):'.format(node_type.name))
             print('  def __init__(self):')
@@ -165,7 +165,7 @@ def main(argv):
             for member_unpack in member_unpacks:
                 print(member_unpack)
             if len(pack_sizes) > 0:
-                print('    return packet[self.__sizes[{}]:]'.format(pack_sizes[-1]))
+                print('    return packet[self.__sizes[{}]:]'.format(type_format_index))
             else:
                 print('    return packet')
             print()

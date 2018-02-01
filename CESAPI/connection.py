@@ -2,32 +2,6 @@ import socket
 import threading
 from CESAPI.packet import *
 
-class LTPacketFactory(object):
-    def packet(self, packet_type, data):
-        if packet_type == ES_DT_Command:
-            if command == ES_C_Initialize:
-                packet = InitializeRT()
-        elif packet_type == ES_DT_Error:
-            packet = ErrorResponseT()
-        elif packet_type == ES_DT_SingleMeasResult:
-            packet_info = ReturnDataT()
-            packet = SingleMeasResultT()
-        elif packet_type == ES_DT_NivelResult:
-            packet_info = ReturnDataT()
-            packet = NivelResultT()
-        elif packet_type == ES_DT_ReflectorPosResult:
-            packet_info = ReturnDataT()
-            packet = ReflectorPosResultT()
-        elif packet_type == ES_DT_SystemStatusChange:
-            packet = ReflectorPosResultT()
-        elif packet_type == ES_DT_SingleMeasResult2:
-            packet_info = ReturnDataT()
-            packet = SingleMeasResult2T()
-        else:
-            packet = PacketHeaderT(packet_header)
-        return packet.unpack(data)
-
-
 class LTPacketStream(threading.Thread):
     def __init__(self, sock):
         self.__sock = sock
@@ -53,6 +27,10 @@ class LTPacketStream(threading.Thread):
 
             data = header_data + self.__sock.recv(packet_header.lPacketSize-PACKET_HEADER_SIZE)
             packet = packet_factory.packet(packet_header.type, data)
+
+            if packet_type == ES_DT_Command:
+                packet_info = BasicCommandRT()
+                packet_info.unpack(data)
 
             self.__packet_buffer[self.__tail_index] = packet
             self.__tail_index += 1

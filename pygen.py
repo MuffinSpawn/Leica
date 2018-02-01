@@ -17,6 +17,16 @@ def main(argv):
     ast = pycparser.parse_file(filename, use_cpp=False)
 
     packet_size_lookup = {}
+    class_gens = ['class LTPacketFactory(object):',
+                  '  def packet(self, data):',
+                  '    packet_header = PacketHeaderT()',
+                  '    packet_header.unpack(data)',
+                  '    packet_info = BasicCommandRT()',
+                  '    packet = None',
+                  '    if packet_header.type == ES_DT_Command:',
+                  '      packet_info.unpack(data)',
+                  '    if False:',
+                  '      pass']
     print('import struct')
     print()
 
@@ -115,9 +125,16 @@ def main(argv):
                             member_inits += ['    self.packetInfo.packetHeader.type = {}'.format(packet_type)]
                             if packet_type == 'ES_DT_Command':
                                 if 'LongSystemParam' in node_type.name or 'DoubleSystemParam' in node_type.name:
-                                    member_inits += ['    self.packetInfo.command = ES_C_{}eter'.format(node_type.name[:-2])]
+                                    command_type = 'ES_C_{}eter'.format(node_type.name[:-2])
                                 else:
-                                    member_inits += ['    self.packetInfo.command = ES_C_{}'.format(node_type.name[:-2])]
+                                    command_type = 'ES_C_{}'.format(node_type.name[:-2])
+                                member_inits += ['    self.packetInfo.command = {}'.format(command_type)]
+                                if node_type.name[-2:] == 'RT':
+                                    class_gens += ['    elif packet_header.type == {} and packet_info.command == {}:'.format(packet_type, command_type)]
+                                    class_gens += ['      packet = {}()'.format(node_type.name)]
+                            else:
+                                class_gens += ['    elif packet_header.type == {}:'.format(packet_type)]
+                                class_gens += ['      packet = {}()'.format(node_type.name)]
                         elif member_name == 'packetHeader':
                             if node_type.name == 'ErrorResponseT':
                                 packet_type = 'ES_DT_Error'
@@ -126,6 +143,8 @@ def main(argv):
                             if node_type.name == 'ErrorResponseT' or node_type.name == 'SystemStatusChangeT':
                                 member_inits += ['    self.packetHeader.lPacketSize = self.__packet_size']
                                 member_inits += ['    self.packetHeader.type = {}'.format(packet_type)]
+                                class_gens += ['    elif packet_header.type == {}:'.format(packet_type)]
+                                class_gens += ['      packet = {}()'.format(node_type.name)]
                         member_unpacks += ['    packet = self.{}.unpack(packet)'.format(member_name)]
                         member_packs += ['    packet += self.{}.pack()'.format(member_name)]
                     else:
@@ -178,6 +197,9 @@ def main(argv):
             print()
         else:
             print('# Skipped object {}'.format(type(node_type)))
+    for class_gen in class_gens:
+        print(class_gen)
+    print('    return packet')
 
 if __name__ == "__main__":
     main(sys.argv)

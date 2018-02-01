@@ -4688,3 +4688,178 @@ class GetSystemSoftwareVersionRT(object):
     packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
     return packet
 
+class LTPacketFactory(object):
+  def packet(self, data):
+    packet_header = PacketHeaderT()
+    packet_header.unpack(data)
+    packet_info = BasicCommandRT()
+    packet = None
+    if packet_header.type == ES_DT_Command:
+      packet_info.unpack(data)
+    if False:
+      pass
+    elif packet_header.type == ES_DT_NivelResult:
+      packet = NivelResultT()
+    elif packet_header.type == ES_DT_ReflectorPosResult:
+      packet = ReflectorPosResultT()
+    elif packet_header.type == ES_DT_SingleMeasResult:
+      packet = SingleMeasResultT()
+    elif packet_header.type == ES_DT_SingleMeasResult2:
+      packet = SingleMeasResult2T()
+    elif packet_header.type == ES_DT_SystemStatusChange:
+      packet = SystemStatusChangeT()
+    elif packet_header.type == ES_DT_Error:
+      packet = ErrorResponseT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_Initialize:
+      packet = InitializeRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_ActivateCameraView:
+      packet = ActivateCameraViewRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_Park:
+      packet = ParkRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GoBirdBath:
+      packet = GoBirdBathRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GoBirdBath2:
+      packet = GoBirdBath2RT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_ChangeFace:
+      packet = ChangeFaceRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_StartNivelMeasurement:
+      packet = StartNivelMeasurementRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_StartMeasurement:
+      packet = StartMeasurementRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_StopMeasurement:
+      packet = StopMeasurementRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_ExitApplication:
+      packet = ExitApplicationRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GoLastMeasuredPoint:
+      packet = GoLastMeasuredPointRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_FindReflector:
+      packet = FindReflectorRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_SetCoordinateSystemType:
+      packet = SetCoordinateSystemTypeRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetCoordinateSystemType:
+      packet = GetCoordinateSystemTypeRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_SetMeasurementMode:
+      packet = SetMeasurementModeRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetMeasurementMode:
+      packet = GetMeasurementModeRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_SetSearchParams:
+      packet = SetSearchParamsRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetSearchParams:
+      packet = GetSearchParamsRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_SetStationaryModeParams:
+      packet = SetStationaryModeParamsRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetStationaryModeParams:
+      packet = GetStationaryModeParamsRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_SetSystemSettings:
+      packet = SetSystemSettingsRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetSystemSettings:
+      packet = GetSystemSettingsRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_SetUnits:
+      packet = SetUnitsRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetUnits:
+      packet = GetUnitsRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetSystemStatus:
+      packet = GetSystemStatusRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetMeasurementStatusInfo:
+      packet = GetMeasurementStatusInfoRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetTrackerStatus:
+      packet = GetTrackerStatusRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_SetReflector:
+      packet = SetReflectorRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetReflectors:
+      packet = GetReflectorsRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetReflector:
+      packet = GetReflectorRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_SetEnvironmentParams:
+      packet = SetEnvironmentParamsRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetEnvironmentParams:
+      packet = GetEnvironmentParamsRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_SetRefractionParams:
+      packet = SetRefractionParamsRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetRefractionParams:
+      packet = GetRefractionParamsRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_SetStationOrientationParams:
+      packet = SetStationOrientationParamsRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetStationOrientationParams:
+      packet = GetStationOrientationParamsRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_SetTransformationParams:
+      packet = SetTransformationParamsRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetTransformationParams:
+      packet = GetTransformationParamsRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GoPosition:
+      packet = GoPositionRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetDirection:
+      packet = GetDirectionRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GoPositionHVD:
+      packet = GoPositionHVDRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_PointLaser:
+      packet = PointLaserRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_PositionRelativeHV:
+      packet = PositionRelativeHVRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_PointLaserHVD:
+      packet = PointLaserHVDRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_MoveHV:
+      packet = MoveHVRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GoNivelPosition:
+      packet = GoNivelPositionRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_CallOrientToGravity:
+      packet = CallOrientToGravityRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_SetCompensation:
+      packet = SetCompensationRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetCompensation:
+      packet = GetCompensationRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetCompensations:
+      packet = GetCompensationsRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetCompensations2:
+      packet = GetCompensations2RT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_SetStatisticMode:
+      packet = SetStatisticModeRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetStatisticMode:
+      packet = GetStatisticModeRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_SetCameraParams:
+      packet = SetCameraParamsRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetCameraParams:
+      packet = GetCameraParamsRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetADMInfo2:
+      packet = GetADMInfo2RT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetNivelInfo:
+      packet = GetNivelInfoRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetNivelInfo2:
+      packet = GetNivelInfo2RT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetTPInfo:
+      packet = GetTPInfoRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetTrackerInfo:
+      packet = GetTrackerInfoRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetATRInfo:
+      packet = GetATRInfoRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_SetLaserOnTimer:
+      packet = SetLaserOnTimerRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetLaserOnTimer:
+      packet = GetLaserOnTimerRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetFace:
+      packet = GetFaceRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_SetLongSystemParameter:
+      packet = SetLongSystemParamRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetLongSystemParameter:
+      packet = GetLongSystemParamRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetObjectTemperature:
+      packet = GetObjectTemperatureRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_ClearCommandQueue:
+      packet = ClearCommandQueueRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetOverviewCameraInfo:
+      packet = GetOverviewCameraInfoRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetDoubleSystemParameter:
+      packet = GetDoubleSystemParamRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_SetDoubleSystemParameter:
+      packet = SetDoubleSystemParamRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_RestoreStartupConditions:
+      packet = RestoreStartupConditionsRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GoAndMeasure:
+      packet = GoAndMeasureRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetMeteoStationInfo:
+      packet = GetMeteoStationInfoRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetAT4xxInfo:
+      packet = GetAT4xxInfoRT()
+    elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetSystemSoftwareVersion:
+      packet = GetSystemSoftwareVersionRT()
+    return packet

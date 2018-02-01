@@ -778,6 +778,7 @@ class InitializeCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_Initialize
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -796,6 +797,7 @@ class InitializeRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_Initialize
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -814,6 +816,7 @@ class ActivateCameraViewCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_ActivateCameraView
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -832,6 +835,7 @@ class ActivateCameraViewRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_ActivateCameraView
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -850,6 +854,7 @@ class ParkCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_Park
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -868,6 +873,7 @@ class ParkRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_Park
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -886,6 +892,7 @@ class GoBirdBathCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GoBirdBath
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -904,6 +911,7 @@ class GoBirdBathRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GoBirdBath
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -922,6 +930,7 @@ class GoBirdBath2CT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GoBirdBath2
     self.bClockWise = int(0)
 
   def unpack(self, packet):
@@ -946,6 +955,7 @@ class GoBirdBath2RT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GoBirdBath2
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -964,6 +974,7 @@ class ChangeFaceCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_ChangeFace
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -982,6 +993,7 @@ class ChangeFaceRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_ChangeFace
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -1000,6 +1012,7 @@ class StartNivelMeasurementCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_StartNivelMeasurement
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -1018,6 +1031,7 @@ class StartNivelMeasurementRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_StartNivelMeasurement
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -1036,6 +1050,7 @@ class StartMeasurementCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_StartMeasurement
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -1054,6 +1069,7 @@ class StartMeasurementRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_StartMeasurement
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -1072,6 +1088,7 @@ class StopMeasurementCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_StopMeasurement
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -1090,6 +1107,7 @@ class StopMeasurementRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_StopMeasurement
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -1108,6 +1126,7 @@ class ExitApplicationCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_ExitApplication
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -1126,6 +1145,7 @@ class ExitApplicationRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_ExitApplication
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -1144,6 +1164,7 @@ class GoLastMeasuredPointCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GoLastMeasuredPoint
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -1162,6 +1183,7 @@ class GoLastMeasuredPointRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GoLastMeasuredPoint
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -1180,6 +1202,7 @@ class FindReflectorCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_FindReflector
     self.dAproxDistance = float(0)
 
   def unpack(self, packet):
@@ -1204,6 +1227,7 @@ class FindReflectorRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_FindReflector
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -1222,6 +1246,7 @@ class SetCoordinateSystemTypeCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_SetCoordinateSystemType
     self.coordSysType = int(0)  # ES_CoordinateSystemType
 
   def unpack(self, packet):
@@ -1246,6 +1271,7 @@ class SetCoordinateSystemTypeRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_SetCoordinateSystemType
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -1264,6 +1290,7 @@ class GetCoordinateSystemTypeCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetCoordinateSystemType
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -1282,6 +1309,7 @@ class GetCoordinateSystemTypeRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetCoordinateSystemType
     self.coordSysType = int(0)  # ES_CoordinateSystemType
 
   def unpack(self, packet):
@@ -1306,6 +1334,7 @@ class SetMeasurementModeCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_SetMeasurementMode
     self.measMode = int(0)  # ES_MeasMode
 
   def unpack(self, packet):
@@ -1330,6 +1359,7 @@ class SetMeasurementModeRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_SetMeasurementMode
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -1348,6 +1378,7 @@ class GetMeasurementModeCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetMeasurementMode
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -1366,6 +1397,7 @@ class GetMeasurementModeRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetMeasurementMode
     self.measMode = int(0)  # ES_MeasMode
 
   def unpack(self, packet):
@@ -1412,6 +1444,7 @@ class SetSearchParamsCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_SetSearchParams
     self.searchParams = SearchParamsDataT()
 
   def unpack(self, packet):
@@ -1433,6 +1466,7 @@ class SetSearchParamsRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_SetSearchParams
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -1451,6 +1485,7 @@ class GetSearchParamsCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetSearchParams
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -1469,6 +1504,7 @@ class GetSearchParamsRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetSearchParams
     self.searchParams = SearchParamsDataT()
 
   def unpack(self, packet):
@@ -1512,6 +1548,7 @@ class SetStationaryModeParamsCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_SetStationaryModeParams
     self.stationaryModeData = StationaryModeDataT()
 
   def unpack(self, packet):
@@ -1533,6 +1570,7 @@ class SetStationaryModeParamsRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_SetStationaryModeParams
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -1551,6 +1589,7 @@ class GetStationaryModeParamsCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetStationaryModeParams
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -1569,6 +1608,7 @@ class GetStationaryModeParamsRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetStationaryModeParams
     self.stationaryModeData = StationaryModeDataT()
 
   def unpack(self, packet):
@@ -1633,6 +1673,7 @@ class SetSystemSettingsCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_SetSystemSettings
     self.systemSettings = SystemSettingsDataT()
 
   def unpack(self, packet):
@@ -1654,6 +1695,7 @@ class SetSystemSettingsRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_SetSystemSettings
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -1672,6 +1714,7 @@ class GetSystemSettingsCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetSystemSettings
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -1690,6 +1733,7 @@ class GetSystemSettingsRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetSystemSettings
     self.systemSettings = SystemSettingsDataT()
 
   def unpack(self, packet):
@@ -1742,6 +1786,7 @@ class SetUnitsCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_SetUnits
     self.unitsSettings = SystemUnitsDataT()
 
   def unpack(self, packet):
@@ -1763,6 +1808,7 @@ class SetUnitsRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_SetUnits
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -1781,6 +1827,7 @@ class GetUnitsCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetUnits
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -1799,6 +1846,7 @@ class GetUnitsRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetUnits
     self.unitsSettings = SystemUnitsDataT()
 
   def unpack(self, packet):
@@ -1845,6 +1893,7 @@ class GetSystemStatusCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetSystemStatus
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -1863,6 +1912,7 @@ class GetSystemStatusRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetSystemStatus
     self.lastResultStatus = int(0)  # ES_ResultStatus
     self.trackerProcessorStatus = int(0)  # ES_TrackerProcessorStatus
     self.laserStatus = int(0)  # ES_LaserProcessorStatus
@@ -1911,6 +1961,7 @@ class GetMeasurementStatusInfoCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetMeasurementStatusInfo
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -1929,6 +1980,7 @@ class GetMeasurementStatusInfoRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetMeasurementStatusInfo
     self.lastResultStatus = int(0)  # ES_ResultStatus
     self.lMeasurementStatusInfo = int(0)
 
@@ -1956,6 +2008,7 @@ class GetTrackerStatusCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetTrackerStatus
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -1974,6 +2027,7 @@ class GetTrackerStatusRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetTrackerStatus
     self.trackerStatus = int(0)  # ES_TrackerStatus
 
   def unpack(self, packet):
@@ -1998,6 +2052,7 @@ class SetReflectorCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_SetReflector
     self.iInternalReflectorId = int(0)
 
   def unpack(self, packet):
@@ -2022,6 +2077,7 @@ class SetReflectorRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_SetReflector
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -2040,6 +2096,7 @@ class GetReflectorsCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetReflectors
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -2058,6 +2115,7 @@ class GetReflectorsRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetReflectors
     self.iTotalReflectors = int(0)
     self.iInternalReflectorId = int(0)
     self.targetType = int(0)  # ES_TargetType
@@ -2094,6 +2152,7 @@ class GetReflectorCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetReflector
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -2112,6 +2171,7 @@ class GetReflectorRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetReflector
     self.iInternalReflectorId = int(0)
 
   def unpack(self, packet):
@@ -2161,6 +2221,7 @@ class SetEnvironmentParamsCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_SetEnvironmentParams
     self.environmentData = EnvironmentDataT()
 
   def unpack(self, packet):
@@ -2182,6 +2243,7 @@ class SetEnvironmentParamsRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_SetEnvironmentParams
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -2200,6 +2262,7 @@ class GetEnvironmentParamsCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetEnvironmentParams
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -2218,6 +2281,7 @@ class GetEnvironmentParamsRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetEnvironmentParams
     self.environmentData = EnvironmentDataT()
 
   def unpack(self, packet):
@@ -2261,6 +2325,7 @@ class SetRefractionParamsCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_SetRefractionParams
     self.refractionData = RefractionDataT()
 
   def unpack(self, packet):
@@ -2282,6 +2347,7 @@ class SetRefractionParamsRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_SetRefractionParams
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -2300,6 +2366,7 @@ class GetRefractionParamsCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetRefractionParams
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -2318,6 +2385,7 @@ class GetRefractionParamsRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetRefractionParams
     self.refractionData = RefractionDataT()
 
   def unpack(self, packet):
@@ -2373,6 +2441,7 @@ class SetStationOrientationParamsCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_SetStationOrientationParams
     self.stationOrientation = StationOrientationDataT()
 
   def unpack(self, packet):
@@ -2394,6 +2463,7 @@ class SetStationOrientationParamsRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_SetStationOrientationParams
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -2412,6 +2482,7 @@ class GetStationOrientationParamsCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetStationOrientationParams
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -2430,6 +2501,7 @@ class GetStationOrientationParamsRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetStationOrientationParams
     self.stationOrientation = StationOrientationDataT()
 
   def unpack(self, packet):
@@ -2488,6 +2560,7 @@ class SetTransformationParamsCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_SetTransformationParams
     self.transformationData = TransformationDataT()
 
   def unpack(self, packet):
@@ -2509,6 +2582,7 @@ class SetTransformationParamsRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_SetTransformationParams
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -2527,6 +2601,7 @@ class GetTransformationParamsCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetTransformationParams
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -2545,6 +2620,7 @@ class GetTransformationParamsRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetTransformationParams
     self.transformationData = TransformationDataT()
 
   def unpack(self, packet):
@@ -2566,6 +2642,7 @@ class GoPositionCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GoPosition
     self.dVal1 = float(0)
     self.dVal2 = float(0)
     self.dVal3 = float(0)
@@ -2599,6 +2676,7 @@ class GoPositionRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GoPosition
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -2617,6 +2695,7 @@ class GetDirectionCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetDirection
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -2635,6 +2714,7 @@ class GetDirectionRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetDirection
     self.dHzAngle = float(0)
     self.dVtAngle = float(0)
 
@@ -2662,6 +2742,7 @@ class GoPositionHVDCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GoPositionHVD
     self.dHzAngle = float(0)
     self.dVtAngle = float(0)
     self.dDistance = float(0)
@@ -2695,6 +2776,7 @@ class GoPositionHVDRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GoPositionHVD
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -2713,6 +2795,7 @@ class PointLaserCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_PointLaser
     self.dVal1 = float(0)
     self.dVal2 = float(0)
     self.dVal3 = float(0)
@@ -2743,6 +2826,7 @@ class PointLaserRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_PointLaser
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -2761,6 +2845,7 @@ class PositionRelativeHVCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_PositionRelativeHV
     self.dHzVal = float(0)
     self.dVtVal = float(0)
 
@@ -2788,6 +2873,7 @@ class PositionRelativeHVRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_PositionRelativeHV
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -2806,6 +2892,7 @@ class PointLaserHVDCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_PointLaserHVD
     self.dHzAngle = float(0)
     self.dVtAngle = float(0)
     self.dDistance = float(0)
@@ -2836,6 +2923,7 @@ class PointLaserHVDRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_PointLaserHVD
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -2854,6 +2942,7 @@ class MoveHVCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_MoveHV
     self.iHzSpeed = int(0)
     self.iVtSpeed = int(0)
 
@@ -2881,6 +2970,7 @@ class MoveHVRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_MoveHV
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -2899,6 +2989,7 @@ class GoNivelPositionCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GoNivelPosition
     self.nivelPosition = int(0)  # ES_NivelPosition
 
   def unpack(self, packet):
@@ -2923,6 +3014,7 @@ class GoNivelPositionRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GoNivelPosition
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -2941,6 +3033,7 @@ class CallOrientToGravityCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_CallOrientToGravity
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -2959,6 +3052,7 @@ class CallOrientToGravityRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_CallOrientToGravity
     self.dOmega = float(0)
     self.dPhi = float(0)
 
@@ -2986,6 +3080,7 @@ class SetCompensationCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_SetCompensation
     self.iInternalCompensationId = int(0)
 
   def unpack(self, packet):
@@ -3010,6 +3105,7 @@ class SetCompensationRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_SetCompensation
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -3028,6 +3124,7 @@ class GetCompensationCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetCompensation
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -3046,6 +3143,7 @@ class GetCompensationRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetCompensation
     self.iInternalCompensationId = int(0)
 
   def unpack(self, packet):
@@ -3070,6 +3168,7 @@ class GetCompensationsCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetCompensations
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -3088,6 +3187,7 @@ class GetCompensationsRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetCompensations
     self.iTotalCompensations = int(0)
     self.iInternalCompensationId = int(0)
     self.cTrackerCompensationName = str()  # 32 bytes max
@@ -3127,6 +3227,7 @@ class GetCompensations2CT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetCompensations2
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -3145,6 +3246,7 @@ class GetCompensations2RT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetCompensations2
     self.iTotalCompensations = int(0)
     self.iInternalCompensationId = int(0)
     self.cTrackerCompensationName = str()  # 32 bytes max
@@ -3190,6 +3292,7 @@ class SetStatisticModeCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_SetStatisticMode
     self.stationaryMeasurements = int(0)  # ES_StatisticMode
     self.continuousMeasurements = int(0)  # ES_StatisticMode
 
@@ -3217,6 +3320,7 @@ class SetStatisticModeRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_SetStatisticMode
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -3235,6 +3339,7 @@ class GetStatisticModeCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetStatisticMode
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -3253,6 +3358,7 @@ class GetStatisticModeRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetStatisticMode
     self.stationaryMeasurements = int(0)  # ES_StatisticMode
     self.continuousMeasurements = int(0)  # ES_StatisticMode
 
@@ -3305,6 +3411,7 @@ class SetCameraParamsCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_SetCameraParams
     self.cameraParams = CameraParamsDataT()
 
   def unpack(self, packet):
@@ -3326,6 +3433,7 @@ class SetCameraParamsRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_SetCameraParams
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -3344,6 +3452,7 @@ class GetCameraParamsCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetCameraParams
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -3362,6 +3471,7 @@ class GetCameraParamsRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetCameraParams
     self.cameraParams = CameraParamsDataT()
 
   def unpack(self, packet):
@@ -3383,6 +3493,7 @@ class GetADMInfo2CT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetADMInfo2
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -3401,6 +3512,7 @@ class GetADMInfo2RT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetADMInfo2
     self.admType = int(0)  # ES_ADMType
     self.cADMName = str()  # 32 bytes max
     self.lSerialNumber = int(0)
@@ -3449,6 +3561,7 @@ class GetNivelInfoCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetNivelInfo
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -3467,6 +3580,7 @@ class GetNivelInfoRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetNivelInfo
     self.iFirmwareMajorVersionNumber = int(0)
     self.iFirmwareMinorVersionNumber = int(0)
     self.lSerialNumber = int(0)
@@ -3497,6 +3611,7 @@ class GetNivelInfo2CT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetNivelInfo2
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -3515,6 +3630,7 @@ class GetNivelInfo2RT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetNivelInfo2
     self.nivelType = int(0)  # ES_NivelType
     self.cNivelName = str()  # 32 bytes max
     self.lSerialNumber = int(0)
@@ -3560,6 +3676,7 @@ class GetTPInfoCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetTPInfo
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -3578,6 +3695,7 @@ class GetTPInfoRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetTPInfo
     self.iTPBootMajorVersionNumber = int(0)
     self.iTPBootMinorVersionNumber = int(0)
     self.iTPFirmwareMajorVersionNumber = int(0)
@@ -3629,6 +3747,7 @@ class GetTrackerInfoCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetTrackerInfo
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -3647,6 +3766,7 @@ class GetTrackerInfoRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetTrackerInfo
     self.trackerType = int(0)  # ES_LTSensorType
     self.cTrackerName = str()  # 32 bytes max
     self.lSerialNumber = int(0)
@@ -3719,6 +3839,7 @@ class GetATRInfoCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetATRInfo
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -3737,6 +3858,7 @@ class GetATRInfoRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetATRInfo
     self.atrType = int(0)  # ES_ATRType
     self.cATRName = str()  # 32 bytes max
     self.lMajFirmwareVersion = int(0)
@@ -3794,6 +3916,7 @@ class SetLaserOnTimerCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_SetLaserOnTimer
     self.iLaserOnTimeOffsetHour = int(0)
     self.iLaserOnTimeOffsetMinute = int(0)
 
@@ -3821,6 +3944,7 @@ class SetLaserOnTimerRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_SetLaserOnTimer
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -3839,6 +3963,7 @@ class GetLaserOnTimerCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetLaserOnTimer
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -3857,6 +3982,7 @@ class GetLaserOnTimerRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetLaserOnTimer
     self.iLaserOnTimeOffsetHour = int(0)
     self.iLaserOnTimeOffsetMinute = int(0)
 
@@ -3884,6 +4010,7 @@ class GetFaceCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetFace
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -3902,6 +4029,7 @@ class GetFaceRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetFace
     self.trackerFace = int(0)  # ES_TrackerFace
 
   def unpack(self, packet):
@@ -3926,6 +4054,7 @@ class SetLongSystemParamCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_SetLongSystemParameter
     self.systemParam = int(0)  # ES_SystemParameter
     self.lParameter = int(0)
 
@@ -3953,6 +4082,7 @@ class SetLongSystemParamRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_SetLongSystemParameter
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -3971,6 +4101,7 @@ class GetLongSystemParamCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetLongSystemParameter
     self.systemParam = int(0)  # ES_SystemParameter
 
   def unpack(self, packet):
@@ -3995,6 +4126,7 @@ class GetLongSystemParamRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetLongSystemParameter
     self.systemParam = int(0)  # ES_SystemParameter
     self.lParameter = int(0)
 
@@ -4022,6 +4154,7 @@ class GetObjectTemperatureCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetObjectTemperature
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -4040,6 +4173,7 @@ class GetObjectTemperatureRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetObjectTemperature
     self.dObjectTemperature = float(0)
 
   def unpack(self, packet):
@@ -4064,6 +4198,7 @@ class ClearCommandQueueCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_ClearCommandQueue
     self.clearQueueType = int(0)  # ES_ClearCommandQueueType
 
   def unpack(self, packet):
@@ -4088,6 +4223,7 @@ class ClearCommandQueueRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_ClearCommandQueue
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -4106,6 +4242,7 @@ class GetOverviewCameraInfoCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetOverviewCameraInfo
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -4124,6 +4261,7 @@ class GetOverviewCameraInfoRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetOverviewCameraInfo
     self.cameraType = int(0)  # ES_OverviewCameraType
     self.cCameraName = str()  # 32 bytes max
     self.bIsColorCamera = int(0)
@@ -4169,6 +4307,7 @@ class GetDoubleSystemParamCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetDoubleSystemParameter
     self.systemParam = int(0)  # ES_SystemParameter
 
   def unpack(self, packet):
@@ -4193,6 +4332,7 @@ class GetDoubleSystemParamRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetDoubleSystemParameter
     self.systemParam = int(0)  # ES_SystemParameter
     self.dParameter = float(0)
 
@@ -4220,6 +4360,7 @@ class SetDoubleSystemParamCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_SetDoubleSystemParameter
     self.systemParam = int(0)  # ES_SystemParameter
     self.dParameter = float(0)
 
@@ -4247,6 +4388,7 @@ class SetDoubleSystemParamRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_SetDoubleSystemParameter
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -4265,6 +4407,7 @@ class RestoreStartupConditionsCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_RestoreStartupConditions
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -4283,6 +4426,7 @@ class RestoreStartupConditionsRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_RestoreStartupConditions
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -4301,6 +4445,7 @@ class GoAndMeasureCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GoAndMeasure
     self.dVal1 = float(0)
     self.dVal2 = float(0)
     self.dVal3 = float(0)
@@ -4331,6 +4476,7 @@ class GoAndMeasureRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GoAndMeasure
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -4349,6 +4495,7 @@ class GetMeteoStationInfoCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetMeteoStationInfo
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -4367,6 +4514,7 @@ class GetMeteoStationInfoRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetMeteoStationInfo
     self.meteoStationType = int(0)  # ES_MeteoStationType
     self.cIdentifier = str()  # 32 bytes max
     self.iFirmwareMajorVersionNumber = int(0)
@@ -4400,6 +4548,7 @@ class GetAT4xxInfoCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetAT4xxInfo
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -4418,6 +4567,7 @@ class GetAT4xxInfoRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetAT4xxInfo
     self.trackerType = int(0)  # ES_LTSensorType
     self.cTrackerName = str()  # 32 bytes max
     self.lSerialNumber = int(0)
@@ -4502,6 +4652,7 @@ class GetSystemSoftwareVersionCT(object):
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetSystemSoftwareVersion
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -4520,6 +4671,7 @@ class GetSystemSoftwareVersionRT(object):
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
+    self.packetInfo.command = ES_C_GetSystemSoftwareVersion
     self.cSoftwareVersion = str()  # 32 bytes max
 
   def unpack(self, packet):

@@ -101,7 +101,6 @@ def main(argv):
                         member_inits += ['    self.{} = {}()'.format(member_name, member_type.type.name)]
                         if member_name == 'packetInfo':
                             member_inits += ['    self.packetInfo.packetHeader.lPacketSize = self.__packet_size']
-                            packet_type = 'ES_DT_Command'
                             if node_type.name == 'SingleMeasResultT':
                                 packet_type = 'ES_DT_SingleMeasResult'
                             elif node_type.name == 'NivelResultT':
@@ -110,7 +109,14 @@ def main(argv):
                                 packet_type = 'ES_DT_ReflectorPosResult'
                             elif node_type.name == 'SingleMeasResult2T':
                                 packet_type = 'ES_DT_SingleMeasResult2'
+                            else:
+                                packet_type = 'ES_DT_Command'
                             member_inits += ['    self.packetInfo.packetHeader.type = {}'.format(packet_type)]
+                            if packet_type == 'ES_DT_Command':
+                                if 'LongSystemParam' in node_type.name or 'DoubleSystemParam' in node_type.name:
+                                    member_inits += ['    self.packetInfo.command = ES_C_{}eter'.format(node_type.name[:-2])]
+                                else:
+                                    member_inits += ['    self.packetInfo.command = ES_C_{}'.format(node_type.name[:-2])]
                         elif member_name == 'packetHeader':
                             if node_type.name == 'ErrorResponseT':
                                 packet_type = 'ES_DT_Error'

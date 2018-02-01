@@ -4,6 +4,8 @@ Created on Thu Feb  1 16:05:49 2018
 
 @author: peter
 """
+
+import time
 import unittest
 
 from CESAPI.connection import *
@@ -49,6 +51,28 @@ class LaserTrackerConnectionTestCase(ConnectionTestCase):
             if connection != None:
                 connection.disconnect()
         self.assertTrue(success)
+
+class InitializeTestCase(ConnectionTestCase):
+    def runTest(self):
+        success = False
+        connection = LTConnection()
+        try:
+            stream = connection.connect()
+            
+            init = InitializeCT()
+            stream.write(init)
+            
+            time.sleep(1)
+            
+            initrt = stream.read()
+        except exception:
+            pass
+        finally:
+            if connection != None:
+                connection.disconnect()
+
+        self.assertFalse(initrt == None)
+        self.assertEqual(ES_C_Initialize, initrt.packetInfo.command)
 
 if __name__ == '__main__':
     unittest.main()

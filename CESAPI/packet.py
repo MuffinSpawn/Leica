@@ -393,7 +393,7 @@ ES_ISS_ApplyCorrections = 2
 
 class PacketHeaderT(object):
   def __init__(self):
-    self.__packet_size = 16
+    self.__packet_size = 12
     self.__sizes = [12]
     self.__formats = [('L I ')]
     self.lPacketSize = int(0)
@@ -415,7 +415,7 @@ class PacketHeaderT(object):
 
 class ReturnDataT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = [4]
     self.__formats = [('I ')]
     self.packetHeader = PacketHeaderT()
@@ -437,7 +437,7 @@ class ReturnDataT(object):
 
 class BasicCommandCT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = [4]
     self.__formats = [('I ')]
     self.packetHeader = PacketHeaderT()
@@ -459,7 +459,7 @@ class BasicCommandCT(object):
 
 class BasicCommandRT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 20
     self.__sizes = [8]
     self.__formats = [('I I ')]
     self.packetHeader = PacketHeaderT()
@@ -484,7 +484,7 @@ class BasicCommandRT(object):
 
 class NivelResultT(object):
   def __init__(self):
-    self.__packet_size = 56
+    self.__packet_size = 44
     self.__sizes = [28]
     self.__formats = [('I d d d ')]
     self.packetInfo = ReturnDataT()
@@ -517,7 +517,7 @@ class NivelResultT(object):
 
 class ReflectorPosResultT(object):
   def __init__(self):
-    self.__packet_size = 48
+    self.__packet_size = 40
     self.__sizes = [24]
     self.__formats = [('d d d ')]
     self.packetInfo = ReturnDataT()
@@ -547,7 +547,7 @@ class ReflectorPosResultT(object):
 
 class SingleMeasResultT(object):
   def __init__(self):
-    self.__packet_size = 172
+    self.__packet_size = 160
     self.__sizes = [144]
     self.__formats = [('I i d d d d d d d d d d d d d d d d d ')]
     self.packetInfo = ReturnDataT()
@@ -625,7 +625,7 @@ class SingleMeasResultT(object):
 
 class SingleMeasResult2T(object):
   def __init__(self):
-    self.__packet_size = 220
+    self.__packet_size = 208
     self.__sizes = [192]
     self.__formats = [('I i d d d d d d d d d d d d d d d d d d d d d d d ')]
     self.packetInfo = ReturnDataT()
@@ -721,7 +721,7 @@ class SingleMeasResult2T(object):
 
 class SystemStatusChangeT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = [4]
     self.__formats = [('I ')]
     self.packetHeader = PacketHeaderT()
@@ -745,7 +745,7 @@ class SystemStatusChangeT(object):
 
 class ErrorResponseT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 20
     self.__sizes = [8]
     self.__formats = [('I I ')]
     self.packetHeader = PacketHeaderT()
@@ -772,7 +772,7 @@ class ErrorResponseT(object):
 
 class InitializeCT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -791,7 +791,7 @@ class InitializeCT(object):
 
 class InitializeRT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 20
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -810,7 +810,7 @@ class InitializeRT(object):
 
 class ActivateCameraViewCT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -829,7 +829,7 @@ class ActivateCameraViewCT(object):
 
 class ActivateCameraViewRT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 20
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -848,7 +848,7 @@ class ActivateCameraViewRT(object):
 
 class ParkCT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -867,7 +867,7 @@ class ParkCT(object):
 
 class ParkRT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 20
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -886,7 +886,7 @@ class ParkRT(object):
 
 class GoBirdBathCT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -905,7 +905,7 @@ class GoBirdBathCT(object):
 
 class GoBirdBathRT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 20
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -924,7 +924,7 @@ class GoBirdBathRT(object):
 
 class GoBirdBath2CT(object):
   def __init__(self):
-    self.__packet_size = 28
+    self.__packet_size = 20
     self.__sizes = [4]
     self.__formats = [('i ')]
     self.packetInfo = BasicCommandCT()
@@ -949,7 +949,7 @@ class GoBirdBath2CT(object):
 
 class GoBirdBath2RT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 20
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -968,7 +968,7 @@ class GoBirdBath2RT(object):
 
 class ChangeFaceCT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -987,7 +987,7 @@ class ChangeFaceCT(object):
 
 class ChangeFaceRT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 20
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -1006,7 +1006,7 @@ class ChangeFaceRT(object):
 
 class StartNivelMeasurementCT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -1025,7 +1025,7 @@ class StartNivelMeasurementCT(object):
 
 class StartNivelMeasurementRT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 20
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -1044,7 +1044,7 @@ class StartNivelMeasurementRT(object):
 
 class StartMeasurementCT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -1063,7 +1063,7 @@ class StartMeasurementCT(object):
 
 class StartMeasurementRT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 20
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -1082,7 +1082,7 @@ class StartMeasurementRT(object):
 
 class StopMeasurementCT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -1101,7 +1101,7 @@ class StopMeasurementCT(object):
 
 class StopMeasurementRT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 20
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -1120,7 +1120,7 @@ class StopMeasurementRT(object):
 
 class ExitApplicationCT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -1139,7 +1139,7 @@ class ExitApplicationCT(object):
 
 class ExitApplicationRT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 20
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -1158,7 +1158,7 @@ class ExitApplicationRT(object):
 
 class GoLastMeasuredPointCT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -1177,7 +1177,7 @@ class GoLastMeasuredPointCT(object):
 
 class GoLastMeasuredPointRT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 20
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -1196,7 +1196,7 @@ class GoLastMeasuredPointRT(object):
 
 class FindReflectorCT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 24
     self.__sizes = [8]
     self.__formats = [('d ')]
     self.packetInfo = BasicCommandCT()
@@ -1221,7 +1221,7 @@ class FindReflectorCT(object):
 
 class FindReflectorRT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 20
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -1240,7 +1240,7 @@ class FindReflectorRT(object):
 
 class SetCoordinateSystemTypeCT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 20
     self.__sizes = [4]
     self.__formats = [('I ')]
     self.packetInfo = BasicCommandCT()
@@ -1265,7 +1265,7 @@ class SetCoordinateSystemTypeCT(object):
 
 class SetCoordinateSystemTypeRT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 20
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -1284,7 +1284,7 @@ class SetCoordinateSystemTypeRT(object):
 
 class GetCoordinateSystemTypeCT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -1303,7 +1303,7 @@ class GetCoordinateSystemTypeCT(object):
 
 class GetCoordinateSystemTypeRT(object):
   def __init__(self):
-    self.__packet_size = 40
+    self.__packet_size = 24
     self.__sizes = [4]
     self.__formats = [('I ')]
     self.packetInfo = BasicCommandRT()
@@ -1328,7 +1328,7 @@ class GetCoordinateSystemTypeRT(object):
 
 class SetMeasurementModeCT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 20
     self.__sizes = [4]
     self.__formats = [('I ')]
     self.packetInfo = BasicCommandCT()
@@ -1353,7 +1353,7 @@ class SetMeasurementModeCT(object):
 
 class SetMeasurementModeRT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 20
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -1372,7 +1372,7 @@ class SetMeasurementModeRT(object):
 
 class GetMeasurementModeCT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -1391,7 +1391,7 @@ class GetMeasurementModeCT(object):
 
 class GetMeasurementModeRT(object):
   def __init__(self):
-    self.__packet_size = 40
+    self.__packet_size = 24
     self.__sizes = [4]
     self.__formats = [('I ')]
     self.packetInfo = BasicCommandRT()
@@ -1438,7 +1438,7 @@ class SearchParamsDataT(object):
 
 class SetSearchParamsCT(object):
   def __init__(self):
-    self.__packet_size = 40
+    self.__packet_size = 32
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -1460,7 +1460,7 @@ class SetSearchParamsCT(object):
 
 class SetSearchParamsRT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 20
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -1479,7 +1479,7 @@ class SetSearchParamsRT(object):
 
 class GetSearchParamsCT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -1498,7 +1498,7 @@ class GetSearchParamsCT(object):
 
 class GetSearchParamsRT(object):
   def __init__(self):
-    self.__packet_size = 48
+    self.__packet_size = 36
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -1542,7 +1542,7 @@ class StationaryModeDataT(object):
 
 class SetStationaryModeParamsCT(object):
   def __init__(self):
-    self.__packet_size = 36
+    self.__packet_size = 28
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -1564,7 +1564,7 @@ class SetStationaryModeParamsCT(object):
 
 class SetStationaryModeParamsRT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 20
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -1583,7 +1583,7 @@ class SetStationaryModeParamsRT(object):
 
 class GetStationaryModeParamsCT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -1602,7 +1602,7 @@ class GetStationaryModeParamsCT(object):
 
 class GetStationaryModeParamsRT(object):
   def __init__(self):
-    self.__packet_size = 44
+    self.__packet_size = 32
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -1624,7 +1624,7 @@ class GetStationaryModeParamsRT(object):
 
 class SystemSettingsDataT(object):
   def __init__(self):
-    self.__packet_size = 40
+    self.__packet_size = 36
     self.__sizes = [36]
     self.__formats = [('I i i i i i i i i ')]
     self.weatherMonitorStatus = int(0)  # ES_WeatherMonitorStatus
@@ -1667,7 +1667,7 @@ class SystemSettingsDataT(object):
 
 class SetSystemSettingsCT(object):
   def __init__(self):
-    self.__packet_size = 64
+    self.__packet_size = 52
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -1689,7 +1689,7 @@ class SetSystemSettingsCT(object):
 
 class SetSystemSettingsRT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 20
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -1708,7 +1708,7 @@ class SetSystemSettingsRT(object):
 
 class GetSystemSettingsCT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -1727,7 +1727,7 @@ class GetSystemSettingsCT(object):
 
 class GetSystemSettingsRT(object):
   def __init__(self):
-    self.__packet_size = 72
+    self.__packet_size = 56
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -1749,7 +1749,7 @@ class GetSystemSettingsRT(object):
 
 class SystemUnitsDataT(object):
   def __init__(self):
-    self.__packet_size = 40
+    self.__packet_size = 20
     self.__sizes = [20]
     self.__formats = [('I I I I I ')]
     self.lenUnitType = int(0)  # ES_LengthUnit
@@ -1780,7 +1780,7 @@ class SystemUnitsDataT(object):
 
 class SetUnitsCT(object):
   def __init__(self):
-    self.__packet_size = 64
+    self.__packet_size = 36
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -1802,7 +1802,7 @@ class SetUnitsCT(object):
 
 class SetUnitsRT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 20
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -1821,7 +1821,7 @@ class SetUnitsRT(object):
 
 class GetUnitsCT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -1840,7 +1840,7 @@ class GetUnitsCT(object):
 
 class GetUnitsRT(object):
   def __init__(self):
-    self.__packet_size = 72
+    self.__packet_size = 40
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -1887,7 +1887,7 @@ class ESVersionNumberT(object):
 
 class GetSystemStatusCT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -1906,7 +1906,7 @@ class GetSystemStatusCT(object):
 
 class GetSystemStatusRT(object):
   def __init__(self):
-    self.__packet_size = 100
+    self.__packet_size = 68
     self.__sizes = [16,20]
     self.__formats = [('I I I I '),('I L L ')]
     self.packetInfo = BasicCommandRT()
@@ -1955,7 +1955,7 @@ class GetSystemStatusRT(object):
 
 class GetMeasurementStatusInfoCT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -1974,7 +1974,7 @@ class GetMeasurementStatusInfoCT(object):
 
 class GetMeasurementStatusInfoRT(object):
   def __init__(self):
-    self.__packet_size = 48
+    self.__packet_size = 32
     self.__sizes = [12]
     self.__formats = [('I L ')]
     self.packetInfo = BasicCommandRT()
@@ -2002,7 +2002,7 @@ class GetMeasurementStatusInfoRT(object):
 
 class GetTrackerStatusCT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -2021,7 +2021,7 @@ class GetTrackerStatusCT(object):
 
 class GetTrackerStatusRT(object):
   def __init__(self):
-    self.__packet_size = 40
+    self.__packet_size = 24
     self.__sizes = [4]
     self.__formats = [('I ')]
     self.packetInfo = BasicCommandRT()
@@ -2046,7 +2046,7 @@ class GetTrackerStatusRT(object):
 
 class SetReflectorCT(object):
   def __init__(self):
-    self.__packet_size = 28
+    self.__packet_size = 20
     self.__sizes = [4]
     self.__formats = [('i ')]
     self.packetInfo = BasicCommandCT()
@@ -2071,7 +2071,7 @@ class SetReflectorCT(object):
 
 class SetReflectorRT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 20
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -2090,7 +2090,7 @@ class SetReflectorRT(object):
 
 class GetReflectorsCT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -2109,7 +2109,7 @@ class GetReflectorsCT(object):
 
 class GetReflectorsRT(object):
   def __init__(self):
-    self.__packet_size = 88
+    self.__packet_size = 72
     self.__sizes = [52]
     self.__formats = [('i i I d 32s ')]
     self.packetInfo = BasicCommandRT()
@@ -2146,7 +2146,7 @@ class GetReflectorsRT(object):
 
 class GetReflectorCT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -2165,7 +2165,7 @@ class GetReflectorCT(object):
 
 class GetReflectorRT(object):
   def __init__(self):
-    self.__packet_size = 36
+    self.__packet_size = 24
     self.__sizes = [4]
     self.__formats = [('i ')]
     self.packetInfo = BasicCommandRT()
@@ -2215,7 +2215,7 @@ class EnvironmentDataT(object):
 
 class SetEnvironmentParamsCT(object):
   def __init__(self):
-    self.__packet_size = 48
+    self.__packet_size = 40
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -2237,7 +2237,7 @@ class SetEnvironmentParamsCT(object):
 
 class SetEnvironmentParamsRT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 20
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -2256,7 +2256,7 @@ class SetEnvironmentParamsRT(object):
 
 class GetEnvironmentParamsCT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -2275,7 +2275,7 @@ class GetEnvironmentParamsCT(object):
 
 class GetEnvironmentParamsRT(object):
   def __init__(self):
-    self.__packet_size = 56
+    self.__packet_size = 44
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -2319,7 +2319,7 @@ class RefractionDataT(object):
 
 class SetRefractionParamsCT(object):
   def __init__(self):
-    self.__packet_size = 40
+    self.__packet_size = 32
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -2341,7 +2341,7 @@ class SetRefractionParamsCT(object):
 
 class SetRefractionParamsRT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 20
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -2360,7 +2360,7 @@ class SetRefractionParamsRT(object):
 
 class GetRefractionParamsCT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -2379,7 +2379,7 @@ class GetRefractionParamsCT(object):
 
 class GetRefractionParamsRT(object):
   def __init__(self):
-    self.__packet_size = 48
+    self.__packet_size = 36
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -2435,7 +2435,7 @@ class StationOrientationDataT(object):
 
 class SetStationOrientationParamsCT(object):
   def __init__(self):
-    self.__packet_size = 72
+    self.__packet_size = 64
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -2457,7 +2457,7 @@ class SetStationOrientationParamsCT(object):
 
 class SetStationOrientationParamsRT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 20
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -2476,7 +2476,7 @@ class SetStationOrientationParamsRT(object):
 
 class GetStationOrientationParamsCT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -2495,7 +2495,7 @@ class GetStationOrientationParamsCT(object):
 
 class GetStationOrientationParamsRT(object):
   def __init__(self):
-    self.__packet_size = 80
+    self.__packet_size = 68
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -2554,7 +2554,7 @@ class TransformationDataT(object):
 
 class SetTransformationParamsCT(object):
   def __init__(self):
-    self.__packet_size = 80
+    self.__packet_size = 72
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -2576,7 +2576,7 @@ class SetTransformationParamsCT(object):
 
 class SetTransformationParamsRT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 20
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -2595,7 +2595,7 @@ class SetTransformationParamsRT(object):
 
 class GetTransformationParamsCT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -2614,7 +2614,7 @@ class GetTransformationParamsCT(object):
 
 class GetTransformationParamsRT(object):
   def __init__(self):
-    self.__packet_size = 88
+    self.__packet_size = 76
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -2636,7 +2636,7 @@ class GetTransformationParamsRT(object):
 
 class GoPositionCT(object):
   def __init__(self):
-    self.__packet_size = 52
+    self.__packet_size = 44
     self.__sizes = [28]
     self.__formats = [('d d d i ')]
     self.packetInfo = BasicCommandCT()
@@ -2670,7 +2670,7 @@ class GoPositionCT(object):
 
 class GoPositionRT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 20
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -2689,7 +2689,7 @@ class GoPositionRT(object):
 
 class GetDirectionCT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -2708,7 +2708,7 @@ class GetDirectionCT(object):
 
 class GetDirectionRT(object):
   def __init__(self):
-    self.__packet_size = 48
+    self.__packet_size = 36
     self.__sizes = [16]
     self.__formats = [('d d ')]
     self.packetInfo = BasicCommandRT()
@@ -2736,7 +2736,7 @@ class GetDirectionRT(object):
 
 class GoPositionHVDCT(object):
   def __init__(self):
-    self.__packet_size = 52
+    self.__packet_size = 44
     self.__sizes = [28]
     self.__formats = [('d d d i ')]
     self.packetInfo = BasicCommandCT()
@@ -2770,7 +2770,7 @@ class GoPositionHVDCT(object):
 
 class GoPositionHVDRT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 20
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -2789,7 +2789,7 @@ class GoPositionHVDRT(object):
 
 class PointLaserCT(object):
   def __init__(self):
-    self.__packet_size = 48
+    self.__packet_size = 40
     self.__sizes = [24]
     self.__formats = [('d d d ')]
     self.packetInfo = BasicCommandCT()
@@ -2820,7 +2820,7 @@ class PointLaserCT(object):
 
 class PointLaserRT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 20
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -2839,7 +2839,7 @@ class PointLaserRT(object):
 
 class PositionRelativeHVCT(object):
   def __init__(self):
-    self.__packet_size = 40
+    self.__packet_size = 32
     self.__sizes = [16]
     self.__formats = [('d d ')]
     self.packetInfo = BasicCommandCT()
@@ -2867,7 +2867,7 @@ class PositionRelativeHVCT(object):
 
 class PositionRelativeHVRT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 20
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -2886,7 +2886,7 @@ class PositionRelativeHVRT(object):
 
 class PointLaserHVDCT(object):
   def __init__(self):
-    self.__packet_size = 48
+    self.__packet_size = 40
     self.__sizes = [24]
     self.__formats = [('d d d ')]
     self.packetInfo = BasicCommandCT()
@@ -2917,7 +2917,7 @@ class PointLaserHVDCT(object):
 
 class PointLaserHVDRT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 20
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -2936,7 +2936,7 @@ class PointLaserHVDRT(object):
 
 class MoveHVCT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 24
     self.__sizes = [8]
     self.__formats = [('i i ')]
     self.packetInfo = BasicCommandCT()
@@ -2964,7 +2964,7 @@ class MoveHVCT(object):
 
 class MoveHVRT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 20
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -2983,7 +2983,7 @@ class MoveHVRT(object):
 
 class GoNivelPositionCT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 20
     self.__sizes = [4]
     self.__formats = [('I ')]
     self.packetInfo = BasicCommandCT()
@@ -3008,7 +3008,7 @@ class GoNivelPositionCT(object):
 
 class GoNivelPositionRT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 20
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -3027,7 +3027,7 @@ class GoNivelPositionRT(object):
 
 class CallOrientToGravityCT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -3046,7 +3046,7 @@ class CallOrientToGravityCT(object):
 
 class CallOrientToGravityRT(object):
   def __init__(self):
-    self.__packet_size = 48
+    self.__packet_size = 36
     self.__sizes = [16]
     self.__formats = [('d d ')]
     self.packetInfo = BasicCommandRT()
@@ -3074,7 +3074,7 @@ class CallOrientToGravityRT(object):
 
 class SetCompensationCT(object):
   def __init__(self):
-    self.__packet_size = 28
+    self.__packet_size = 20
     self.__sizes = [4]
     self.__formats = [('i ')]
     self.packetInfo = BasicCommandCT()
@@ -3099,7 +3099,7 @@ class SetCompensationCT(object):
 
 class SetCompensationRT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 20
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -3118,7 +3118,7 @@ class SetCompensationRT(object):
 
 class GetCompensationCT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -3137,7 +3137,7 @@ class GetCompensationCT(object):
 
 class GetCompensationRT(object):
   def __init__(self):
-    self.__packet_size = 36
+    self.__packet_size = 24
     self.__sizes = [4]
     self.__formats = [('i ')]
     self.packetInfo = BasicCommandRT()
@@ -3162,7 +3162,7 @@ class GetCompensationRT(object):
 
 class GetCompensationsCT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -3181,7 +3181,7 @@ class GetCompensationsCT(object):
 
 class GetCompensationsRT(object):
   def __init__(self):
-    self.__packet_size = 236
+    self.__packet_size = 224
     self.__sizes = [204]
     self.__formats = [('i i 32s 128s 32s i ')]
     self.packetInfo = BasicCommandRT()
@@ -3221,7 +3221,7 @@ class GetCompensationsRT(object):
 
 class GetCompensations2CT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -3240,7 +3240,7 @@ class GetCompensations2CT(object):
 
 class GetCompensations2RT(object):
   def __init__(self):
-    self.__packet_size = 368
+    self.__packet_size = 356
     self.__sizes = [336]
     self.__formats = [('i i 32s 128s 32s 128s i i ')]
     self.packetInfo = BasicCommandRT()
@@ -3286,7 +3286,7 @@ class GetCompensations2RT(object):
 
 class SetStatisticModeCT(object):
   def __init__(self):
-    self.__packet_size = 40
+    self.__packet_size = 24
     self.__sizes = [8]
     self.__formats = [('I I ')]
     self.packetInfo = BasicCommandCT()
@@ -3314,7 +3314,7 @@ class SetStatisticModeCT(object):
 
 class SetStatisticModeRT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 20
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -3333,7 +3333,7 @@ class SetStatisticModeRT(object):
 
 class GetStatisticModeCT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -3352,7 +3352,7 @@ class GetStatisticModeCT(object):
 
 class GetStatisticModeRT(object):
   def __init__(self):
-    self.__packet_size = 48
+    self.__packet_size = 28
     self.__sizes = [8]
     self.__formats = [('I I ')]
     self.packetInfo = BasicCommandRT()
@@ -3405,7 +3405,7 @@ class CameraParamsDataT(object):
 
 class SetCameraParamsCT(object):
   def __init__(self):
-    self.__packet_size = 36
+    self.__packet_size = 28
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -3427,7 +3427,7 @@ class SetCameraParamsCT(object):
 
 class SetCameraParamsRT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 20
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -3446,7 +3446,7 @@ class SetCameraParamsRT(object):
 
 class GetCameraParamsCT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -3465,7 +3465,7 @@ class GetCameraParamsCT(object):
 
 class GetCameraParamsRT(object):
   def __init__(self):
-    self.__packet_size = 44
+    self.__packet_size = 32
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -3487,7 +3487,7 @@ class GetCameraParamsRT(object):
 
 class GetADMInfo2CT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -3506,7 +3506,7 @@ class GetADMInfo2CT(object):
 
 class GetADMInfo2RT(object):
   def __init__(self):
-    self.__packet_size = 116
+    self.__packet_size = 100
     self.__sizes = [80]
     self.__formats = [('I 32s L i i d d i d ')]
     self.packetInfo = BasicCommandRT()
@@ -3555,7 +3555,7 @@ class GetADMInfo2RT(object):
 
 class GetNivelInfoCT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -3574,7 +3574,7 @@ class GetNivelInfoCT(object):
 
 class GetNivelInfoRT(object):
   def __init__(self):
-    self.__packet_size = 48
+    self.__packet_size = 36
     self.__sizes = [16]
     self.__formats = [('i i L ')]
     self.packetInfo = BasicCommandRT()
@@ -3605,7 +3605,7 @@ class GetNivelInfoRT(object):
 
 class GetNivelInfo2CT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -3624,7 +3624,7 @@ class GetNivelInfo2CT(object):
 
 class GetNivelInfo2RT(object):
   def __init__(self):
-    self.__packet_size = 112
+    self.__packet_size = 96
     self.__sizes = [76]
     self.__formats = [('I 32s L i i d d d ')]
     self.packetInfo = BasicCommandRT()
@@ -3670,7 +3670,7 @@ class GetNivelInfo2RT(object):
 
 class GetTPInfoCT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -3689,7 +3689,7 @@ class GetTPInfoCT(object):
 
 class GetTPInfoRT(object):
   def __init__(self):
-    self.__packet_size = 84
+    self.__packet_size = 60
     self.__sizes = [40]
     self.__formats = [('i i i i i i I I i I ')]
     self.packetInfo = BasicCommandRT()
@@ -3741,7 +3741,7 @@ class GetTPInfoRT(object):
 
 class GetTrackerInfoCT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -3760,7 +3760,7 @@ class GetTrackerInfoCT(object):
 
 class GetTrackerInfoRT(object):
   def __init__(self):
-    self.__packet_size = 164
+    self.__packet_size = 144
     self.__sizes = [124]
     self.__formats = [('I 32s L L i i i d d d i i d d I i i ')]
     self.packetInfo = BasicCommandRT()
@@ -3833,7 +3833,7 @@ class GetTrackerInfoRT(object):
 
 class GetATRInfoCT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -3852,7 +3852,7 @@ class GetATRInfoCT(object):
 
 class GetATRInfoRT(object):
   def __init__(self):
-    self.__packet_size = 152
+    self.__packet_size = 136
     self.__sizes = [116]
     self.__formats = [('I 32s L L L L L L d d d d ')]
     self.packetInfo = BasicCommandRT()
@@ -3910,7 +3910,7 @@ class GetATRInfoRT(object):
 
 class SetLaserOnTimerCT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 24
     self.__sizes = [8]
     self.__formats = [('i i ')]
     self.packetInfo = BasicCommandCT()
@@ -3938,7 +3938,7 @@ class SetLaserOnTimerCT(object):
 
 class SetLaserOnTimerRT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 20
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -3957,7 +3957,7 @@ class SetLaserOnTimerRT(object):
 
 class GetLaserOnTimerCT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -3976,7 +3976,7 @@ class GetLaserOnTimerCT(object):
 
 class GetLaserOnTimerRT(object):
   def __init__(self):
-    self.__packet_size = 40
+    self.__packet_size = 28
     self.__sizes = [8]
     self.__formats = [('i i ')]
     self.packetInfo = BasicCommandRT()
@@ -4004,7 +4004,7 @@ class GetLaserOnTimerRT(object):
 
 class GetFaceCT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -4023,7 +4023,7 @@ class GetFaceCT(object):
 
 class GetFaceRT(object):
   def __init__(self):
-    self.__packet_size = 40
+    self.__packet_size = 24
     self.__sizes = [4]
     self.__formats = [('I ')]
     self.packetInfo = BasicCommandRT()
@@ -4048,7 +4048,7 @@ class GetFaceRT(object):
 
 class SetLongSystemParamCT(object):
   def __init__(self):
-    self.__packet_size = 40
+    self.__packet_size = 28
     self.__sizes = [12]
     self.__formats = [('I L ')]
     self.packetInfo = BasicCommandCT()
@@ -4076,7 +4076,7 @@ class SetLongSystemParamCT(object):
 
 class SetLongSystemParamRT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 20
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -4095,7 +4095,7 @@ class SetLongSystemParamRT(object):
 
 class GetLongSystemParamCT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 20
     self.__sizes = [4]
     self.__formats = [('I ')]
     self.packetInfo = BasicCommandCT()
@@ -4120,7 +4120,7 @@ class GetLongSystemParamCT(object):
 
 class GetLongSystemParamRT(object):
   def __init__(self):
-    self.__packet_size = 48
+    self.__packet_size = 32
     self.__sizes = [12]
     self.__formats = [('I L ')]
     self.packetInfo = BasicCommandRT()
@@ -4148,7 +4148,7 @@ class GetLongSystemParamRT(object):
 
 class GetObjectTemperatureCT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -4167,7 +4167,7 @@ class GetObjectTemperatureCT(object):
 
 class GetObjectTemperatureRT(object):
   def __init__(self):
-    self.__packet_size = 40
+    self.__packet_size = 28
     self.__sizes = [8]
     self.__formats = [('d ')]
     self.packetInfo = BasicCommandRT()
@@ -4192,7 +4192,7 @@ class GetObjectTemperatureRT(object):
 
 class ClearCommandQueueCT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 20
     self.__sizes = [4]
     self.__formats = [('I ')]
     self.packetInfo = BasicCommandCT()
@@ -4217,7 +4217,7 @@ class ClearCommandQueueCT(object):
 
 class ClearCommandQueueRT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 20
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -4236,7 +4236,7 @@ class ClearCommandQueueRT(object):
 
 class GetOverviewCameraInfoCT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -4255,7 +4255,7 @@ class GetOverviewCameraInfoCT(object):
 
 class GetOverviewCameraInfoRT(object):
   def __init__(self):
-    self.__packet_size = 108
+    self.__packet_size = 92
     self.__sizes = [72]
     self.__formats = [('I 32s i d d d i i ')]
     self.packetInfo = BasicCommandRT()
@@ -4301,7 +4301,7 @@ class GetOverviewCameraInfoRT(object):
 
 class GetDoubleSystemParamCT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 20
     self.__sizes = [4]
     self.__formats = [('I ')]
     self.packetInfo = BasicCommandCT()
@@ -4326,7 +4326,7 @@ class GetDoubleSystemParamCT(object):
 
 class GetDoubleSystemParamRT(object):
   def __init__(self):
-    self.__packet_size = 48
+    self.__packet_size = 32
     self.__sizes = [12]
     self.__formats = [('I d ')]
     self.packetInfo = BasicCommandRT()
@@ -4354,7 +4354,7 @@ class GetDoubleSystemParamRT(object):
 
 class SetDoubleSystemParamCT(object):
   def __init__(self):
-    self.__packet_size = 40
+    self.__packet_size = 28
     self.__sizes = [12]
     self.__formats = [('I d ')]
     self.packetInfo = BasicCommandCT()
@@ -4382,7 +4382,7 @@ class SetDoubleSystemParamCT(object):
 
 class SetDoubleSystemParamRT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 20
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -4401,7 +4401,7 @@ class SetDoubleSystemParamRT(object):
 
 class RestoreStartupConditionsCT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -4420,7 +4420,7 @@ class RestoreStartupConditionsCT(object):
 
 class RestoreStartupConditionsRT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 20
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -4439,7 +4439,7 @@ class RestoreStartupConditionsRT(object):
 
 class GoAndMeasureCT(object):
   def __init__(self):
-    self.__packet_size = 48
+    self.__packet_size = 40
     self.__sizes = [24]
     self.__formats = [('d d d ')]
     self.packetInfo = BasicCommandCT()
@@ -4470,7 +4470,7 @@ class GoAndMeasureCT(object):
 
 class GoAndMeasureRT(object):
   def __init__(self):
-    self.__packet_size = 32
+    self.__packet_size = 20
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandRT()
@@ -4489,7 +4489,7 @@ class GoAndMeasureRT(object):
 
 class GetMeteoStationInfoCT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -4508,7 +4508,7 @@ class GetMeteoStationInfoCT(object):
 
 class GetMeteoStationInfoRT(object):
   def __init__(self):
-    self.__packet_size = 80
+    self.__packet_size = 64
     self.__sizes = [44]
     self.__formats = [('I 32s i i ')]
     self.packetInfo = BasicCommandRT()
@@ -4542,7 +4542,7 @@ class GetMeteoStationInfoRT(object):
 
 class GetAT4xxInfoCT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -4561,7 +4561,7 @@ class GetAT4xxInfoCT(object):
 
 class GetAT4xxInfoRT(object):
   def __init__(self):
-    self.__packet_size = 224
+    self.__packet_size = 200
     self.__sizes = [180]
     self.__formats = [('I 32s L L L L L L L L L L I I L d d d d d d ')]
     self.packetInfo = BasicCommandRT()
@@ -4646,7 +4646,7 @@ class GetAT4xxInfoRT(object):
 
 class GetSystemSoftwareVersionCT(object):
   def __init__(self):
-    self.__packet_size = 24
+    self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
     self.packetInfo = BasicCommandCT()
@@ -4665,7 +4665,7 @@ class GetSystemSoftwareVersionCT(object):
 
 class GetSystemSoftwareVersionRT(object):
   def __init__(self):
-    self.__packet_size = 64
+    self.__packet_size = 52
     self.__sizes = [32]
     self.__formats = [('32s ')]
     self.packetInfo = BasicCommandRT()

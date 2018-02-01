@@ -8,6 +8,7 @@ import sys
 import pycparser
 import pycparser.c_generator
 from pycparser.c_ast import *
+
 def main(argv):
     if len(argv) < 2:
         print("Error: C source code filename required as the argument 1")
@@ -85,7 +86,7 @@ def main(argv):
                             member_unpacks += ['    packet_elements = struct.Struct(self.__formats[{0}]).unpack(packet[:self._size[{0}]])'.format(type_format_index)]
                             member_packs += ['    packet_elements = ()']
                             pack_index = 0
-                        packet_size += 8
+                        packet_size += 4
                         pack_sizes[-1] += 4
                         member_inits += ['    self.{} = int(0)  # {}'.format(member_name, member_type.type.name)]
                         member_unpacks += ['    self.{} = packet_elements[{}]'.format(member_name, pack_index)]

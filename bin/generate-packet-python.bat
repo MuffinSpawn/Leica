@@ -1,3 +1,3 @@
 @echo off
-SET script_path=%~dp0
-python %script_path%\pygen.py %script_path%\..\Include\ES_C_API_Def_clean.h > %script_path%\..\CESAPI\packet.py
+SET SCRIPT_PATH=%~dp0
+python %SCRIPT_PATH%\pygen.py %SCRIPT_PATH%\..\Include\ES_C_API_Def_clean.h > %SCRIPT_PATH%\..\CESAPI\packet.py

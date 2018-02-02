@@ -4,13 +4,16 @@ Created on Thu Feb  1 16:05:49 2018
 
 @author: peter
 """
-
+import logging
 import time
 import unittest
 
 from CESAPI.connection import *
 from CESAPI.packet import *
 from CESAPI.test import *
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 class ConnectionTestCase(unittest.TestCase):
     def __init(self):
@@ -105,6 +108,39 @@ class DelayedMultipleReadTestCase(ConnectionTestCase):
             self.assertEqual(ES_C_Initialize, initrts[index].packetInfo.command)
             self.assertFalse(statusrts[index] == None)
             self.assertEqual(ES_C_GetSystemStatus, statusrts[index].packetInfo.command)
+
+class BufferWrapAroundTestCase(ConnectionTestCase):
+    def runTest(self):
+        success = False
+        connection = LTConnection()
+        try:
+            stream = connection.connect()
+            stream.PACKET_BUFFER_SIZE = 10
+            
+            init = InitializeCT()
+            for index in range(10):
+                stream.write(init)
+            status = GetSystemStatusCT()
+            stream.write(status)
+            
+            time.sleep(1)
+
+            rtpackets = []
+            for index in range(10):
+                rtpackets += [stream.read()]
+        except exception:
+            pass
+        finally:
+            if connection != None:
+                connection.disconnect()
+
+        for index in range(9):
+            logger.debug('Inspecting packet #{}'.format(index))
+            self.assertFalse(rtpackets[index] == None)
+            self.assertEqual(ES_C_Initialize, rtpackets[index].packetInfo.command)
+        logger.debug('Inspecting packet #{}'.format(9))
+        self.assertFalse(rtpackets[9] == None)
+        self.assertEqual(ES_C_GetSystemStatus, rtpackets[9].packetInfo.command)
 
 if __name__ == '__main__':
     unittest.main()

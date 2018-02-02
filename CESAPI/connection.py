@@ -1,9 +1,13 @@
+import logging
 import socket
 import threading
 from CESAPI.packet import *
 
 class LTPacketStream(threading.Thread):
     def __init__(self, sock):
+        logging.basicConfig(level=logging.INFO)
+        self.__logger = logging.getLogger(__name__)
+
         super().__init__()
         self.__sock = sock
         self.__running = True
@@ -28,65 +32,64 @@ class LTPacketStream(threading.Thread):
                     data_list += [read_data]
                     data_count += len(read_data)
                 header_data = b''.join(data_list)
-                print('DEBUG: LTPacketStream received {} bytes from laser tracker.'.format(len(header_data)))
+                self.__logger.debug('LTPacketStream received {} bytes from laser tracker.'.format(len(header_data)))
                 packet_header = PacketHeaderT()
                 packet_header.unpack(header_data)
     
-                print('DEBUG: LTPacketStream header data: {}'.format(header_data))
-                print('DEBUG: LTPacketStream lPacketSize: {}'.format(packet_header.lPacketSize))
+                self.__logger.debug('LTPacketStream header data: {}'.format(header_data))
+                self.__logger.debug('LTPacketStream lPacketSize: {}'.format(packet_header.lPacketSize))
 
                 while data_count < packet_header.lPacketSize:
                     read_data = self.__sock.recv(packet_header.lPacketSize-PACKET_HEADER_SIZE)
                     data_list += [read_data]
                     data_count += len(read_data)
                 data = b''.join(data_list)
-                print('DEBUG: LTPacketStream data: {}'.format(data))
-                print('DEBUG: LTPacketStream received a {} byte packet.'.format(len(data)))
+                self.__logger.debug('LTPacketStream data: {}'.format(data))
+                self.__logger.debug('LTPacketStream received a {} byte packet.'.format(len(data)))
                 packet = packet_factory.packet(data)
     
                 # append or overwrite an old packet with the new packet
                 if len(self.__packet_buffer) < self.PACKET_BUFFER_SIZE:
                     self.__packet_buffer += [packet]
-                    print('DEBUG: LTPacketStream appended a {} byte packet to the input stream buffer.'.format(len(data)))
+                    self.__logger.debug('LTPacketStream appended a {} byte packet to the input stream buffer.'.format(len(data)))
                 else:
                     self.__packet_buffer[self.__tail_index] = packet
-                    print('DEBUG: LTPacketStream set a {} byte packet to the input stream buffer.'.format(len(data)))
-    
+                    self.__logger.debug('LTPacketStream set a {} byte packet at index {} of the input stream buffer.'.format(len(data), self.__tail_index))
+                    if self.__tail_index == self.__head_index:
+                        # If the tail is right behind the head (full buffer),
+                        # move up the head index (lose oldest packet).
+                        self.__head_index += 1
+                        self.__logger.debug('LTPacketStream incremented the input stream buffer head index to {}.'.format(self.__head_index))
+
                 self.__tail_index += 1
-                if self.__head_index == 0 and self.__tail_index == self.PACKET_BUFFER_SIZE:
-                    # If the head is at index 0 and the tail is past the end of the buffer (full buffer),
-                    # move up the head index (lose oldest packet).
-                    self.__head_index = 1
-                    print('DEBUG: LTPacketStream incremented the input stream buffer head index to {}.'.format(self.__tail_index))
-                elif self.__tail_index == self.__head_index:
-                    # If the tail is right behind the head (full buffer),
-                    # move up the head index (lose oldest packet).
-                    self.__head_index += 1
-                    print('DEBUG: LTPacketStream incremented the input stream buffer head index to {}.'.format(self.__tail_index))
-    
+
                 if self.__tail_index == self.PACKET_BUFFER_SIZE:
                     # If the tail is past the end of the buffer, loop it around to 0.
                     self.__tail_index = 0
-                    print('DEBUG: LTPacketStream set the input stream buffer tail index to {}.'.format(self.__tail_index))
+                    self.__logger.debug('LTPacketStream set the input stream buffer tail index to {}.'.format(self.__tail_index))
             except socket.timeout as ste:
-                print('DEBUG: LTPacketStream timed out waiting for laser tracker packets.')
+                self.__logger.debug('LTPacketStream timed out waiting for laser tracker packets.')
+            self.__logger.debug('*** LTPacketStream buffer head index is {} and tail index is {}. ***'.format(self.__head_index, self.__tail_index))
 
     def read(self):
-        if self.__tail_index == self.__head_index:
-            print('DEBUG: LTPacketStream packet buffer is empty. Returning None.'.format(self.__tail_index))
+        if self.__packet_buffer[self.__head_index] == None:
+            self.__logger.debug('LTPacketStream packet buffer is empty. Returning None.'.format(self.__tail_index))
             return None
         packet = self.__packet_buffer[self.__head_index]
+        self.__packet_buffer[self.__head_index] = None
+        self.__logger.debug('LTPacketStream popped the packet at input stream buffer head index {}.'.format(self.__head_index))
         self.__head_index += 1
         if self.__head_index == self.PACKET_BUFFER_SIZE:
             # If the head is past the end of the buffer, loop it around to 0
             self.__head_index = 0
-            print('DEBUG: LTPacketStream set the input stream buffer head index to {}.'.format(self.__head_index))
+            self.__logger.debug('LTPacketStream set the input stream buffer head index to {}.'.format(self.__head_index))
+        self.__logger.debug('### LTPacketStream buffer head index is {} and tail index is {}. ###'.format(self.__head_index, self.__tail_index))
         return packet
 
     def write(self, packet):
         data = packet.pack()
         self.__sock.sendall(data)
-        print('DEBUG: LTPacketStream sent a {} byte packet.'.format(len(data)))
+        self.__logger.debug('LTPacketStream sent a {} byte packet.'.format(len(data)))
 
 class LTConnection(object):
     def __init__(self):
@@ -109,7 +112,7 @@ class LTConnection(object):
             self.__stream_in.start()
         except socket.timeout as ste:
             self.disconnect()
-            print('DEBUG: Client timed out waiting for a connection to the laser tracker.')
+            self.__logger.debug('Client timed out waiting for a connection to the laser tracker.')
             raise ste
     
         return self.__stream_in

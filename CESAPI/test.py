@@ -5,11 +5,13 @@ Created on Thu Feb  1 12:41:29 2018
 @author: peter
 """
 
+import logging
 import socket
 import sys
 import threading
 from CESAPI.packet import *
 from CESAPI.connection import *
+
 
 class LTSimulator(threading.Thread):
     def __init__(self):
@@ -349,6 +351,9 @@ class LTSimulator(threading.Thread):
                     self.setBogusValues(attribute)
 
     def run(self):
+        logging.basicConfig(level=logging.INFO)
+        logger = logging.getLogger(__name__)
+
         PACKET_HEADER_SIZE = 12  # lPacketSize, type
         packet_factory = LTPacketFactory()
         
@@ -357,42 +362,42 @@ class LTSimulator(threading.Thread):
         sock.listen(1)
         sock.settimeout(1)
         print()
-        print('DEBUG: Laser tracker simulator was started on port {}.'.format(self.port))
+        logger.debug('Laser tracker simulator was started on port {}.'.format(self.port))
 
         while self.__running:
             try:
                 connection, client_address = sock.accept()
-                print('DEBUG: Laser tracker simulator accepted a connection from {}.'.format(client_address))
+                logger.debug('Laser tracker simulator accepted a connection from {}.'.format(client_address))
                 
                 try:
                     while self.__running:
                         header_data = connection.recv(PACKET_HEADER_SIZE)
                         if len(header_data) == 0:
                             continue
-                        print('DEBUG: Laser Tracker header data: {}'.format(header_data))
+                        logger.debug('Laser Tracker header data: {}'.format(header_data))
                         packet_header = PacketHeaderT()
                         packet_header.unpack(header_data)
             
                         data = header_data + connection.recv(packet_header.lPacketSize-PACKET_HEADER_SIZE)
-                        print('DEBUG: Laser Tracker data in: {}'.format(data))
-                        print('DEBUG: Laser tracker received {} byte packet'.format(len(data)))
+                        logger.debug('Laser Tracker data in: {}'.format(data))
+                        logger.debug('Laser tracker received {} byte packet'.format(len(data)))
                         (command_packet, return_packet) = self.packets(data)
                         self.setBogusValues(return_packet)
                         return_data = return_packet.pack()
                         connection.sendall(return_data)
-                        print('DEBUG: Laser tracker data out {}.'.format(return_data))
-                        print('DEBUG: Laser tracker sent a {} byte packet'.format(len(return_data)))
+                        logger.debug('Laser tracker data out {}.'.format(return_data))
+                        logger.debug('Laser tracker sent a {} byte packet'.format(len(return_data)))
                 except socket.timeout:
-                    print('DEBUG: Socket timed out waiting for client packets.')
+                    logger.debug('Socket timed out waiting for client packets.')
                 except ConnectionResetError:
-                    print('DEBUG: Client closed its connection.')
+                    logger.debug('Client closed its connection.')
                 finally:
                     connection.close()
             except socket.timeout as ste:
                 pass
 
         sock.close()
-        print('DEBUG: Laser tracker simulator has stopped.')
+        logger.debug('Laser tracker simulator has stopped.')
 
 if __name__ == '__main__':
     LTSimulator().start()

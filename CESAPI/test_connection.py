@@ -15,6 +15,8 @@ from CESAPI.test import *
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# Base class for most of the other test cases. Used to setup and teardown
+# the LTSimulator instance that the test cases use.
 class ConnectionTestCase(unittest.TestCase):
     def __init(self):
         self.sim = None
@@ -27,6 +29,7 @@ class ConnectionTestCase(unittest.TestCase):
         self.sim.stop()
         self.sim.join()
 
+# Check that LTConnection gracefully fails if it cannot connect to the laser tracker.
 class MissingLaserTrackerConnectionTestCase(unittest.TestCase):
     def runTest(self):
         success = False
@@ -40,6 +43,7 @@ class MissingLaserTrackerConnectionTestCase(unittest.TestCase):
                 connection.disconnect()
         self.assertTrue(success)
 
+# Basic connect/disconnect test.
 class LaserTrackerConnectionTestCase(ConnectionTestCase):
     def runTest(self):
         success = False
@@ -55,6 +59,7 @@ class LaserTrackerConnectionTestCase(ConnectionTestCase):
                 connection.disconnect()
         self.assertTrue(success)
 
+# Send an InitializeCT packet and verify that an InitializeRT packet was returned.
 class InitializeTestCase(ConnectionTestCase):
     def runTest(self):
         success = False
@@ -77,6 +82,8 @@ class InitializeTestCase(ConnectionTestCase):
         self.assertFalse(initrt == None)
         self.assertEqual(ES_C_Initialize, initrt.packetInfo.command)
 
+# Send several InitializeCT and GetSystemStatusCT packets and verify that
+# appropriate return type packets were received.
 class DelayedMultipleReadTestCase(ConnectionTestCase):
     def runTest(self):
         success = False
@@ -109,6 +116,7 @@ class DelayedMultipleReadTestCase(ConnectionTestCase):
             self.assertFalse(statusrts[index] == None)
             self.assertEqual(ES_C_GetSystemStatus, statusrts[index].packetInfo.command)
 
+# Test the packet ring buffer functionality when packet overflow occurs.
 class BufferWrapAroundTestCase(ConnectionTestCase):
     def runTest(self):
         success = False

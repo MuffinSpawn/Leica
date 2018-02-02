@@ -369,16 +369,19 @@ class LTSimulator(threading.Thread):
                         header_data = connection.recv(PACKET_HEADER_SIZE)
                         if len(header_data) == 0:
                             continue
-                        print('header_data: {}'.format(header_data))
+                        print('DEBUG: Laser Tracker header data: {}'.format(header_data))
                         packet_header = PacketHeaderT()
                         packet_header.unpack(header_data)
             
                         data = header_data + connection.recv(packet_header.lPacketSize-PACKET_HEADER_SIZE)
+                        print('DEBUG: Laser Tracker data in: {}'.format(data))
+                        print('DEBUG: Laser tracker received {} byte packet'.format(len(data)))
                         (command_packet, return_packet) = self.packets(data)
                         self.setBogusValues(return_packet)
                         return_data = return_packet.pack()
                         connection.sendall(return_data)
-                        print('DEBUG: Laser tracker simulator sent {}.'.format(return_data))
+                        print('DEBUG: Laser tracker data out {}.'.format(return_data))
+                        print('DEBUG: Laser tracker sent a {} byte packet'.format(len(return_data)))
                 except socket.timeout:
                     print('DEBUG: Socket timed out waiting for client packets.')
                 except ConnectionResetError:

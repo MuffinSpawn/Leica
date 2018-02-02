@@ -63,7 +63,7 @@ def main(argv):
                         member_type_name = member_type.type.names[0]
                         if new_subformat:
                             pack_sizes += [int(0)]
-                            type_formats += ["('"]
+                            type_formats += ["('="]
                             new_subformat = False
                             type_format_index += 1
                             member_unpacks += ['    packet_elements = struct.Struct(self.__formats[{0}]).unpack(packet[:self.__sizes[{0}]])'.format(type_format_index)]
@@ -90,7 +90,7 @@ def main(argv):
                     elif type(member_type.type) == Enum:
                         if new_subformat:
                             pack_sizes += [int(0)]
-                            type_formats += ["('"]
+                            type_formats += ["('="]
                             new_subformat = False
                             type_format_index += 1
                             member_unpacks += ['    packet_elements = struct.Struct(self.__formats[{0}]).unpack(packet[:self.__sizes[{0}]])'.format(type_format_index)]
@@ -153,7 +153,7 @@ def main(argv):
                     array_dim = int(member_type.dim.value)
                     if new_subformat:
                         pack_sizes += [int(0)]
-                        type_formats += ["('"]
+                        type_formats += ["('="]
                         new_subformat = False
                         type_format_index += 1
                         member_unpacks += ['    packet_elements = struct.Struct(self.__formats[{0}]).unpack(packet[:self.__sizes[{0}]])'.format(type_format_index)]

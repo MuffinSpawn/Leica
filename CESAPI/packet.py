@@ -395,7 +395,7 @@ class PacketHeaderT(object):
   def __init__(self):
     self.__packet_size = 12
     self.__sizes = [12]
-    self.__formats = [('q I ')]
+    self.__formats = [('=q I ')]
     self.lPacketSize = int(0)
     self.type = int(0)  # ES_DataType
 
@@ -417,7 +417,7 @@ class ReturnDataT(object):
   def __init__(self):
     self.__packet_size = 16
     self.__sizes = [4]
-    self.__formats = [('I ')]
+    self.__formats = [('=I ')]
     self.packetHeader = PacketHeaderT()
     self.status = int(0)  # ES_ResultStatus
 
@@ -439,7 +439,7 @@ class BasicCommandCT(object):
   def __init__(self):
     self.__packet_size = 16
     self.__sizes = [4]
-    self.__formats = [('I ')]
+    self.__formats = [('=I ')]
     self.packetHeader = PacketHeaderT()
     self.command = int(0)  # ES_Command
 
@@ -461,7 +461,7 @@ class BasicCommandRT(object):
   def __init__(self):
     self.__packet_size = 20
     self.__sizes = [8]
-    self.__formats = [('I I ')]
+    self.__formats = [('=I I ')]
     self.packetHeader = PacketHeaderT()
     self.command = int(0)  # ES_Command
     self.status = int(0)  # ES_ResultStatus
@@ -486,7 +486,7 @@ class NivelResultT(object):
   def __init__(self):
     self.__packet_size = 44
     self.__sizes = [28]
-    self.__formats = [('I d d d ')]
+    self.__formats = [('=I d d d ')]
     self.packetInfo = ReturnDataT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_NivelResult
@@ -519,7 +519,7 @@ class ReflectorPosResultT(object):
   def __init__(self):
     self.__packet_size = 40
     self.__sizes = [24]
-    self.__formats = [('d d d ')]
+    self.__formats = [('=d d d ')]
     self.packetInfo = ReturnDataT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_ReflectorPosResult
@@ -549,7 +549,7 @@ class SingleMeasResultT(object):
   def __init__(self):
     self.__packet_size = 160
     self.__sizes = [144]
-    self.__formats = [('I i d d d d d d d d d d d d d d d d d ')]
+    self.__formats = [('=I i d d d d d d d d d d d d d d d d d ')]
     self.packetInfo = ReturnDataT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_SingleMeasResult
@@ -627,7 +627,7 @@ class SingleMeasResult2T(object):
   def __init__(self):
     self.__packet_size = 208
     self.__sizes = [192]
-    self.__formats = [('I i d d d d d d d d d d d d d d d d d d d d d d d ')]
+    self.__formats = [('=I i d d d d d d d d d d d d d d d d d d d d d d d ')]
     self.packetInfo = ReturnDataT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_SingleMeasResult2
@@ -723,7 +723,7 @@ class SystemStatusChangeT(object):
   def __init__(self):
     self.__packet_size = 16
     self.__sizes = [4]
-    self.__formats = [('I ')]
+    self.__formats = [('=I ')]
     self.packetHeader = PacketHeaderT()
     self.packetHeader.lPacketSize = self.__packet_size
     self.packetHeader.type = ES_DT_SystemStatusChange
@@ -747,7 +747,7 @@ class ErrorResponseT(object):
   def __init__(self):
     self.__packet_size = 20
     self.__sizes = [8]
-    self.__formats = [('I I ')]
+    self.__formats = [('=I I ')]
     self.packetHeader = PacketHeaderT()
     self.packetHeader.lPacketSize = self.__packet_size
     self.packetHeader.type = ES_DT_Error
@@ -926,7 +926,7 @@ class GoBirdBath2CT(object):
   def __init__(self):
     self.__packet_size = 20
     self.__sizes = [4]
-    self.__formats = [('i ')]
+    self.__formats = [('=i ')]
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -1198,7 +1198,7 @@ class FindReflectorCT(object):
   def __init__(self):
     self.__packet_size = 24
     self.__sizes = [8]
-    self.__formats = [('d ')]
+    self.__formats = [('=d ')]
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -1242,7 +1242,7 @@ class SetCoordinateSystemTypeCT(object):
   def __init__(self):
     self.__packet_size = 20
     self.__sizes = [4]
-    self.__formats = [('I ')]
+    self.__formats = [('=I ')]
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -1305,7 +1305,7 @@ class GetCoordinateSystemTypeRT(object):
   def __init__(self):
     self.__packet_size = 24
     self.__sizes = [4]
-    self.__formats = [('I ')]
+    self.__formats = [('=I ')]
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -1330,7 +1330,7 @@ class SetMeasurementModeCT(object):
   def __init__(self):
     self.__packet_size = 20
     self.__sizes = [4]
-    self.__formats = [('I ')]
+    self.__formats = [('=I ')]
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -1393,7 +1393,7 @@ class GetMeasurementModeRT(object):
   def __init__(self):
     self.__packet_size = 24
     self.__sizes = [4]
-    self.__formats = [('I ')]
+    self.__formats = [('=I ')]
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -1418,7 +1418,7 @@ class SearchParamsDataT(object):
   def __init__(self):
     self.__packet_size = 16
     self.__sizes = [16]
-    self.__formats = [('d q ')]
+    self.__formats = [('=d q ')]
     self.dSearchRadius = float(0)
     self.lTimeOut = int(0)
 
@@ -1522,7 +1522,7 @@ class StationaryModeDataT(object):
   def __init__(self):
     self.__packet_size = 12
     self.__sizes = [12]
-    self.__formats = [('q i ')]
+    self.__formats = [('=q i ')]
     self.lMeasTime = int(0)
     self.bUseADM = int(0)
 
@@ -1626,7 +1626,7 @@ class SystemSettingsDataT(object):
   def __init__(self):
     self.__packet_size = 36
     self.__sizes = [36]
-    self.__formats = [('I i i i i i i i i ')]
+    self.__formats = [('=I i i i i i i i i ')]
     self.weatherMonitorStatus = int(0)  # ES_WeatherMonitorStatus
     self.bApplyTransformationParams = int(0)
     self.bApplyStationOrientationParams = int(0)
@@ -1751,7 +1751,7 @@ class SystemUnitsDataT(object):
   def __init__(self):
     self.__packet_size = 20
     self.__sizes = [20]
-    self.__formats = [('I I I I I ')]
+    self.__formats = [('=I I I I I ')]
     self.lenUnitType = int(0)  # ES_LengthUnit
     self.angUnitType = int(0)  # ES_AngleUnit
     self.tempUnitType = int(0)  # ES_TemperatureUnit
@@ -1864,7 +1864,7 @@ class ESVersionNumberT(object):
   def __init__(self):
     self.__packet_size = 12
     self.__sizes = [12]
-    self.__formats = [('i i i ')]
+    self.__formats = [('=i i i ')]
     self.iMajorVersionNumber = int(0)
     self.iMinorVersionNumber = int(0)
     self.iBuildNumber = int(0)
@@ -1908,7 +1908,7 @@ class GetSystemStatusRT(object):
   def __init__(self):
     self.__packet_size = 68
     self.__sizes = [16,20]
-    self.__formats = [('I I I I '),('I q q ')]
+    self.__formats = [('=I I I I '),('=I q q ')]
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -1976,7 +1976,7 @@ class GetMeasurementStatusInfoRT(object):
   def __init__(self):
     self.__packet_size = 32
     self.__sizes = [12]
-    self.__formats = [('I q ')]
+    self.__formats = [('=I q ')]
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -2023,7 +2023,7 @@ class GetTrackerStatusRT(object):
   def __init__(self):
     self.__packet_size = 24
     self.__sizes = [4]
-    self.__formats = [('I ')]
+    self.__formats = [('=I ')]
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -2048,7 +2048,7 @@ class SetReflectorCT(object):
   def __init__(self):
     self.__packet_size = 20
     self.__sizes = [4]
-    self.__formats = [('i ')]
+    self.__formats = [('=i ')]
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -2111,7 +2111,7 @@ class GetReflectorsRT(object):
   def __init__(self):
     self.__packet_size = 72
     self.__sizes = [52]
-    self.__formats = [('i i I d 32s ')]
+    self.__formats = [('=i i I d 32s ')]
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -2167,7 +2167,7 @@ class GetReflectorRT(object):
   def __init__(self):
     self.__packet_size = 24
     self.__sizes = [4]
-    self.__formats = [('i ')]
+    self.__formats = [('=i ')]
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -2192,7 +2192,7 @@ class EnvironmentDataT(object):
   def __init__(self):
     self.__packet_size = 24
     self.__sizes = [24]
-    self.__formats = [('d d d ')]
+    self.__formats = [('=d d d ')]
     self.dTemperature = float(0)
     self.dPressure = float(0)
     self.dHumidity = float(0)
@@ -2299,7 +2299,7 @@ class RefractionDataT(object):
   def __init__(self):
     self.__packet_size = 16
     self.__sizes = [16]
-    self.__formats = [('d d ')]
+    self.__formats = [('=d d ')]
     self.dIfmRefractionIndex = float(0)
     self.dAdmRefractionIndex = float(0)
 
@@ -2403,7 +2403,7 @@ class StationOrientationDataT(object):
   def __init__(self):
     self.__packet_size = 48
     self.__sizes = [48]
-    self.__formats = [('d d d d d d ')]
+    self.__formats = [('=d d d d d d ')]
     self.dVal1 = float(0)
     self.dVal2 = float(0)
     self.dVal3 = float(0)
@@ -2519,7 +2519,7 @@ class TransformationDataT(object):
   def __init__(self):
     self.__packet_size = 56
     self.__sizes = [56]
-    self.__formats = [('d d d d d d d ')]
+    self.__formats = [('=d d d d d d d ')]
     self.dVal1 = float(0)
     self.dVal2 = float(0)
     self.dVal3 = float(0)
@@ -2638,7 +2638,7 @@ class GoPositionCT(object):
   def __init__(self):
     self.__packet_size = 44
     self.__sizes = [28]
-    self.__formats = [('d d d i ')]
+    self.__formats = [('=d d d i ')]
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -2710,7 +2710,7 @@ class GetDirectionRT(object):
   def __init__(self):
     self.__packet_size = 36
     self.__sizes = [16]
-    self.__formats = [('d d ')]
+    self.__formats = [('=d d ')]
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -2738,7 +2738,7 @@ class GoPositionHVDCT(object):
   def __init__(self):
     self.__packet_size = 44
     self.__sizes = [28]
-    self.__formats = [('d d d i ')]
+    self.__formats = [('=d d d i ')]
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -2791,7 +2791,7 @@ class PointLaserCT(object):
   def __init__(self):
     self.__packet_size = 40
     self.__sizes = [24]
-    self.__formats = [('d d d ')]
+    self.__formats = [('=d d d ')]
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -2841,7 +2841,7 @@ class PositionRelativeHVCT(object):
   def __init__(self):
     self.__packet_size = 32
     self.__sizes = [16]
-    self.__formats = [('d d ')]
+    self.__formats = [('=d d ')]
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -2888,7 +2888,7 @@ class PointLaserHVDCT(object):
   def __init__(self):
     self.__packet_size = 40
     self.__sizes = [24]
-    self.__formats = [('d d d ')]
+    self.__formats = [('=d d d ')]
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -2938,7 +2938,7 @@ class MoveHVCT(object):
   def __init__(self):
     self.__packet_size = 24
     self.__sizes = [8]
-    self.__formats = [('i i ')]
+    self.__formats = [('=i i ')]
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -2985,7 +2985,7 @@ class GoNivelPositionCT(object):
   def __init__(self):
     self.__packet_size = 20
     self.__sizes = [4]
-    self.__formats = [('I ')]
+    self.__formats = [('=I ')]
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -3048,7 +3048,7 @@ class CallOrientToGravityRT(object):
   def __init__(self):
     self.__packet_size = 36
     self.__sizes = [16]
-    self.__formats = [('d d ')]
+    self.__formats = [('=d d ')]
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -3076,7 +3076,7 @@ class SetCompensationCT(object):
   def __init__(self):
     self.__packet_size = 20
     self.__sizes = [4]
-    self.__formats = [('i ')]
+    self.__formats = [('=i ')]
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -3139,7 +3139,7 @@ class GetCompensationRT(object):
   def __init__(self):
     self.__packet_size = 24
     self.__sizes = [4]
-    self.__formats = [('i ')]
+    self.__formats = [('=i ')]
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -3183,7 +3183,7 @@ class GetCompensationsRT(object):
   def __init__(self):
     self.__packet_size = 224
     self.__sizes = [204]
-    self.__formats = [('i i 32s 128s 32s i ')]
+    self.__formats = [('=i i 32s 128s 32s i ')]
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -3242,7 +3242,7 @@ class GetCompensations2RT(object):
   def __init__(self):
     self.__packet_size = 356
     self.__sizes = [336]
-    self.__formats = [('i i 32s 128s 32s 128s i i ')]
+    self.__formats = [('=i i 32s 128s 32s 128s i i ')]
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -3288,7 +3288,7 @@ class SetStatisticModeCT(object):
   def __init__(self):
     self.__packet_size = 24
     self.__sizes = [8]
-    self.__formats = [('I I ')]
+    self.__formats = [('=I I ')]
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -3354,7 +3354,7 @@ class GetStatisticModeRT(object):
   def __init__(self):
     self.__packet_size = 28
     self.__sizes = [8]
-    self.__formats = [('I I ')]
+    self.__formats = [('=I I ')]
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -3382,7 +3382,7 @@ class CameraParamsDataT(object):
   def __init__(self):
     self.__packet_size = 12
     self.__sizes = [12]
-    self.__formats = [('i i i ')]
+    self.__formats = [('=i i i ')]
     self.iContrast = int(0)
     self.iBrightness = int(0)
     self.iSaturation = int(0)
@@ -3508,7 +3508,7 @@ class GetADMInfo2RT(object):
   def __init__(self):
     self.__packet_size = 100
     self.__sizes = [80]
-    self.__formats = [('I 32s q i i d d i d ')]
+    self.__formats = [('=I 32s q i i d d i d ')]
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -3576,7 +3576,7 @@ class GetNivelInfoRT(object):
   def __init__(self):
     self.__packet_size = 36
     self.__sizes = [16]
-    self.__formats = [('i i q ')]
+    self.__formats = [('=i i q ')]
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -3626,7 +3626,7 @@ class GetNivelInfo2RT(object):
   def __init__(self):
     self.__packet_size = 96
     self.__sizes = [76]
-    self.__formats = [('I 32s q i i d d d ')]
+    self.__formats = [('=I 32s q i i d d d ')]
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -3691,7 +3691,7 @@ class GetTPInfoRT(object):
   def __init__(self):
     self.__packet_size = 60
     self.__sizes = [40]
-    self.__formats = [('i i i i i i I I i I ')]
+    self.__formats = [('=i i i i i i I I i I ')]
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -3762,7 +3762,7 @@ class GetTrackerInfoRT(object):
   def __init__(self):
     self.__packet_size = 144
     self.__sizes = [124]
-    self.__formats = [('I 32s q q i i i d d d i i d d I i i ')]
+    self.__formats = [('=I 32s q q i i i d d d i i d d I i i ')]
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -3854,7 +3854,7 @@ class GetATRInfoRT(object):
   def __init__(self):
     self.__packet_size = 136
     self.__sizes = [116]
-    self.__formats = [('I 32s q q q q q q d d d d ')]
+    self.__formats = [('=I 32s q q q q q q d d d d ')]
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -3912,7 +3912,7 @@ class SetLaserOnTimerCT(object):
   def __init__(self):
     self.__packet_size = 24
     self.__sizes = [8]
-    self.__formats = [('i i ')]
+    self.__formats = [('=i i ')]
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -3978,7 +3978,7 @@ class GetLaserOnTimerRT(object):
   def __init__(self):
     self.__packet_size = 28
     self.__sizes = [8]
-    self.__formats = [('i i ')]
+    self.__formats = [('=i i ')]
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -4025,7 +4025,7 @@ class GetFaceRT(object):
   def __init__(self):
     self.__packet_size = 24
     self.__sizes = [4]
-    self.__formats = [('I ')]
+    self.__formats = [('=I ')]
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -4050,7 +4050,7 @@ class SetLongSystemParamCT(object):
   def __init__(self):
     self.__packet_size = 28
     self.__sizes = [12]
-    self.__formats = [('I q ')]
+    self.__formats = [('=I q ')]
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -4097,7 +4097,7 @@ class GetLongSystemParamCT(object):
   def __init__(self):
     self.__packet_size = 20
     self.__sizes = [4]
-    self.__formats = [('I ')]
+    self.__formats = [('=I ')]
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -4122,7 +4122,7 @@ class GetLongSystemParamRT(object):
   def __init__(self):
     self.__packet_size = 32
     self.__sizes = [12]
-    self.__formats = [('I q ')]
+    self.__formats = [('=I q ')]
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -4169,7 +4169,7 @@ class GetObjectTemperatureRT(object):
   def __init__(self):
     self.__packet_size = 28
     self.__sizes = [8]
-    self.__formats = [('d ')]
+    self.__formats = [('=d ')]
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -4194,7 +4194,7 @@ class ClearCommandQueueCT(object):
   def __init__(self):
     self.__packet_size = 20
     self.__sizes = [4]
-    self.__formats = [('I ')]
+    self.__formats = [('=I ')]
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -4257,7 +4257,7 @@ class GetOverviewCameraInfoRT(object):
   def __init__(self):
     self.__packet_size = 92
     self.__sizes = [72]
-    self.__formats = [('I 32s i d d d i i ')]
+    self.__formats = [('=I 32s i d d d i i ')]
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -4303,7 +4303,7 @@ class GetDoubleSystemParamCT(object):
   def __init__(self):
     self.__packet_size = 20
     self.__sizes = [4]
-    self.__formats = [('I ')]
+    self.__formats = [('=I ')]
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -4328,7 +4328,7 @@ class GetDoubleSystemParamRT(object):
   def __init__(self):
     self.__packet_size = 32
     self.__sizes = [12]
-    self.__formats = [('I d ')]
+    self.__formats = [('=I d ')]
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -4356,7 +4356,7 @@ class SetDoubleSystemParamCT(object):
   def __init__(self):
     self.__packet_size = 28
     self.__sizes = [12]
-    self.__formats = [('I d ')]
+    self.__formats = [('=I d ')]
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -4441,7 +4441,7 @@ class GoAndMeasureCT(object):
   def __init__(self):
     self.__packet_size = 40
     self.__sizes = [24]
-    self.__formats = [('d d d ')]
+    self.__formats = [('=d d d ')]
     self.packetInfo = BasicCommandCT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -4510,7 +4510,7 @@ class GetMeteoStationInfoRT(object):
   def __init__(self):
     self.__packet_size = 64
     self.__sizes = [44]
-    self.__formats = [('I 32s i i ')]
+    self.__formats = [('=I 32s i i ')]
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -4563,7 +4563,7 @@ class GetAT4xxInfoRT(object):
   def __init__(self):
     self.__packet_size = 200
     self.__sizes = [180]
-    self.__formats = [('I 32s q q q q q q q q q q I I q d d d d d d ')]
+    self.__formats = [('=I 32s q q q q q q q q q q I I q d d d d d d ')]
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -4667,7 +4667,7 @@ class GetSystemSoftwareVersionRT(object):
   def __init__(self):
     self.__packet_size = 52
     self.__sizes = [32]
-    self.__formats = [('32s ')]
+    self.__formats = [('=32s ')]
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command

@@ -74,5 +74,37 @@ class InitializeTestCase(ConnectionTestCase):
         self.assertFalse(initrt == None)
         self.assertEqual(ES_C_Initialize, initrt.packetInfo.command)
 
+class DelayedMultipleReadTestCase(ConnectionTestCase):
+    def runTest(self):
+        success = False
+        connection = LTConnection()
+        try:
+            stream = connection.connect()
+            
+            init = InitializeCT()
+            status = GetSystemStatusCT()
+            for index in range(10):
+                stream.write(init)
+                stream.write(status)
+            
+            time.sleep(1)
+
+            initrts = []
+            statusrts = []
+            for index in range(10):
+                initrts += [stream.read()]
+                statusrts += [stream.read()]
+        except exception:
+            pass
+        finally:
+            if connection != None:
+                connection.disconnect()
+
+        for index in range(10):
+            self.assertFalse(initrts[index] == None)
+            self.assertEqual(ES_C_Initialize, initrts[index].packetInfo.command)
+            self.assertFalse(statusrts[index] == None)
+            self.assertEqual(ES_C_GetSystemStatus, statusrts[index].packetInfo.command)
+
 if __name__ == '__main__':
     unittest.main()

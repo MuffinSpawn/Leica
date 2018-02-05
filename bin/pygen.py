@@ -83,10 +83,10 @@ def main(argv):
                             member_inits += ['    self.{} = {}(0)'.format(member_name, member_type_name)]
                             type_formats[-1] += "i "
                         elif member_type_name == 'long':
-                            packet_size += 8
-                            pack_sizes[-1] += 8
+                            packet_size += 4
+                            pack_sizes[-1] += 4
                             member_inits += ['    self.{} = {}(0)'.format(member_name, 'int')]
-                            type_formats[-1] += "q "
+                            type_formats[-1] += "i "
                         elif member_type_name == 'double':
                             packet_size += 8
                             pack_sizes[-1] += 8

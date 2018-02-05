@@ -15,6 +15,7 @@ class LTPacketStream(threading.Thread):
         self.__packet_buffer = []
         self.__head_index = 0
         self.__tail_index = 0
+        self.__buffer_lock = threading.Lock()
 
     def stop(self):
         self.__running = False
@@ -48,6 +49,7 @@ class LTPacketStream(threading.Thread):
                 self.__logger.debug('LTPacketStream received a {} byte packet.'.format(len(data)))
                 packet = packet_factory.packet(data)
     
+                self.__buffer_lock.acquire()
                 # append or overwrite an old packet with the new packet
                 if len(self.__packet_buffer) < self.PACKET_BUFFER_SIZE:
                     self.__packet_buffer += [packet]
@@ -67,12 +69,28 @@ class LTPacketStream(threading.Thread):
                     # If the tail is past the end of the buffer, loop it around to 0.
                     self.__tail_index = 0
                     self.__logger.debug('LTPacketStream set the input stream buffer tail index to {}.'.format(self.__tail_index))
+                self.__buffer_lock.release()
             except socket.timeout as ste:
                 self.__logger.debug('LTPacketStream timed out waiting for laser tracker packets.')
             self.__logger.debug('*** LTPacketStream buffer head index is {} and tail index is {}. ***'.format(self.__head_index, self.__tail_index))
 
+    def unreadCount(self):
+        count = 0
+        self.__buffer_lock.acquire()
+        if len(self.__packet_buffer) == 0:
+            count = 0
+        elif self.__tail_index > self.__head_index:
+            count = self.__tail_index - self.__head_index
+        else:
+            count = self.PACKET_BUFFER_SIZE-self.__head_index + self.__tail_index
+        self.__buffer_lock.release()
+        return count
+
     def read(self):
-        if self.__packet_buffer[self.__head_index] == None:
+        self.__buffer_lock.acquire()
+        self.__logger.debug('### LTPacketStream buffer size is {}. ###'.format(len(self.__packet_buffer)))
+        self.__logger.debug('### LTPacketStream buffer head index is {} and tail index is {}. ###'.format(self.__head_index, self.__tail_index))
+        if self.__head_index == len(self.__packet_buffer) or self.__packet_buffer[self.__head_index] == None:
             self.__logger.debug('LTPacketStream packet buffer is empty. Returning None.'.format(self.__tail_index))
             return None
         packet = self.__packet_buffer[self.__head_index]
@@ -84,6 +102,7 @@ class LTPacketStream(threading.Thread):
             self.__head_index = 0
             self.__logger.debug('LTPacketStream set the input stream buffer head index to {}.'.format(self.__head_index))
         self.__logger.debug('### LTPacketStream buffer head index is {} and tail index is {}. ###'.format(self.__head_index, self.__tail_index))
+        self.__buffer_lock.release()
         return packet
 
     def write(self, packet):
@@ -96,7 +115,7 @@ class LTConnection(object):
         self.__sock = None
         self.__stream_in = None
 
-    def connect(self, host='localhost', port=700):
+    def connect(self, host='192.168.0.1', port=700):
         if self.__sock != None:
             raise Exception("Repeat connection. Only one connection to the laser tracker is allowed at one time.")
 

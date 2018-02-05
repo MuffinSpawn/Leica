@@ -12,7 +12,7 @@ from CESAPI.connection import *
 from CESAPI.packet import *
 from CESAPI.test import *
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 class ConnectionTestCase(unittest.TestCase):
@@ -32,7 +32,7 @@ class MissingLaserTrackerConnectionTestCase(unittest.TestCase):
         success = False
         connection = LTConnection()
         try:
-            stream = connection.connect()
+            stream = connection.connect(host='localhost')
         except ConnectionRefusedError:
             success = True
         finally:
@@ -45,7 +45,7 @@ class LaserTrackerConnectionTestCase(ConnectionTestCase):
         success = False
         connection = LTConnection()
         try:
-            connection.connect()
+            connection.connect(host='localhost')
     
             success = True
         except exception:
@@ -60,7 +60,7 @@ class InitializeTestCase(ConnectionTestCase):
         success = False
         connection = LTConnection()
         try:
-            stream = connection.connect()
+            stream = connection.connect(host='localhost')
             
             init = InitializeCT()
             stream.write(init)
@@ -82,7 +82,7 @@ class DelayedMultipleReadTestCase(ConnectionTestCase):
         success = False
         connection = LTConnection()
         try:
-            stream = connection.connect()
+            stream = connection.connect(host='localhost')
             
             init = InitializeCT()
             status = GetSystemStatusCT()
@@ -109,12 +109,35 @@ class DelayedMultipleReadTestCase(ConnectionTestCase):
             self.assertFalse(statusrts[index] == None)
             self.assertEqual(ES_C_GetSystemStatus, statusrts[index].packetInfo.command)
 
+class AlternatingReadWriteTestCase(ConnectionTestCase):
+    def runTest(self):
+        success = False
+        connection = LTConnection()
+        try:
+            stream = connection.connect(host='localhost')
+            
+            init = InitializeCT()
+            initrts = []
+            for index in range(10):
+                stream.write(init)
+                time.sleep(1)
+                initrts += [stream.read()]
+        except exception:
+            pass
+        finally:
+            if connection != None:
+                connection.disconnect()
+
+        for index in range(10):
+            self.assertFalse(initrts[index] == None)
+            self.assertEqual(ES_C_Initialize, initrts[index].packetInfo.command)
+
 class BufferWrapAroundTestCase(ConnectionTestCase):
     def runTest(self):
         success = False
         connection = LTConnection()
         try:
-            stream = connection.connect()
+            stream = connection.connect(host='localhost')
             stream.PACKET_BUFFER_SIZE = 10
             
             init = InitializeCT()

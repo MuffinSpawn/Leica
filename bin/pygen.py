@@ -205,6 +205,17 @@ def main(argv):
             print()
         else:
             print('# Skipped object {}'.format(type(node_type)))
+
+    print('def packetType(packet):')
+    print('  attributes = dir(packet)')
+    print("  if 'packetHeader' in attributes:")
+    print('    return packet.packetHeader.type')
+    print("  elif 'packetInfo' in attributes:")
+    print('    return packetType(packet.packetInfo)')
+    print('  else:')
+    print('    return None')
+    print()
+
     for class_gen in class_gens:
         print(class_gen)
     print('    return packet')

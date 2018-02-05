@@ -14,41 +14,31 @@ from CESAPI.test import *
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-def packetType(packet):
-    attributes = dir(packet)
-    if 'packetHeader' in attributes:
-        return packet.packetHeader.type
-    elif 'packetInfo' in attributes:
-        return packetType(packet.packetInfo)
-    else:
-        return type(packet)
-
 def main():
     connection = LTConnection()
     try:
         stream = connection.connect()
         
+        logger.info('Initializing laser tracker...')
         init = InitializeCT()
         stream.write(init)
         
         in_packet = None
-        while (packetType(in_packet) != ES_DT_Command and packetType(in_packet) != ES_DT_Error):
+        done = False
+        while (not done):
             unread_count = stream.unreadCount()
             logger.debug('Unread packet count: {}'.format(unread_count))
             if unread_count > 0:
                 in_packet = stream.read()
-                if in_packet == None:
-                    logger.debug('No packet read.')
-                else:
-                    logger.info('Recieved type {} packet.'.format(packetType(in_packet)))
-                    logger.debug(in_packet.pack())
+                logger.debug('Recieved type {} packet'.format(packetType(in_packet)))
+                if packetType(in_packet) == ES_DT_Command and in_packet.packetInfo.command == ES_C_Initialize:
+                    logger.info('Done initializing laser tracker.')
+                    done = True
+                elif packetType(in_packet) == ES_DT_Error:
+                    logger.info('Received error for command type {} with status code {}.'.format(in_packet.command, in_packet.status))
+                    if in_packet.packetInfo.command == ES_C_Initialize:
+                        done = True
             time.sleep(1)
-        if packetType(in_packet) == ES_DT_Command and in_packet.packetInfo.command == ES_C_Initialize:
-            logger.info('Received initialize acknowledgement.')
-        elif packetType(in_packet) == ES_DT_Error:
-            logger.info('Received error for command {} with status {}.'.format(in_packet.command, in_packet.status))
-    #except Exception as e:
-    #    logger.error(str(e))
     finally:
         if connection != None:
             connection.disconnect()

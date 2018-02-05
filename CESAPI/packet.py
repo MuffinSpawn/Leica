@@ -4695,6 +4695,15 @@ class GetSystemSoftwareVersionRT(object):
     packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
     return packet
 
+def packetType(packet):
+  attributes = dir(packet)
+  if 'packetHeader' in attributes:
+    return packet.packetHeader.type
+  elif 'packetInfo' in attributes:
+    return packetType(packet.packetInfo)
+  else:
+    return None
+
 class LTPacketFactory(object):
   def packet(self, data):
     packet_header = PacketHeaderT()

@@ -381,7 +381,3 @@ class CommandSync(object):
     packet = StartNivelMeasurementCT()
     return self.execute(packet)
 
-  def StopMeasurement(self):
-    packet = StopMeasurementCT()
-    return self.execute(packet)
-

@@ -56,6 +56,8 @@ def main():
     print('    return return_packet')
     print()
     for name in get_command_names():
+        if name == 'StopMeasurement':
+            continue
         attributes = list(get_command_attributes(name))
         if len(attributes) > 0:
             arguments = ', '.join(get_command_attributes(name))

@@ -1,4 +1,4 @@
-rem @echo off
+@echo off
 SET CURRENT_PATH=%cd%
 SET SCRIPT_PATH=%~dp0
 cd %SCRIPT_PATH%\..

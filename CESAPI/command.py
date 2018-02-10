@@ -9,18 +9,29 @@ class CommandSync(object):
     stream.write(packet)
 
     in_packet = None
+    return_packet = None
     done = False
     while (not done):
       unread_count = stream.unreadCount()
       if unread_count > 0:
         in_packet = stream.read()
+        packet_type = packetType(in_packet)
         if packetType(in_packet) == ES_DT_Command and \
            in_packet.packetInfo.command == packet.packetInfo.command:
-          done = True
+          return_packet = in_packet
+          if in_packet.packetInfo.command != ES_C_StartMeasurement and \
+             in_packet.packetInfo.command != ES_C_StartNivelMeasurement:
+            done = True
         elif packetType(in_packet) == ES_DT_Error:
           raise Exception('Command {} failed with status {}'.format(in_packet.command, in_packet.status))
+        elif packet_type == ES_DT_SingleMeasResult or packet_type == ES_DT_SingleMeasResult2:
+          self.measurement = in_packet
+          done = True
+        elif packet_type == ES_DT_NivelResult:
+          self.nivel_measurement = in_packet
+          done = True
       time.sleep(0.2)
-    return in_packet
+    return return_packet
 
   def ActivateCameraView(self):
     packet = ActivateCameraViewCT()

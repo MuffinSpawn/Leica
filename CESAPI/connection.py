@@ -113,7 +113,7 @@ class LTPacketStream(threading.Thread):
 class LTConnection(object):
     def __init__(self):
         self.__sock = None
-        self.__stream_in = None
+        self.__stream = None
 
     def connect(self, host='192.168.0.1', port=700):
         if self.__sock != None:
@@ -127,19 +127,19 @@ class LTConnection(object):
             # Connect the socket to the port where the server is listening
             self.__sock.connect((host, port))
 
-            self.__stream_in = LTPacketStream(self.__sock)
-            self.__stream_in.start()
+            self.__stream = LTPacketStream(self.__sock)
+            self.__stream.start()
         except socket.timeout as ste:
             self.disconnect()
             self.__logger.debug('Client timed out waiting for a connection to the laser tracker.')
             raise ste
     
-        return self.__stream_in
+        return self.__stream
 
     def disconnect(self):
-        if self.__stream_in != None:
-            self.__stream_in.stop()
-            self.__stream_in.join()
+        if self.__stream != None:
+            self.__stream.stop()
+            self.__stream.join()
         if self.__sock != None:
             self.__sock.close()
             self.__sock = None

@@ -5,8 +5,9 @@ from CESAPI.packet import *
 
 class LTPacketStream(threading.Thread):
     def __init__(self, sock):
-        logging.basicConfig(level=logging.INFO)
+        logging.basicConfig()
         self.__logger = logging.getLogger(__name__)
+        self.__logger.setLevel(logging.INFO)
 
         super().__init__()
         self.__sock = sock
@@ -78,6 +79,8 @@ class LTPacketStream(threading.Thread):
         count = 0
         self.__buffer_lock.acquire()
         if len(self.__packet_buffer) == 0:
+            count = 0
+        elif self.__tail_index == self.__head_index:
             count = 0
         elif self.__tail_index > self.__head_index:
             count = self.__tail_index - self.__head_index

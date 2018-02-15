@@ -1,36 +1,61 @@
 import time
 from CESAPI.packet import *
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger('CommandSync')
+logger.setLevel(logging.INFO)
+
+
 class CommandSync(object):
   def __init__(self, connection):
     self.__connection = connection
 
-  def execute(self, packet):
+  def execute(self, packet, block=True):
     stream = self.__connection._LTConnection__stream
     stream.write(packet)
 
     in_packet = None
     return_packet = None
     done = False
-    while (not done):
+    while (block and not done):
       unread_count = stream.unreadCount()
       if unread_count > 0:
         in_packet = stream.read()
         packet_type = packetType(in_packet)
+        logger.debug('Waiting for response to command {}'.format(packet.packetInfo.command))
         if packetType(in_packet) == ES_DT_Command and \
            in_packet.packetInfo.command == packet.packetInfo.command:
+          logger.debug('Received command response: {}'.format(in_packet.packetInfo.command))
           return_packet = in_packet
           if in_packet.packetInfo.command != ES_C_StartMeasurement and \
              in_packet.packetInfo.command != ES_C_StartNivelMeasurement:
+            logger.debug('Done: non-measurement command response')
             done = True
         elif packetType(in_packet) == ES_DT_Error:
+          logger.debug('Command {} failed with status {}'.format(in_packet.command, in_packet.status))
           raise Exception('Command {} failed with status {}'.format(in_packet.command, in_packet.status))
         elif packet_type == ES_DT_SingleMeasResult or packet_type == ES_DT_SingleMeasResult2:
-          self.measurement = in_packet
+          return_packet = in_packet
+          logger.debug('Done: measurement data event')
           done = True
         elif packet_type == ES_DT_NivelResult:
           self.nivel_measurement = in_packet
+          logger.debug('Done: nivel data event')
           done = True
-      time.sleep(0.2)
+        elif packet_type == ES_DT_ReflectorPosResult:
+          logger.debug('Reflector Postion: ({}, {}, {})'.format(in_packet.dVal1, in_packet.dVal2, in_packet.dVal3))
+        elif packet_type == ES_DT_SystemStatusChange:
+          logger.debug('System Status Changed to {}'.format(in_packet.systemStatusChange))
+          if packet.packetInfo.command == ES_C_SetCoordinateSystemType and \
+             in_packet.systemStatusChange == ES_SSC_CoordinateSystemTypeChanged:
+            done = True
+        else:
+          if in_packet == None:
+            logger.debug("I ain't got nothin'")
+          else:
+            logger.debug('What the ^&*%^*&?:\n{}'.format(in_packet.pack()))
+      time.sleep(0.05)
     return return_packet
 
   def ActivateCameraView(self):

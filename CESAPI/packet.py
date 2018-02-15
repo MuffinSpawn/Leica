@@ -4878,4 +4878,5 @@ class LTPacketFactory(object):
       packet = GetAT4xxInfoRT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetSystemSoftwareVersion:
       packet = GetSystemSoftwareVersionRT()
+    packet.unpack(data)
     return packet

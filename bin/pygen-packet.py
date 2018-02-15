@@ -218,6 +218,7 @@ def main(argv):
 
     for class_gen in class_gens:
         print(class_gen)
+    print('    packet.unpack(data)')
     print('    return packet')
 
 if __name__ == "__main__":

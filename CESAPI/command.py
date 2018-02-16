@@ -36,7 +36,8 @@ class CommandSync(object):
           if packet.packetInfo.command == ES_C_SetCoordinateSystemType and \
              in_packet.systemStatusChange == ES_SSC_CoordinateSystemTypeChanged:
             done = True
-      time.sleep(0.05)
+         else:
+           time.sleep(0.2)
     return return_packet
 
   def ActivateCameraView(self):

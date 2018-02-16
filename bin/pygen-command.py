@@ -58,8 +58,8 @@ def main():
     print('          if packet.packetInfo.command == ES_C_SetCoordinateSystemType and \\')
     print('             in_packet.systemStatusChange == ES_SSC_CoordinateSystemTypeChanged:')
     print('            done = True')
-    print('         else:')
-    print('           time.sleep(0.2)')
+    print('        else:')
+    print('          time.sleep(0.2)')
     print('    return return_packet')
     print()
     for name in get_command_names():

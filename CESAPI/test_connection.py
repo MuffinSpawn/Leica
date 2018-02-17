@@ -8,9 +8,9 @@ import logging
 import time
 import unittest
 
-from CESAPI.connection import *
+from CESAPI.connection import Connection
 from CESAPI.packet import *
-from CESAPI.test import *
+from CESAPI.test import LTSimulator
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -29,11 +29,11 @@ class ConnectionTestCase(unittest.TestCase):
         self.sim.stop()
         self.sim.join()
 
-# Check that LTConnection gracefully fails if it cannot connect to the laser tracker.
+# Check that Connection gracefully fails if it cannot connect to the laser tracker.
 class MissingLaserTrackerConnectionTestCase(unittest.TestCase):
     def runTest(self):
         success = False
-        connection = LTConnection()
+        connection = Connection()
         try:
             stream = connection.connect(host='localhost')
         except ConnectionRefusedError:
@@ -47,7 +47,7 @@ class MissingLaserTrackerConnectionTestCase(unittest.TestCase):
 class LaserTrackerConnectionTestCase(ConnectionTestCase):
     def runTest(self):
         success = False
-        connection = LTConnection()
+        connection = Connection()
         try:
             connection.connect(host='localhost')
     
@@ -63,7 +63,7 @@ class LaserTrackerConnectionTestCase(ConnectionTestCase):
 class InitializeTestCase(ConnectionTestCase):
     def runTest(self):
         success = False
-        connection = LTConnection()
+        connection = Connection()
         try:
             stream = connection.connect(host='localhost')
             
@@ -87,7 +87,7 @@ class InitializeTestCase(ConnectionTestCase):
 class DelayedMultipleReadTestCase(ConnectionTestCase):
     def runTest(self):
         success = False
-        connection = LTConnection()
+        connection = Connection()
         try:
             stream = connection.connect(host='localhost')
             
@@ -120,7 +120,7 @@ class DelayedMultipleReadTestCase(ConnectionTestCase):
 class AlternatingReadWriteTestCase(ConnectionTestCase):
     def runTest(self):
         success = False
-        connection = LTConnection()
+        connection = Connection()
         try:
             stream = connection.connect(host='localhost')
             
@@ -144,7 +144,7 @@ class AlternatingReadWriteTestCase(ConnectionTestCase):
 class BufferWrapAroundTestCase(ConnectionTestCase):
     def runTest(self):
         success = False
-        connection = LTConnection()
+        connection = Connection()
         try:
             stream = connection.connect(host='localhost')
             stream.PACKET_BUFFER_SIZE = 10

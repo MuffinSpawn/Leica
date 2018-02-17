@@ -8,9 +8,9 @@ import logging
 import time
 import unittest
 
-from CESAPI.connection import *
+from CESAPI.connection import Connection
 from CESAPI.packet import *
-from CESAPI.test import *
+from CESAPI.test import LTSimulator
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

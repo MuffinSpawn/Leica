@@ -2,7 +2,7 @@
 """
 Created on Thu Feb  1 12:41:29 2018
 
-@author: peter
+@author: Peter G. Lane (petergwinlane@gmail.com)
 """
 
 import logging

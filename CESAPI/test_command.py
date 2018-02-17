@@ -9,8 +9,8 @@ import time
 import unittest
 
 from CESAPI.command import *
-from CESAPI.connection import *
-from CESAPI.test import *
+from CESAPI.connection import Connection
+from CESAPI.test import LTSimulator
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -33,7 +33,7 @@ class CommandTestCase(unittest.TestCase):
 class InitializeTestCase(CommandTestCase):
     def runTest(self):
         success = False
-        connection = LTConnection()
+        connection = Connection()
         initrt = None
         try:
             connection.connect(host='localhost')

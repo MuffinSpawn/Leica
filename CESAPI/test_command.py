@@ -14,6 +14,7 @@ from CESAPI.test import LTSimulator
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 # Base class for most of the other test cases. Used to setup and teardown
 # the LTSimulator instance that the test cases use.
@@ -46,7 +47,7 @@ class InitializeTestCase(CommandTestCase):
             if connection != None:
                 connection.disconnect()
 
-        self.assertFalse(initrt == None)
+        self.assertTrue(initrt != None)
         self.assertEqual(ES_C_Initialize, initrt.packetInfo.command)
 
 if __name__ == '__main__':

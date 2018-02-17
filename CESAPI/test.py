@@ -380,7 +380,7 @@ class LTSimulator(threading.Thread):
         logger = logging.getLogger(__name__)
 
         PACKET_HEADER_SIZE = 12  # lPacketSize, type
-        packet_factory = LTPacketFactory()
+        packet_factory = PacketFactory()
         
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.bind((self.host, self.port))

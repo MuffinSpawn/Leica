@@ -23,7 +23,7 @@ class PacketStream(threading.Thread):
 
     def run(self):
         PACKET_HEADER_SIZE = 12  # lPacketSize, type
-        packet_factory = LTPacketFactory()
+        packet_factory = PacketFactory()
 
         while self.__running:
             try:

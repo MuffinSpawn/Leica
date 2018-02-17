@@ -28,7 +28,7 @@ class CommandSync(object):
     self.__connection = connection
     print()
   def execute(self, packet):
-    stream = self.__connection._LTConnection__stream
+    stream = self.__connection._Connection__stream
     stream.write(packet)
     print()
     in_packet = None

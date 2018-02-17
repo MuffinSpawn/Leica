@@ -1,13 +1,14 @@
+
 import time
 from CESAPI.packet import *
 class CommandSync(object):
   def __init__(self, connection):
     self.__connection = connection
-
+    print()
   def execute(self, packet):
     stream = self.__connection._LTConnection__stream
     stream.write(packet)
-
+    print()
     in_packet = None
     return_packet = None
     done = False
@@ -40,6 +41,7 @@ class CommandSync(object):
           time.sleep(0.2)
     return return_packet
 
+    
   def ActivateCameraView(self):
     packet = ActivateCameraViewCT()
     return self.execute(packet)

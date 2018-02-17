@@ -20,48 +20,50 @@ def get_command_attributes(name):
     return public_attrs
 
 def main():
-    print('import time')
-    print('from CESAPI.packet import *')
-    print('class CommandSync(object):')
-    print('  def __init__(self, connection):')
-    print('    self.__connection = connection')
+    print('''
+import time
+from CESAPI.packet import *
+class CommandSync(object):
+  def __init__(self, connection):
+    self.__connection = connection
     print()
-    print('  def execute(self, packet):')
-    print('    stream = self.__connection._LTConnection__stream')
-    print('    stream.write(packet)')
+  def execute(self, packet):
+    stream = self.__connection._LTConnection__stream
+    stream.write(packet)
     print()
-    print('    in_packet = None')
-    print('    return_packet = None')
-    print('    done = False')
-    print('    while (not done):')
-    print('      unread_count = stream.unreadCount()')
-    print('      if unread_count > 0:')
-    print('        in_packet = stream.read()')
-    print('        packet_type = packetType(in_packet)')
-    print('        if packetType(in_packet) == ES_DT_Command and \\')
-    print('           in_packet.packetInfo.command == packet.packetInfo.command:')
-    print('          return_packet = in_packet')
-    print('          if in_packet.packetInfo.command != ES_C_StartMeasurement and \\')
-    print('             in_packet.packetInfo.command != ES_C_StartNivelMeasurement:')
-    print('            done = True')
-    print('        elif packetType(in_packet) == ES_DT_Error:')
-    print('          raise Exception("Command {} failed with status {}".format(in_packet.command, in_packet.status))')
-    print('        elif packet_type == ES_DT_SingleMeasResult or packet_type == ES_DT_SingleMeasResult2:')
-    print('          return_packet = in_packet')
-    print('          done = True')
-    print('        elif packet_type == ES_DT_NivelResult:')
-    print('          self.nivel_measurement = in_packet')
-    print('          done = True')
-    print('        elif packet_type == ES_DT_ReflectorPosResult:')
-    print('          pass')
-    print('        elif packet_type == ES_DT_SystemStatusChange:')
-    print('          if packet.packetInfo.command == ES_C_SetCoordinateSystemType and \\')
-    print('             in_packet.systemStatusChange == ES_SSC_CoordinateSystemTypeChanged:')
-    print('            done = True')
-    print('        else:')
-    print('          time.sleep(0.2)')
-    print('    return return_packet')
-    print()
+    in_packet = None
+    return_packet = None
+    done = False
+    while (not done):
+      unread_count = stream.unreadCount()
+      if unread_count > 0:
+        in_packet = stream.read()
+        packet_type = packetType(in_packet)
+        if packetType(in_packet) == ES_DT_Command and \\
+           in_packet.packetInfo.command == packet.packetInfo.command:
+          return_packet = in_packet
+          if in_packet.packetInfo.command != ES_C_StartMeasurement and \\
+             in_packet.packetInfo.command != ES_C_StartNivelMeasurement:
+            done = True
+        elif packetType(in_packet) == ES_DT_Error:
+          raise Exception("Command {} failed with status {}".format(in_packet.command, in_packet.status))
+        elif packet_type == ES_DT_SingleMeasResult or packet_type == ES_DT_SingleMeasResult2:
+          return_packet = in_packet
+          done = True
+        elif packet_type == ES_DT_NivelResult:
+          self.nivel_measurement = in_packet
+          done = True
+        elif packet_type == ES_DT_ReflectorPosResult:
+          pass
+        elif packet_type == ES_DT_SystemStatusChange:
+          if packet.packetInfo.command == ES_C_SetCoordinateSystemType and \\
+             in_packet.systemStatusChange == ES_SSC_CoordinateSystemTypeChanged:
+            done = True
+        else:
+          time.sleep(0.2)
+    return return_packet
+
+    ''')
     for name in get_command_names():
         if name == 'StopMeasurement':
             continue

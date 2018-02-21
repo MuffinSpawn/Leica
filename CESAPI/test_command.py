@@ -10,6 +10,7 @@ import unittest
 
 from CESAPI.command import *
 from CESAPI.connection import Connection
+import CESAPI.packet
 from CESAPI.test import LTSimulator
 
 logging.basicConfig(level=logging.INFO)
@@ -49,6 +50,30 @@ class InitializeTestCase(CommandTestCase):
 
         self.assertTrue(initrt != None)
         self.assertEqual(ES_C_Initialize, initrt.packetInfo.command)
+
+# Check whether CommandSync.execute() times out properly.
+class TimeoutTestCase(CommandTestCase):
+    def runTest(self):
+        success = False
+        connection = Connection()
+        try:
+            connection.connect(host='localhost')
+            command = CommandSync(connection)
+            command._CommandSync__timeout = 100
+            
+            bogus_command = CESAPI.packet.InitializeCT()
+            bogus_command.packetInfo.packetHeader.type = 9999
+            bogus_command.packetInfo.command = 9999
+            bogus_command.packetInfo.packetHeader.lPacketSize = 12
+            logger.debug('Bogus Packet: {}'.format(bogus_command.pack()))
+            command.execute(bogus_command)
+        except Exception as e:
+            logger.debug('Received Exception: {}'.format(e))
+            self.assertTrue(len(e.args) == 1)
+            self.assertTrue('timed out.' in e.args[0])
+        finally:
+            if connection != None:
+                connection.disconnect()
 
 if __name__ == '__main__':
     unittest.main()

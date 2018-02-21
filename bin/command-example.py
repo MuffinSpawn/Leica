@@ -5,11 +5,15 @@ Created on Thu Feb  1 16:05:49 2018
 @author: peter
 """
 import logging
+import signal
+import sys
+import time
 
 import CESAPI.connection
 import CESAPI.command
 import CESAPI.packet
 import CESAPI.refract
+import CESAPI.test
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -61,16 +65,22 @@ def measure(command, rialg=None):
         CESAPI.refract.SetRefractionIndex(command, rialg)
         return command.StartMeasurement()
 
+def signal_handler(signal, frame):
+        logger.info('You pressed Ctrl+C! Exiting...')
+        sys.exit(0)
+
 def main():
     connection = CESAPI.connection.Connection()
     try:
-        connection.connect()
+        # connection.connect()
+        stream = connection.connect(host='localhost')
         command = CESAPI.command.CommandSync(connection)
         
         initialize(command, manualiof=False)
         
         # ri_algorithm = CESAPI.refract.AlgorithmFactory(CESAPI.refract.RI_ALG_CiddorAndHill)
-        ri_algorithm = CESAPI.refract.AlgorithmFactory(CESAPI.refract.RI_ALG_Leica)
+        ri_algorithm = CESAPI.refract.AlgorithmFactory().refractionIndexAlgorithm(CESAPI.refract.RI_ALG_Leica)
+
         
         logger.info('Measuring reflector..')
         measurement = measure(command, rialg=ri_algorithm)
@@ -83,8 +93,12 @@ def main():
         print('Temperature: {} C'.format(measurement.dTemperature))
         print('Pressure:    {} mbar'.format(measurement.dPressure))
         print('Humidity:    {} %RH'.format(measurement.dHumidity))
+        
+        # command.GetStatisticMode()
     finally:
         connection.disconnect()
+        pass
+    logger.debug('Done')
 
 if __name__ == '__main__':
     main()

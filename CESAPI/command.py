@@ -1,30 +1,39 @@
 
+import logging
 import time
-
 from CESAPI.packet import *
+
+logging.basicConfig()
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
+
 class CommandSync(object):
   def __init__(self, connection):
     self.__connection = connection
-    self.__timeout = 60000
+    self.__timeout = 5000
 
   def execute(self, packet):
     self.__executing = True
     stream = self.__connection._Connection__stream
     stream.write(packet)
-    print()
+
     in_packet = None
     return_packet = None
     current_time_ms = lambda: int(round(time.time() * 1000))
     start_time = current_time_ms()
+    timeout = self.__timeout
+    if packet.packetInfo.command == ES_C_Initialize:
+        timeout = 90000
     done = False
     while (self.__executing and not done):
       unread_count = stream.unreadCount()
       if unread_count > 0:
         in_packet = stream.read()
         packet_type = packetType(in_packet)
-        if packetType(in_packet) == ES_DT_Command and            in_packet.packetInfo.command == packet.packetInfo.command:
+        if packetType(in_packet) == ES_DT_Command and in_packet.packetInfo.command == packet.packetInfo.command:
           return_packet = in_packet
-          if in_packet.packetInfo.command != ES_C_StartMeasurement and              in_packet.packetInfo.command != ES_C_StartNivelMeasurement:
+          if in_packet.packetInfo.command != ES_C_StartMeasurement and in_packet.packetInfo.command != ES_C_StartNivelMeasurement:
             done = True
         elif packetType(in_packet) == ES_DT_Error:
           raise Exception("Command {} failed with status {}".format(in_packet.command, in_packet.status))
@@ -40,13 +49,14 @@ class CommandSync(object):
           if packet.packetInfo.command == ES_C_SetCoordinateSystemType and              in_packet.systemStatusChange == ES_SSC_CoordinateSystemTypeChanged:
             done = True
         else:
+          logger.debug('Waiting for command response...')
           time.sleep(0.2)
       elapsed_time = current_time_ms() - start_time
-      if not done and elapsed_time > self.__timeout:
-        raise Exception("Command {} timed out.".format(packet.command))
+      if not done and elapsed_time > timeout:
+        raise Exception("Command {} timed out.".format(packet.packetInfo.command))
     self.__executing = False
+    logger.debug('Exiting CommandSync.execute().')
     return return_packet
-
     
   def ActivateCameraView(self):
     packet = ActivateCameraViewCT()

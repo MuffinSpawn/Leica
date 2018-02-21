@@ -376,7 +376,7 @@ class LTSimulator(threading.Thread):
                     self.setBogusValues(attribute)
 
     def run(self):
-        logging.basicConfig(level=logging.INFO)
+        logging.basicConfig(level=logging.DEBUG)
         logger = logging.getLogger(__name__)
         logger.setLevel(logging.INFO)
 
@@ -387,18 +387,22 @@ class LTSimulator(threading.Thread):
         sock.bind((self.host, self.port))
         sock.listen(1)
         sock.settimeout(1)
-        print()
         logger.debug('Laser tracker simulator was started on port {}.'.format(self.port))
 
         while self.__running:
             try:
+                logger.debug('Waiting for connection...')
                 connection, client_address = sock.accept()
+                connection.settimeout(1)
                 logger.debug('Laser tracker simulator accepted a connection from {}.'.format(client_address))
                 
-                try:
-                    while self.__running:
+                while self.__running:
+                    try:
+                        logger.debug('Attempting to receive a packet...')
                         header_data = connection.recv(PACKET_HEADER_SIZE)
                         if len(header_data) == 0:
+                            logger.debug('Laser Tracker is waiting to receive data...')
+                            time.sleep(0.2)
                             continue
                         logger.debug('Laser Tracker header data: {}'.format(header_data))
                         packet_header = PacketHeaderT()
@@ -416,14 +420,16 @@ class LTSimulator(threading.Thread):
                             connection.sendall(return_data)
                             logger.debug('Laser tracker data out {}.'.format(return_data))
                             logger.debug('Laser tracker sent a {} byte packet'.format(len(return_data)))
-                except socket.timeout:
-                    logger.debug('Socket timed out waiting for client packets.')
-                except ConnectionResetError:
-                    logger.debug('Client closed its connection.')
-                finally:
-                    connection.close()
+                    except socket.timeout:
+                        logger.debug('Socket timed out waiting for client packets.')
+            except ConnectionResetError:
+                logger.debug('Client connection was reset.')
+            except ConnectionAbortedError as cae:
+                logger.debug('Client connection was aborted.')
             except socket.timeout as ste:
                 pass
+            finally:
+                connection.close()
 
         sock.close()
         logger.debug('Laser tracker simulator has stopped.')

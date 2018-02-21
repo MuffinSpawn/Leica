@@ -61,10 +61,10 @@ class TimeoutTestCase(CommandTestCase):
             command = CommandSync(connection)
             command._CommandSync__timeout = 100
             
-            bogus_command = CESAPI.packet.BasicCommandCT()
-            bogus_command.packetHeader.type = 9999
-            bogus_command.command = 9999
-            bogus_command.packetHeader.lPacketSize = 12
+            bogus_command = CESAPI.packet.InitializeCT()
+            bogus_command.packetInfo.packetHeader.type = 9999
+            bogus_command.packetInfo.command = 9999
+            bogus_command.packetInfo.packetHeader.lPacketSize = 12
             logger.debug('Bogus Packet: {}'.format(bogus_command.pack()))
             command.execute(bogus_command)
         except Exception as e:

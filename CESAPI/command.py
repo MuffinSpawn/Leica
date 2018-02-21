@@ -14,6 +14,7 @@ class CommandSync(object):
     self.__timeout = 5000
 
   def execute(self, packet):
+    logger.debug('Executing command {}'.format(packet.packetInfo.command))
     self.__executing = True
     stream = self.__connection._Connection__stream
     stream.write(packet)
@@ -32,6 +33,7 @@ class CommandSync(object):
         in_packet = stream.read()
         packet_type = packetType(in_packet)
         if packetType(in_packet) == ES_DT_Command and in_packet.packetInfo.command == packet.packetInfo.command:
+          logger.debug('Received response packet for command {}'.format(packet.packetInfo.command))
           return_packet = in_packet
           if in_packet.packetInfo.command != ES_C_StartMeasurement and in_packet.packetInfo.command != ES_C_StartNivelMeasurement:
             done = True
@@ -55,7 +57,7 @@ class CommandSync(object):
       if not done and elapsed_time > timeout:
         raise Exception("Command {} timed out.".format(packet.packetInfo.command))
     self.__executing = False
-    logger.debug('Exiting CommandSync.execute().')
+    logger.debug('Exiting CommandSync.execute(). Elapsed time of command: {} ms'.format(elapsed_time))
     return return_packet
     
   def ActivateCameraView(self):

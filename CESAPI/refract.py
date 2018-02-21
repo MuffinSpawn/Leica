@@ -34,7 +34,7 @@ def SetRefractionIndex(command, ri_algorithm):
     if ri_algorithm == None:
         return
     if ri_algorithm.__class__.__bases__[0] != RefractionIndexAlgorithm:
-        raise Exception('Invalid RefractionIndexAlgorithm class. Use AlgorithmFactory.')
+        raise Exception('Invalid RefractionIndexAlgorithm class {}. Use AlgorithmFactory.'.format(ri_algorithm.__class__.__bases__[0]))
     mid_refraction_index = (RI_MIN + RI_MAX)/2.0
     refraction_params = command.GetRefractionParams()
     if refraction_params.dIfmRefractionIndex <= mid_refraction_index:

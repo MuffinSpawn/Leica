@@ -7,7 +7,7 @@ class PacketStream(threading.Thread):
     def __init__(self, sock):
         logging.basicConfig()
         self.__logger = logging.getLogger(__name__)
-        self.__logger.setLevel(logging.INFO)
+        self.__logger.setLevel(logging.DEBUG)
 
         super().__init__()
         self.__sock = sock

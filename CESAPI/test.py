@@ -26,9 +26,9 @@ class LTSimulator(threading.Thread):
     def packets(self, data):
         packet_header = PacketHeaderT()
         packet_header.unpack(data)
+        packets = None
         if packet_header.type == ES_DT_Command:
             packet_info = BasicCommandCT()
-            packets = None
             packet_info.unpack(data)
             if packet_header.type != ES_DT_Command:
               pass
@@ -376,10 +376,11 @@ class LTSimulator(threading.Thread):
                     self.setBogusValues(attribute)
 
     def run(self):
-        logging.basicConfig(level=logging.DEBUG)
+        logging.basicConfig(level=logging.INFO)
         logger = logging.getLogger(__name__)
+        logger.setLevel(logging.INFO)
 
-        PACKET_HEADER_SIZE = 12  # lPacketSize, type
+        PACKET_HEADER_SIZE = 8  # lPacketSize, type
         packet_factory = PacketFactory()
         
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -402,16 +403,19 @@ class LTSimulator(threading.Thread):
                         logger.debug('Laser Tracker header data: {}'.format(header_data))
                         packet_header = PacketHeaderT()
                         packet_header.unpack(header_data)
+                        logger.debug('Laser Tracker packet size: {}'.format(packet_header.lPacketSize))
             
                         data = header_data + connection.recv(packet_header.lPacketSize-PACKET_HEADER_SIZE)
                         logger.debug('Laser Tracker data in: {}'.format(data))
                         logger.debug('Laser tracker received {} byte packet'.format(len(data)))
-                        (command_packet, return_packet) = self.packets(data)
-                        self.setBogusValues(return_packet)
-                        return_data = return_packet.pack()
-                        connection.sendall(return_data)
-                        logger.debug('Laser tracker data out {}.'.format(return_data))
-                        logger.debug('Laser tracker sent a {} byte packet'.format(len(return_data)))
+                        packets = self.packets(data)
+                        if packets != None:
+                            (command_packet, return_packet) = packets
+                            self.setBogusValues(return_packet)
+                            return_data = return_packet.pack()
+                            connection.sendall(return_data)
+                            logger.debug('Laser tracker data out {}.'.format(return_data))
+                            logger.debug('Laser tracker sent a {} byte packet'.format(len(return_data)))
                 except socket.timeout:
                     logger.debug('Socket timed out waiting for client packets.')
                 except ConnectionResetError:

@@ -1,27 +1,30 @@
 
 import time
+
 from CESAPI.packet import *
 class CommandSync(object):
   def __init__(self, connection):
     self.__connection = connection
-    print()
+    self.__timeout = 60000
+
   def execute(self, packet):
+    self.__executing = True
     stream = self.__connection._Connection__stream
     stream.write(packet)
     print()
     in_packet = None
     return_packet = None
+    current_time_ms = lambda: int(round(time.time() * 1000))
+    start_time = current_time_ms()
     done = False
-    while (not done):
+    while (self.__executing and not done):
       unread_count = stream.unreadCount()
       if unread_count > 0:
         in_packet = stream.read()
         packet_type = packetType(in_packet)
-        if packetType(in_packet) == ES_DT_Command and \
-           in_packet.packetInfo.command == packet.packetInfo.command:
+        if packetType(in_packet) == ES_DT_Command and            in_packet.packetInfo.command == packet.packetInfo.command:
           return_packet = in_packet
-          if in_packet.packetInfo.command != ES_C_StartMeasurement and \
-             in_packet.packetInfo.command != ES_C_StartNivelMeasurement:
+          if in_packet.packetInfo.command != ES_C_StartMeasurement and              in_packet.packetInfo.command != ES_C_StartNivelMeasurement:
             done = True
         elif packetType(in_packet) == ES_DT_Error:
           raise Exception("Command {} failed with status {}".format(in_packet.command, in_packet.status))
@@ -34,11 +37,14 @@ class CommandSync(object):
         elif packet_type == ES_DT_ReflectorPosResult:
           pass
         elif packet_type == ES_DT_SystemStatusChange:
-          if packet.packetInfo.command == ES_C_SetCoordinateSystemType and \
-             in_packet.systemStatusChange == ES_SSC_CoordinateSystemTypeChanged:
+          if packet.packetInfo.command == ES_C_SetCoordinateSystemType and              in_packet.systemStatusChange == ES_SSC_CoordinateSystemTypeChanged:
             done = True
         else:
           time.sleep(0.2)
+      elapsed_time = current_time_ms() - start_time
+      if not done and elapsed_time > self.__timeout:
+        raise Exception("Command {} timed out.".format(packet.command))
+    self.__executing = False
     return return_packet
 
     

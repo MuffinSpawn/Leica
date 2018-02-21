@@ -30,7 +30,7 @@ class AlgorithmFactory(object):
       else:
           return None
 
-def SetRefractionIndex(command, ri_algorithm):
+def SetRefractionIndex(command, ri_algorithm=None):
     if ri_algorithm == None:
         return
     if ri_algorithm.__class__.__bases__[0] != RefractionIndexAlgorithm:

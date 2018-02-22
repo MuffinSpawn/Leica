@@ -11,7 +11,7 @@ logger.setLevel(logging.INFO)
 class CommandSync(object):
   def __init__(self, connection):
     self.__connection = connection
-    self.__timeout = 5000
+    self.__timeout = 10000
 
   def execute(self, packet):
     logger.debug('Executing command {}'.format(packet.packetInfo.command))
@@ -48,7 +48,7 @@ class CommandSync(object):
         elif packet_type == ES_DT_ReflectorPosResult:
           pass
         elif packet_type == ES_DT_SystemStatusChange:
-          if packet.packetInfo.command == ES_C_SetCoordinateSystemType and              in_packet.systemStatusChange == ES_SSC_CoordinateSystemTypeChanged:
+          if packet.packetInfo.command == ES_C_SetCoordinateSystemType and in_packet.systemStatusChange == ES_SSC_CoordinateSystemTypeChanged:
             done = True
         else:
           logger.debug('Waiting for command response...')

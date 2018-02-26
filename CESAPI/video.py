@@ -6,15 +6,13 @@
 # serialization and deserialization of TCP packets consumed and
 # emitted by Leica AT4xx laser trackers.
 
+import io
 import logging
+from PIL import Image
 import socket
 import struct
 import time
 import threading
-
-IMG_TYPE_UNKNOWN = 1
-IMG_TYPE_JPEG = 1
-IMG_TYPE_BMP = 2
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)
@@ -113,7 +111,6 @@ class VideoStream(threading.Thread):
         self.__frame_rate = int(0)
         self.__camera_parameters = OverviewVideoCameraParametersT()
         self.__image_data = None
-        self.__image_type = IMG_TYPE_UNKNOWN
 
     def __write(self, packet):
         data = packet.pack()
@@ -182,17 +179,8 @@ class VideoStream(threading.Thread):
         logger.debug('Releasing lock (next)')
         self.__lock.release()
         logger.debug('Released lock (next)')
-        return image_data        
-    
-    def type(self):
-        logger.debug('Acquiring lock (type)')
-        self.__lock.acquire()
-        logger.debug('Acquired lock (type)')
-        image_type = self.__image_type
-        logger.debug('Releasing lock (type)')
-        self.__lock.release()
-        logger.debug('Released lock (type)')
-        return image_type        
+        image_buffer = io.BytesIO(image_data)
+        return Image.open(image_buffer)
 
     def increase_frame_rate(self):
         self.__write(b'FrameRateStepUp')

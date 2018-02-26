@@ -16,7 +16,7 @@ import threading
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 
 class OverviewVideoCameraParametersT(object):
   def __init__(self):
@@ -199,7 +199,7 @@ class VideoStream(threading.Thread):
         self.__write(b'FrameRateStepDown')
 
     def set_frame_rate(self, frame_rate):
-        self.__write(b'SetFrameRate:{}'.format(int(frame_rate)))
+        self.__write(b''.join((b'SetFrameRate:', bytes(int(frame_rate)))))
 
 
     def get_frame_rate(self):

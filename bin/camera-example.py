@@ -102,58 +102,38 @@ if __name__ == '__main__':
     control_connection.connect()
     command = CESAPI.command.CommandSync(control_connection)
     try:
-        #command.Initialize()
         command.ActivateCameraView()
     finally:
         control_connection.disconnect()
-        #sys.exit()
 
 
     video_connection = CESAPI.video.Connection()
     video_stream = video_connection.connect()
-
-    fig = plt.figure()
-
-    def get_next_image():
-        image = video_stream.next()
-        image_matrix = None
-        if image != None:
-            logger.debug('Updating image...')
-            image_matrix = numpy.array(image.getdata(), dtype=numpy.uint8).reshape((image.size[1],image.size[0],3))
-        else:
-            logger.debug('No image!')
-            image_matrix = numpy.ones((240,320,3))
-        return image_matrix
-
-    im = plt.imshow(get_next_image(), animated=True)
-    
-    def update_image(*args):
-        logger.debug("!!!")
-        im.set_array(get_next_image())
-        return im,
-
-    ImageFile.LOAD_TRUNCATED_IMAGES = True
     try:
-        '''
-        while running:
-            img = video_stream.next()
-            if img == None:
-                logger.info('No image data received.')
-                time.sleep(0.5)
-                continue
-            #image_buffer = io.BytesIO(image_data)
-            #img = Image.open(image_buffer)
-            print(img)
-            #plt.imshow(numpy.array(img.getdata(), dtype=numpy.float32).reshape((img.size[0],img.size[1],3)))
-            #plt.imshow(numpy.array(img.getdata(), dtype=numpy.float64).reshape((img.size[0],img.size[1],3)))
-            #plt.imshow(numpy.array(img.getdata(), dtype=numpy.ubyte).reshape((img.size[0],img.size[1],3)))
-            #image_data = numpy.array(img.getdata(), dtype=numpy.ubyte)
-            image_data = numpy.array(img.getdata(), dtype=numpy.uint8).reshape((img.size[1],img.size[0],3))
-            print(numpy.shape(image_data))
-            plt.imshow(image_data)
-            break
-        '''
-        video = anim.FuncAnimation(fig, update_image, interval=50, blit=True)
+        video_stream.set_frame_rate(16)
+    
+        fig = plt.figure()
+    
+        def get_next_image():
+            image = video_stream.next()
+            image_matrix = None
+            if image != None:
+                logger.debug('Updating image...')
+                image_matrix = numpy.array(image.getdata(), dtype=numpy.uint8).reshape((image.size[1],image.size[0],3))
+            else:
+                logger.debug('No image!')
+                image_matrix = numpy.ones((240,320,3))
+            return image_matrix
+    
+        im = plt.imshow(get_next_image(), animated=True)
+        
+        def update_image(*args):
+            logger.debug("!!!")
+            im.set_array(get_next_image())
+            return im,
+    
+        ImageFile.LOAD_TRUNCATED_IMAGES = True
+        video = anim.FuncAnimation(fig, update_image, interval=16, blit=True)
         plt.show()
     finally:
         video_connection.disconnect()

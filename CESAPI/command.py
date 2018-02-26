@@ -11,7 +11,7 @@ logger.setLevel(logging.INFO)
 class CommandSync(object):
   def __init__(self, connection):
     self.__connection = connection
-    self.__timeout = 10000
+    self.__timeout = 30000
 
   def execute(self, packet):
     self.__executing = True

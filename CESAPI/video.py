@@ -16,7 +16,7 @@ import threading
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG)
 
 class OverviewVideoCameraParametersT(object):
   def __init__(self):
@@ -62,6 +62,7 @@ class Connection(object):
     def __init__(self):
         self.__sock = None
         self.__stream = None
+        self.__video_server_host = None
         self.__video_server_port = 5001
     
     def __del__(self):
@@ -69,18 +70,16 @@ class Connection(object):
         self.disconnect()
 
     def connect(self, host='192.168.0.1'):
+        self.__video_server_host = host
         if self.__sock != None:
             raise Exception("Repeat connection. Only one connection to the laser tracker is allowed at one time.")
 
         try:
-            # Create a TCP/IP socket
-            self.__sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            # Create a UDP socket
+            self.__sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             self.__sock.settimeout(1)
-    
-            # Connect the socket to the port where the server is listening
-            self.__sock.connect((host, self.__video_server_port))
 
-            self.__stream = VideoStream(self.__sock)
+            self.__stream = VideoStream(self.__sock, self.__video_server_host)
             self.__stream.start()
         except socket.timeout as ste:
             self.disconnect()
@@ -99,9 +98,11 @@ class Connection(object):
             self.__sock = None
 
 class VideoStream(threading.Thread):
-    def __init__(self, sock):
+    def __init__(self, sock, host):
         super().__init__()
         self.__sock = sock
+        self.__video_server_host = host
+        self.__video_server_port = 5001
         self.__running = True
         self.__jpeg_signature = b'emScon>>'
         self.__image_buffer_size = 65536
@@ -112,56 +113,60 @@ class VideoStream(threading.Thread):
         self.__camera_parameters = OverviewVideoCameraParametersT()
         self.__image_data = None
 
-    def __write(self, packet):
-        data = packet.pack()
-        self.__sock.sendall(data)
+    def __write(self, data):
+        logger.debug('Sending data: {}'.format(data))
+        self.__sock.sendto(data, (self.__video_server_host, self.__video_server_port))
         logger.debug('VideoStream sent a {} byte packet.'.format(len(data)))
 
     def run(self):
         self.__write(b'LiveImageStart')
-
         bmp_chunk_index = 0
         bmp_chunk = None
+        read_data = []
         while self.__running:
             try:
                 logger.debug('Receiving video data...')
-                read_data = self.__sock.recv(self.__image_buffer_size)
+                read_data,server_address = self.__sock.recvfrom(self.__image_buffer_size)
 
                 logger.debug('Acquiring lock (run)')
                 self.__lock.acquire()
                 logger.debug('Acquired lock (run)')
-                if len(read_data) == self.__bmp_chunk_size:
+                if len(read_data) == 4:
+                    # Frame rate
+                    self.__frame_rate = struct.Struct('<i').unpack(read_data)
+                    logger.debug('*** Received frame rate: {} ***'.format(self.__frame_rate))
+                elif len(read_data) == self.__camera_parameters.size():
+                    logger.debug('*** Received camera parameters. ***')
+                    self.__camera_parameters.unpack(read_data)
+                elif len(read_data) == self.__bmp_chunk_size:
                     if bmp_chunk_index == 0:
                         # BMP chunk 0
+                        logger.debug('*** Received 1st BMP chunk. ***')
                         bmp_chunk = read_data
                         bmp_chunk_index = 1
                     else:
                         # BMP chunk 1
+                        logger.debug('*** Received 2nd BMP chunk. ***')
                         self.__image_data = b''.join((bmp_chunk, read_data))
                         bmp_chunk_index = 0
-                elif len(read_data) > len(self.__jpeg_signature):
-                    # JPEG image
+                elif len(read_data) > len(self.__jpeg_signature) and read_data[:len(self.__jpeg_signature)] == self.__jpeg_signature:
+                    logger.debug('*** Received JPEG image. ***')
                     self.__image_data = read_data[len(self.__jpeg_signature):]
-                elif len(read_data) == self.__frame_rate_size:
-                    # Frame rate
-                    self.__frame_rate = struct.Struct('<i').unpack(read_data)
-                elif len(read_data) == self.__camera_params_size:
-                    self.__camera_parameters.unpack(read_data)
                 elif len(read_data) == 0:
-                    logger.debug('No image data received.')
+                    logger.debug('*** No image data received. ***')
                     time.sleep(0.2)
                 else:
-                    logger.debug('Invalid video data:\n{}'.format(read_data))
+                    logger.debug('*** Invalid video data: ***\n{}'.format(read_data))
                     logger.debug('Releasing lock (run exception)')
                     self.__lock.release()
                     logger.debug('Released lock (run exception)')
                     raise Exception('recieved invalid {}-byte video data'.format(len(read_data)))
-                self.__lock.release()
                 logger.debug('Releasing lock (run)')
-                self.__buffer_lock.release()
+                self.__lock.release()
                 logger.debug('Released lock (run)')
             except socket.timeout as ste:
                 logger.debug('VideoStream timed out waiting for laser tracker data.')
+                logger.debug('Read data size: {}'.format(len(read_data)))
             except ConnectionAbortedError as cae:
                 logger.debug('VideoStream socket connection was aborted: {}'.format(cae))
                 self.__running = False
@@ -182,6 +187,8 @@ class VideoStream(threading.Thread):
         logger.debug('Releasing lock (next)')
         self.__lock.release()
         logger.debug('Released lock (next)')
+        if image_data == None:
+            return None
         image_buffer = io.BytesIO(image_data)
         return Image.open(image_buffer)
 
@@ -190,6 +197,10 @@ class VideoStream(threading.Thread):
 
     def decrease_frame_rate(self):
         self.__write(b'FrameRateStepDown')
+
+    def set_frame_rate(self, frame_rate):
+        self.__write(b'SetFrameRate:{}'.format(int(frame_rate)))
+
 
     def get_frame_rate(self):
         self.__frame_rate = int(0)

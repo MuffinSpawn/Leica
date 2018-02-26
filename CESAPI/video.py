@@ -147,6 +147,9 @@ class VideoStream(threading.Thread):
                     self.__frame_rate = struct.Struct('<i').unpack(read_data)
                 elif len(read_data) == self.__camera_params_size:
                     self.__camera_parameters.unpack(read_data)
+                elif len(read_data) == 0:
+                    logger.debug('No image data received.')
+                    time.sleep(0.2)
                 else:
                     logger.debug('Invalid video data:\n{}'.format(read_data))
                     logger.debug('Releasing lock (run exception)')

@@ -16,7 +16,7 @@ import threading
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG)
 
 class OverviewVideoCameraParametersT(object):
   def __init__(self):
@@ -115,8 +115,9 @@ class VideoStream(threading.Thread):
 
     def __write(self, data):
         logger.debug('Sending data: {}'.format(data))
-        self.__sock.sendto(data, (self.__video_server_host, self.__video_server_port))
-        logger.debug('VideoStream sent a {} byte packet.'.format(len(data)))
+        if not self.__sock._closed:
+            self.__sock.sendto(data, (self.__video_server_host, self.__video_server_port))
+            logger.debug('VideoStream sent a {} byte packet.'.format(len(data)))
 
     def run(self):
         self.__write(b'LiveImageStart')

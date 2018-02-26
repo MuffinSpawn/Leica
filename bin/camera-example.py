@@ -102,6 +102,7 @@ if __name__ == '__main__':
     control_connection.connect()
     command = CESAPI.command.CommandSync(control_connection)
     try:
+        initialize(command)
         command.ActivateCameraView()
     finally:
         control_connection.disconnect()
@@ -109,6 +110,8 @@ if __name__ == '__main__':
 
     video_connection = CESAPI.video.Connection()
     video_stream = video_connection.connect()
+
+    ImageFile.LOAD_TRUNCATED_IMAGES = True
     try:
         video_stream.set_frame_rate(16)
     
@@ -132,10 +135,15 @@ if __name__ == '__main__':
             im.set_array(get_next_image())
             return im,
     
-        ImageFile.LOAD_TRUNCATED_IMAGES = True
         video = anim.FuncAnimation(fig, update_image, interval=16, blit=True)
         plt.show()
     finally:
         video_connection.disconnect()
+
+    control_connection = CESAPI.connection.Connection()
+    control_connection.connect()
+    command = CESAPI.command.CommandSync(control_connection)
+    try:
+        command.FindReflector(1000)
+    finally:
         control_connection.disconnect()
-        

@@ -57,6 +57,8 @@ class CommandSync(object):
         if packetType(in_packet) == ES_DT_Command and in_packet.packetInfo.command == packet.packetInfo.command:
           logger.debug('Received response packet for command {}'.format(packet.packetInfo.command))
           return_packet = in_packet
+          if in_packet.packetInfo.status != ES_RS_AllOK:
+              raise Exception("Command {} failed with status {}".format(in_packet.packetInfo.command, in_packet.packetInfo.status))
           if in_packet.packetInfo.command != ES_C_StartMeasurement and in_packet.packetInfo.command != ES_C_StartNivelMeasurement:
             done = True
         elif packetType(in_packet) == ES_DT_Error:

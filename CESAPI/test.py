@@ -15,6 +15,9 @@ import threading
 from CESAPI.packet import *
 from CESAPI.connection import *
 
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
 class LTSimulator(threading.Thread):
     def __init__(self):
@@ -22,6 +25,7 @@ class LTSimulator(threading.Thread):
         self.__running = True
         self.host = 'localhost'
         self.port = 700
+        self.initialized = False
 
     def stop(self):
         self.__running = False
@@ -367,7 +371,8 @@ class LTSimulator(threading.Thread):
             packets = (packet, packet)
         return packets
 
-    def setBogusValues(self, thing):
+    def populateReturnPacket(self, thing):
+        # Generic filling of attribute data
         for (index, name) in enumerate(dir(thing)):
             if '__' not in name and 'pack' not in name:
                 attribute = getattr(thing, name)
@@ -376,13 +381,53 @@ class LTSimulator(threading.Thread):
                 elif type(attribute) == float:
                     setattr(thing, name, float(index)+index/10.0)
                 else:
-                    self.setBogusValues(attribute)
+                    self.populateReturnPacket(attribute)
+
+        # Specialized treatment of select responses
+        if packetType(thing) == ES_DT_Command:
+            logger.debug('Populating response for command {}.'.format(thing.packetInfo.command))
+            thing.status = ES_RS_AllOK
+            if thing.packetInfo.command == ES_C_GetSystemStatus:
+                if self.initialized:
+                    thing.trackerProcessorStatus = ES_TPS_Initialized  # ES_TrackerProcessorStatus
+                else:
+                    thing.trackerProcessorStatus = ES_TPS_CompensationSet  # ES_TrackerProcessorStatus
+                thing.laserStatus = ES_LPS_LaserReady  # ES_LaserProcessorStatus
+                thing.admStatus = ES_AS_ADMReady  # ES_ADMStatus
+                thing.esVersionNumber.iMajorVersionNumber = 100  # ESVersionNumberT
+                thing.esVersionNumber.iMinorVersionNumber = 2
+                thing.esVersionNumber.iBuildNumber = 35530
+                thing.weatherMonitorStatus = ES_WMS_ReadOnly  # ES_WeatherMonitorStatus
+            elif thing.packetInfo.command == ES_C_GetTrackerStatus:
+                thing.trackerStatus = ES_TS_Ready  # ES_TrackerStatus
+            elif thing.packetInfo.command == ES_C_GetEnvironmentParams:
+                thing.environmentData.dTemperature = 22.0
+                thing.environmentData.dPressure = 1013.25
+                thing.environmentData.dHumidity = 0.42
+            elif thing.packetInfo.command == ES_C_GetReflectors:
+                thing.iTotalReflectors = 0
+                thing.iInternalReflectorId = 0
+                thing.targetType = ES_TT_Unknown  # ES_TargetType
+                thing.dSurfaceOffset = 3.14
+                thing.cReflectorName = 'Rocinante'.encode()  # 32 bytes max
+            elif thing.packetInfo.command == ES_C_GetFace:
+                thing.trackerFace = ES_TF_Face1
+            elif thing.packetInfo.command == ES_C_GetMeasurementStatusInfo:
+                thing.lMeasurementStatusInfo = 0b11101100000001111
+            elif thing.packetInfo.command == ES_C_GetCompensations2:
+                thing.iTotalCompensations = 0
+                thing.iInternalCompensationId = 0
+                thing.cTrackerCompensationName = 'DarkSword'.encode()  # 32 bytes max
+                thing.cTrackerCompensationComment = 'There are bats in the belfry.'.encode()  # 128 bytes max
+                thing.cADMCompensationName = 'Talladega'.encode()  # 32 bytes max
+                thing.cADMCompensationComment = " I'm all jacked up on Mountain Dew!".encode()  # 128 bytes max
+                thing.bHasMeasurementCameraMounted = 0
+                thing.bIsActive = 0
+            elif thing.packetInfo.command == ES_C_GetRefractionParams:
+                thing.refractionData.dIfmRefractionIndex = 1.00027  # RefractionDataT()
+                thing.refractionData.dAdmRefractionIndex = 1.00027  # RefractionDataT()
 
     def run(self):
-        logging.basicConfig(level=logging.DEBUG)
-        logger = logging.getLogger(__name__)
-        logger.setLevel(logging.INFO)
-
         PACKET_HEADER_SIZE = 8  # lPacketSize, type
         packet_factory = PacketFactory()
         
@@ -420,11 +465,44 @@ class LTSimulator(threading.Thread):
                         if packets != None:
                             (command_packet, return_packet) = packets
                             logger.debug('Preparing response for command {}...'.format(command_packet.packetInfo.command))
-                            self.setBogusValues(return_packet)
+                            self.populateReturnPacket(return_packet)
                             return_data = return_packet.pack()
                             connection.sendall(return_data)
                             logger.debug('Laser tracker data out {}.'.format(return_data))
                             logger.debug('Laser tracker sent a {} byte packet'.format(len(return_data)))
+
+                            # Send expected extra packets
+                            if command_packet.packetInfo.command == ES_C_StartNivelMeasurement:
+                                nivel_result = NivelResultT()
+                                nivel_result.nivelStatus = ES_NS_AllOK  # ES_NivelStatus
+                                nivel_result.dXTilt = 0.0
+                                nivel_result.dYTilt = 0.0
+                                nivel_result.dNivelTemperature = 22.0
+                                return_data = nivel_result.pack()
+                                connection.sendall(return_data)
+                                logger.debug('Laser tracker nivel result data out {}.'.format(return_data))
+                                logger.debug('Laser tracker sent a {} byte packet'.format(len(return_data)))
+                            elif command_packet.packetInfo.command == ES_C_Initialize:
+                                self.initialized = True
+                                status_change = SystemStatusChangeT()
+                                status_change.systemStatusChange = ES_SCC_InitializationStatusChanged
+                                return_data = status_change.pack()
+                                connection.sendall(return_data)
+                                logger.debug('Laser tracker status change data out {}.'.format(return_data))
+                                logger.debug('Laser tracker sent a {} byte packet'.format(len(return_data)))
+
+                                status_change.systemStatusChange = ES_SSC_MeasStatus_Ready
+                                return_data = status_change.pack()
+                                connection.sendall(return_data)
+                                logger.debug('Laser tracker status change data out {}.'.format(return_data))
+                                logger.debug('Laser tracker sent a {} byte packet'.format(len(return_data)))
+
+                                status_change.systemStatusChange = ES_SSC_StatisticModeChanged
+                                return_data = status_change.pack()
+                                connection.sendall(return_data)
+                                logger.debug('Laser tracker status change data out {}.'.format(return_data))
+                                logger.debug('Laser tracker sent a {} byte packet'.format(len(return_data)))
+
                     except socket.timeout:
                         logger.debug('Socket timed out waiting for client packets.')
             except ConnectionResetError:

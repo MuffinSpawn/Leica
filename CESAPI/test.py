@@ -419,6 +419,7 @@ class LTSimulator(threading.Thread):
                         packets = self.packets(data)
                         if packets != None:
                             (command_packet, return_packet) = packets
+                            logger.debug('Preparing response for command {}...'.format(command_packet.packetInfo.command))
                             self.setBogusValues(return_packet)
                             return_data = return_packet.pack()
                             connection.sendall(return_data)

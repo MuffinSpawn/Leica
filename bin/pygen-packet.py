@@ -170,7 +170,7 @@ import struct
                         pack_index = 0
                     packet_size += array_dim
                     pack_sizes[-1] += array_dim
-                    member_inits += ['    self.{} = str()  # {} bytes max'.format(member_name, array_dim)]
+                    member_inits += ["    self.{} = b''  # {} bytes max".format(member_name, array_dim)]
                     type_formats[-1] += "{}s ".format(array_dim)
                     member_unpacks += ['    self.{} = packet_elements[{}]'.format(member_name, pack_index)]
                     member_packs += ['    packet_elements += (self.{},)'.format(member_name)]

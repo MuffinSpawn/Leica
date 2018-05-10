@@ -2129,7 +2129,7 @@ class GetReflectorsRT(object):
     self.iInternalReflectorId = int(0)
     self.targetType = int(0)  # ES_TargetType
     self.dSurfaceOffset = float(0)
-    self.cReflectorName = str()  # 32 bytes max
+    self.cReflectorName = b''  # 32 bytes max
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)
@@ -3199,9 +3199,9 @@ class GetCompensationsRT(object):
     self.packetInfo.command = ES_C_GetCompensations
     self.iTotalCompensations = int(0)
     self.iInternalCompensationId = int(0)
-    self.cTrackerCompensationName = str()  # 32 bytes max
-    self.cTrackerCompensationComment = str()  # 128 bytes max
-    self.cADMCompensationName = str()  # 32 bytes max
+    self.cTrackerCompensationName = b''  # 32 bytes max
+    self.cTrackerCompensationComment = b''  # 128 bytes max
+    self.cADMCompensationName = b''  # 32 bytes max
     self.bHasMeasurementCameraMounted = int(0)
 
   def unpack(self, packet):
@@ -3258,10 +3258,10 @@ class GetCompensations2RT(object):
     self.packetInfo.command = ES_C_GetCompensations2
     self.iTotalCompensations = int(0)
     self.iInternalCompensationId = int(0)
-    self.cTrackerCompensationName = str()  # 32 bytes max
-    self.cTrackerCompensationComment = str()  # 128 bytes max
-    self.cADMCompensationName = str()  # 32 bytes max
-    self.cADMCompensationComment = str()  # 128 bytes max
+    self.cTrackerCompensationName = b''  # 32 bytes max
+    self.cTrackerCompensationComment = b''  # 128 bytes max
+    self.cADMCompensationName = b''  # 32 bytes max
+    self.cADMCompensationComment = b''  # 128 bytes max
     self.bHasMeasurementCameraMounted = int(0)
     self.bIsActive = int(0)
 
@@ -3523,7 +3523,7 @@ class GetADMInfo2RT(object):
     self.packetInfo.packetHeader.type = ES_DT_Command
     self.packetInfo.command = ES_C_GetADMInfo2
     self.admType = int(0)  # ES_ADMType
-    self.cADMName = str()  # 32 bytes max
+    self.cADMName = b''  # 32 bytes max
     self.lSerialNumber = int(0)
     self.iFirmwareMajorVersionNumber = int(0)
     self.iFirmwareMinorVersionNumber = int(0)
@@ -3641,7 +3641,7 @@ class GetNivelInfo2RT(object):
     self.packetInfo.packetHeader.type = ES_DT_Command
     self.packetInfo.command = ES_C_GetNivelInfo2
     self.nivelType = int(0)  # ES_NivelType
-    self.cNivelName = str()  # 32 bytes max
+    self.cNivelName = b''  # 32 bytes max
     self.lSerialNumber = int(0)
     self.iFirmwareMajorVersionNumber = int(0)
     self.iFirmwareMinorVersionNumber = int(0)
@@ -3777,7 +3777,7 @@ class GetTrackerInfoRT(object):
     self.packetInfo.packetHeader.type = ES_DT_Command
     self.packetInfo.command = ES_C_GetTrackerInfo
     self.trackerType = int(0)  # ES_LTSensorType
-    self.cTrackerName = str()  # 32 bytes max
+    self.cTrackerName = b''  # 32 bytes max
     self.lSerialNumber = int(0)
     self.lCompensationIdNumber = int(0)
     self.bHasADM = int(0)
@@ -3869,7 +3869,7 @@ class GetATRInfoRT(object):
     self.packetInfo.packetHeader.type = ES_DT_Command
     self.packetInfo.command = ES_C_GetATRInfo
     self.atrType = int(0)  # ES_ATRType
-    self.cATRName = str()  # 32 bytes max
+    self.cATRName = b''  # 32 bytes max
     self.lMajFirmwareVersion = int(0)
     self.lMinFirmwareVersion = int(0)
     self.lBuildFirmwareVersion = int(0)
@@ -4272,7 +4272,7 @@ class GetOverviewCameraInfoRT(object):
     self.packetInfo.packetHeader.type = ES_DT_Command
     self.packetInfo.command = ES_C_GetOverviewCameraInfo
     self.cameraType = int(0)  # ES_OverviewCameraType
-    self.cCameraName = str()  # 32 bytes max
+    self.cCameraName = b''  # 32 bytes max
     self.bIsColorCamera = int(0)
     self.dFocalLength = float(0)
     self.dHorizontalChipSize = float(0)
@@ -4525,7 +4525,7 @@ class GetMeteoStationInfoRT(object):
     self.packetInfo.packetHeader.type = ES_DT_Command
     self.packetInfo.command = ES_C_GetMeteoStationInfo
     self.meteoStationType = int(0)  # ES_MeteoStationType
-    self.cIdentifier = str()  # 32 bytes max
+    self.cIdentifier = b''  # 32 bytes max
     self.iFirmwareMajorVersionNumber = int(0)
     self.iFirmwareMinorVersionNumber = int(0)
 
@@ -4578,7 +4578,7 @@ class GetAT4xxInfoRT(object):
     self.packetInfo.packetHeader.type = ES_DT_Command
     self.packetInfo.command = ES_C_GetAT4xxInfo
     self.trackerType = int(0)  # ES_LTSensorType
-    self.cTrackerName = str()  # 32 bytes max
+    self.cTrackerName = b''  # 32 bytes max
     self.lSerialNumber = int(0)
     self.lMajorFirmwareVersion = int(0)
     self.lMinorFirmwareVersion = int(0)
@@ -4681,7 +4681,7 @@ class GetSystemSoftwareVersionRT(object):
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
     self.packetInfo.command = ES_C_GetSystemSoftwareVersion
-    self.cSoftwareVersion = str()  # 32 bytes max
+    self.cSoftwareVersion = b''  # 32 bytes max
 
   def unpack(self, packet):
     packet = self.packetInfo.unpack(packet)

@@ -6,6 +6,9 @@ Created on Thu Feb  1 12:41:29 2018
 """
 
 import logging
+import os
+import platform
+import signal
 import socket
 import sys
 import threading
@@ -387,6 +390,7 @@ class LTSimulator(threading.Thread):
         sock.bind((self.host, self.port))
         sock.listen(1)
         sock.settimeout(1)
+        connection = None
         logger.debug('Laser tracker simulator was started on port {}.'.format(self.port))
 
         while self.__running:
@@ -429,10 +433,23 @@ class LTSimulator(threading.Thread):
             except socket.timeout as ste:
                 pass
             finally:
-                connection.close()
+                if connection != None:
+                    connection.close()
 
         sock.close()
         logger.debug('Laser tracker simulator has stopped.')
 
 if __name__ == '__main__':
-    LTSimulator().start()
+    sim = LTSimulator()
+
+    sim.start()
+    print('<<< Server running. Press Ctrl+C stop... >>>')
+    sys.stdout.flush()
+    try:
+        while True:
+            time.sleep(0.2)
+    except KeyboardInterrupt:
+        sim.stop()
+    sim.join()
+    print('Laser Tracker Simulator has terminated.')
+    

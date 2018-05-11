@@ -29,10 +29,13 @@ import struct
 
     packet_size_lookup = {}
     class_gens = ['class PacketFactory(object):',
-                  '  def packet(self, data):',
+                  '  def packet(self, data, return_type=True):',
                   '    packet_header = PacketHeaderT()',
                   '    packet_header.unpack(data)',
-                  '    packet_info = BasicCommandRT()',
+                  '    if return_type:',
+                  '      packet_info = BasicCommandRT()',
+                  '    else:',
+                  '      packet_info = BasicCommandCT()',
                   '    packet = None',
                   '    if packet_header.type == ES_DT_Command:',
                   '      packet_info.unpack(data)',
@@ -116,7 +119,7 @@ import struct
                         if not new_subformat:
                             type_formats[-1] += "')"
                             new_subformat = True
-                            member_packs += ['    packet += struct.Struct(self.__formats[{}]).pack(*packet_elements)'.format(type_format_index)]
+                            member_packs += ['    self.packet += struct.Struct(self.__formats[{}]).pack(*packet_elements)'.format(type_format_index)]
                         packet_size += packet_size_lookup[member_type.type.name]
                         member_inits += ['    self.{} = {}()'.format(member_name, member_type.type.name)]
                         if member_name == 'packetInfo':
@@ -140,7 +143,10 @@ import struct
                                 member_inits += ['    self.packetInfo.command = {}'.format(command_type)]
                                 if node_type.name[-2:] == 'RT':
                                     class_gens += ['    elif packet_header.type == {} and packet_info.command == {}:'.format(packet_type, command_type)]
-                                    class_gens += ['      packet = {}()'.format(node_type.name)]
+                                    class_gens += ['      if return_type:']
+                                    class_gens += ['        packet = {}()'.format(node_type.name)]
+                                    class_gens += ['      else:']
+                                    class_gens += ['        packet = {}CT()'.format(node_type.name[:-2])]
                             else:
                                 class_gens += ['    elif packet_header.type == {}:'.format(packet_type)]
                                 class_gens += ['      packet = {}()'.format(node_type.name)]
@@ -154,8 +160,11 @@ import struct
                                 member_inits += ['    self.packetHeader.type = {}'.format(packet_type)]
                                 class_gens += ['    elif packet_header.type == {}:'.format(packet_type)]
                                 class_gens += ['      packet = {}()'.format(node_type.name)]
-                        member_unpacks += ['    packet = self.{}.unpack(packet)'.format(member_name)]
-                        member_packs += ['    packet += self.{}.pack()'.format(member_name)]
+                        if type_format_index < 0:
+                            member_unpacks += ['    packet = self.{0}.unpack(packet)'.format(member_name, type_format_index)]
+                        else:
+                            member_unpacks += ['    packet = self.{0}.unpack(packet[self.__sizes[{1}]:])'.format(member_name, type_format_index)]
+                        member_packs += ['    self.packet += self.{}.pack()'.format(member_name)]
                     else:
                         print('    # Skipped {} {} {}'.format(type(member_type.type), member_type.type.name, member_name))
                 elif type(member_type) == ArrayDecl:
@@ -168,20 +177,21 @@ import struct
                         member_unpacks += ['    packet_elements = struct.Struct(self.__formats[{0}]).unpack(packet[:self.__sizes[{0}]])'.format(type_format_index)]
                         member_packs += ['    packet_elements = ()']
                         pack_index = 0
-                    packet_size += array_dim
-                    pack_sizes[-1] += array_dim
-                    member_inits += ["    self.{} = b''  # {} bytes max".format(member_name, array_dim)]
-                    type_formats[-1] += "{}s ".format(array_dim)
+                    packet_size += array_dim*2
+                    pack_sizes[-1] += array_dim*2
+                    member_inits += ["    self.{} = b''  # {} bytes max".format(member_name, array_dim*2)]
+                    type_formats[-1] += "{}s ".format(array_dim*2)
                     member_unpacks += ['    self.{} = packet_elements[{}]'.format(member_name, pack_index)]
                     member_packs += ['    packet_elements += (self.{},)'.format(member_name)]
                     pack_index += 1
             packet_size_lookup[node_type.name] = packet_size
             if not new_subformat:
                 type_formats[-1] += "')"
-                member_packs += ['    packet += struct.Struct(self.__formats[{}]).pack(*packet_elements)'.format(type_format_index)]
+                member_packs += ['    self.packet += struct.Struct(self.__formats[{}]).pack(*packet_elements)'.format(type_format_index)]
 
             print('class {}(object):'.format(node_type.name))
             print('  def __init__(self):')
+            print("    self.packet = b''")
             print('    self.__packet_size = {}'.format(packet_size_lookup[node_type.name]))
             print('    self.__sizes = [{}]'.format(','.join(map(str, pack_sizes))))
             print('    self.__formats = [{}]'.format(','.join(type_formats)))
@@ -190,6 +200,7 @@ import struct
             print()
 
             print('  def unpack(self, packet):')
+            print('    self.packet = packet')
             for member_unpack in member_unpacks:
                 print(member_unpack)
             if len(pack_sizes) > 0:
@@ -199,10 +210,10 @@ import struct
             print()
 
             print('  def pack(self):')
-            print("    packet = b''")
+            print("    self.packet = b''")
             for member_pack in member_packs:
                 print(member_pack)
-            print('    return packet')
+            print('    return self.packet')
             print()
         else:
             print('# Skipped object {}'.format(type(node_type)))

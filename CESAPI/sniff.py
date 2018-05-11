@@ -18,7 +18,8 @@ from CESAPI.connection import *
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
+
 
 class ClientRelay(threading.Thread):
     def __init__(self, packet_sniffer):
@@ -32,6 +33,7 @@ class ClientRelay(threading.Thread):
     def run(self):
         logger.debug('Client Relay is running...')
         PACKET_HEADER_SIZE = 8  # lPacketSize, type
+        packet_factory = PacketFactory()
 
         try:
             while self.__running:
@@ -49,7 +51,10 @@ class ClientRelay(threading.Thread):
                     logger.debug('packet size: {}'.format(packet_header.lPacketSize))
         
                     data = header_data + self.packet_sniffer.client_connection.recv(packet_header.lPacketSize-PACKET_HEADER_SIZE)
-                    logger.info('Received {} byte packet from the CLIENT:\n{}'.format(len(data), data))
+                    logger.debug('Received {} byte packet from the CLIENT:\n{}'.format(len(data), data))
+                    
+                    packet = packet_factory.packet(data, return_type=False)
+                    logger.info('Recevied {} packet from the CLIENT'.format(str(packet.__class__)[22:-2]))
                     
                     self.packet_sniffer.lt_stream._PacketStream__sock.sendall(data)
                     logger.debug('sent {} byte packet to the laser tracker.'.format(len(data)))
@@ -85,11 +90,26 @@ class LaserTrackerRelay(threading.Thread):
                 logger.debug('Unread packet count: {}'.format(unread_count))
                 while self.__running and unread_count > 0:
                     packet = self.packet_sniffer.lt_stream.read()
-                    data = packet.pack()
-                    logger.info('Received {} byte packet from the LASER TRACKER:\n{}'.format(len(data), data))
+                    logger.info('Recevied {} packet from the LASER TRACKER'.format(str(packet.__class__)[22:-2]))
+
+                    data = packet.packet
+                    logger.debug('Received {} byte packet from the LASER TRACKER:\n{}'.format(len(data), data))
+                    
+                    if packet.__class__ == NivelResultT:
+                        logger.info('Nivel Status: {}'.format(packet.nivelStatus))  # ES_NivelStatus
+                        logger.info('Nivel X-Tilt: {}'.format(packet.dXTilt))
+                        logger.info('Nivel Y-Tilt: {}'.format(packet.dYTilt))
+                        logger.info('Nivel Temperature: {}'.format(packet.dNivelTemperature))
 
                     self.packet_sniffer.client_connection.sendall(data)
                     logger.debug('sent {} byte packet to the client'.format(len(data)))
+                    
+                    bad_data = packet.pack()
+                    if len(data) != len(bad_data):
+                        logger.info('Length mismatch. Expected: {}. Actual: {}.'.format(len(data), len(bad_data)))
+                    for index,b in enumerate(data):
+                        if b != bad_data[index]:
+                            logger.info('Byte mismatch at index {}. Expected:\n{}\nActual:\n{}'.format(index, data, bad_data))
 
                     unread_count = self.packet_sniffer.lt_stream.unreadCount()
                 time.sleep(0.5)

@@ -402,6 +402,7 @@ ES_ISS_ApplyCorrections = 2
 
 class PacketHeaderT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 8
     self.__sizes = [8]
     self.__formats = [('<i I ')]
@@ -409,21 +410,23 @@ class PacketHeaderT(object):
     self.type = int(0)  # ES_DataType
 
   def unpack(self, packet):
+    self.packet = packet
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.lPacketSize = packet_elements[0]
     self.type = packet_elements[1]
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
+    self.packet = b''
     packet_elements = ()
     packet_elements += (self.lPacketSize,)
     packet_elements += (self.type,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class ReturnDataT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = [4]
     self.__formats = [('<I ')]
@@ -431,21 +434,23 @@ class ReturnDataT(object):
     self.status = int(0)  # ES_ResultStatus
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetHeader.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.status = packet_elements[0]
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetHeader.pack()
+    self.packet = b''
+    self.packet += self.packetHeader.pack()
     packet_elements = ()
     packet_elements += (self.status,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class BasicCommandCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = [4]
     self.__formats = [('<I ')]
@@ -453,21 +458,23 @@ class BasicCommandCT(object):
     self.command = int(0)  # ES_Command
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetHeader.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.command = packet_elements[0]
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetHeader.pack()
+    self.packet = b''
+    self.packet += self.packetHeader.pack()
     packet_elements = ()
     packet_elements += (self.command,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class BasicCommandRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = [8]
     self.__formats = [('<I I ')]
@@ -476,6 +483,7 @@ class BasicCommandRT(object):
     self.status = int(0)  # ES_ResultStatus
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetHeader.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.command = packet_elements[0]
@@ -483,16 +491,17 @@ class BasicCommandRT(object):
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetHeader.pack()
+    self.packet = b''
+    self.packet += self.packetHeader.pack()
     packet_elements = ()
     packet_elements += (self.command,)
     packet_elements += (self.status,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class NivelResultT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 40
     self.__sizes = [28]
     self.__formats = [('<I d d d ')]
@@ -505,6 +514,7 @@ class NivelResultT(object):
     self.dNivelTemperature = float(0)
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.nivelStatus = packet_elements[0]
@@ -514,18 +524,19 @@ class NivelResultT(object):
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.nivelStatus,)
     packet_elements += (self.dXTilt,)
     packet_elements += (self.dYTilt,)
     packet_elements += (self.dNivelTemperature,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class ReflectorPosResultT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 36
     self.__sizes = [24]
     self.__formats = [('<d d d ')]
@@ -537,6 +548,7 @@ class ReflectorPosResultT(object):
     self.dVal3 = float(0)
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.dVal1 = packet_elements[0]
@@ -545,17 +557,18 @@ class ReflectorPosResultT(object):
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.dVal1,)
     packet_elements += (self.dVal2,)
     packet_elements += (self.dVal3,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class SingleMeasResultT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 156
     self.__sizes = [144]
     self.__formats = [('<I i d d d d d d d d d d d d d d d d d ')]
@@ -583,6 +596,7 @@ class SingleMeasResultT(object):
     self.dHumidity = float(0)
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.measMode = packet_elements[0]
@@ -607,8 +621,8 @@ class SingleMeasResultT(object):
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.measMode,)
     packet_elements += (self.bIsTryMode,)
@@ -629,11 +643,12 @@ class SingleMeasResultT(object):
     packet_elements += (self.dTemperature,)
     packet_elements += (self.dPressure,)
     packet_elements += (self.dHumidity,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class SingleMeasResult2T(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 204
     self.__sizes = [192]
     self.__formats = [('<I i d d d d d d d d d d d d d d d d d d d d d d d ')]
@@ -667,6 +682,7 @@ class SingleMeasResult2T(object):
     self.dHumidity = float(0)
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.measMode = packet_elements[0]
@@ -697,8 +713,8 @@ class SingleMeasResult2T(object):
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.measMode,)
     packet_elements += (self.bIsTryMode,)
@@ -725,11 +741,12 @@ class SingleMeasResult2T(object):
     packet_elements += (self.dTemperature,)
     packet_elements += (self.dPressure,)
     packet_elements += (self.dHumidity,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class SystemStatusChangeT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = [4]
     self.__formats = [('<I ')]
@@ -739,21 +756,23 @@ class SystemStatusChangeT(object):
     self.systemStatusChange = int(0)  # ES_SystemStatusChange
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetHeader.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.systemStatusChange = packet_elements[0]
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetHeader.pack()
+    self.packet = b''
+    self.packet += self.packetHeader.pack()
     packet_elements = ()
     packet_elements += (self.systemStatusChange,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class ErrorResponseT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = [8]
     self.__formats = [('<I I ')]
@@ -764,6 +783,7 @@ class ErrorResponseT(object):
     self.status = int(0)  # ES_ResultStatus
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetHeader.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.command = packet_elements[0]
@@ -771,16 +791,17 @@ class ErrorResponseT(object):
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetHeader.pack()
+    self.packet = b''
+    self.packet += self.packetHeader.pack()
     packet_elements = ()
     packet_elements += (self.command,)
     packet_elements += (self.status,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class InitializeCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = []
     self.__formats = []
@@ -790,16 +811,18 @@ class InitializeCT(object):
     self.packetInfo.command = ES_C_Initialize
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class InitializeRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
@@ -809,16 +832,18 @@ class InitializeRT(object):
     self.packetInfo.command = ES_C_Initialize
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class ActivateCameraViewCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = []
     self.__formats = []
@@ -828,16 +853,18 @@ class ActivateCameraViewCT(object):
     self.packetInfo.command = ES_C_ActivateCameraView
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class ActivateCameraViewRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
@@ -847,16 +874,18 @@ class ActivateCameraViewRT(object):
     self.packetInfo.command = ES_C_ActivateCameraView
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class ParkCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = []
     self.__formats = []
@@ -866,16 +895,18 @@ class ParkCT(object):
     self.packetInfo.command = ES_C_Park
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class ParkRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
@@ -885,16 +916,18 @@ class ParkRT(object):
     self.packetInfo.command = ES_C_Park
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GoBirdBathCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = []
     self.__formats = []
@@ -904,16 +937,18 @@ class GoBirdBathCT(object):
     self.packetInfo.command = ES_C_GoBirdBath
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GoBirdBathRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
@@ -923,16 +958,18 @@ class GoBirdBathRT(object):
     self.packetInfo.command = ES_C_GoBirdBath
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GoBirdBath2CT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = [4]
     self.__formats = [('<i ')]
@@ -943,21 +980,23 @@ class GoBirdBath2CT(object):
     self.bClockWise = int(0)
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.bClockWise = packet_elements[0]
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.bClockWise,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class GoBirdBath2RT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
@@ -967,16 +1006,18 @@ class GoBirdBath2RT(object):
     self.packetInfo.command = ES_C_GoBirdBath2
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class ChangeFaceCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = []
     self.__formats = []
@@ -986,16 +1027,18 @@ class ChangeFaceCT(object):
     self.packetInfo.command = ES_C_ChangeFace
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class ChangeFaceRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
@@ -1005,16 +1048,18 @@ class ChangeFaceRT(object):
     self.packetInfo.command = ES_C_ChangeFace
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class StartNivelMeasurementCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = []
     self.__formats = []
@@ -1024,16 +1069,18 @@ class StartNivelMeasurementCT(object):
     self.packetInfo.command = ES_C_StartNivelMeasurement
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class StartNivelMeasurementRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
@@ -1043,16 +1090,18 @@ class StartNivelMeasurementRT(object):
     self.packetInfo.command = ES_C_StartNivelMeasurement
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class StartMeasurementCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = []
     self.__formats = []
@@ -1062,16 +1111,18 @@ class StartMeasurementCT(object):
     self.packetInfo.command = ES_C_StartMeasurement
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class StartMeasurementRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
@@ -1081,16 +1132,18 @@ class StartMeasurementRT(object):
     self.packetInfo.command = ES_C_StartMeasurement
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class StopMeasurementCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = []
     self.__formats = []
@@ -1100,16 +1153,18 @@ class StopMeasurementCT(object):
     self.packetInfo.command = ES_C_StopMeasurement
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class StopMeasurementRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
@@ -1119,16 +1174,18 @@ class StopMeasurementRT(object):
     self.packetInfo.command = ES_C_StopMeasurement
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class ExitApplicationCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = []
     self.__formats = []
@@ -1138,16 +1195,18 @@ class ExitApplicationCT(object):
     self.packetInfo.command = ES_C_ExitApplication
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class ExitApplicationRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
@@ -1157,16 +1216,18 @@ class ExitApplicationRT(object):
     self.packetInfo.command = ES_C_ExitApplication
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GoLastMeasuredPointCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = []
     self.__formats = []
@@ -1176,16 +1237,18 @@ class GoLastMeasuredPointCT(object):
     self.packetInfo.command = ES_C_GoLastMeasuredPoint
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GoLastMeasuredPointRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
@@ -1195,16 +1258,18 @@ class GoLastMeasuredPointRT(object):
     self.packetInfo.command = ES_C_GoLastMeasuredPoint
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class FindReflectorCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 20
     self.__sizes = [8]
     self.__formats = [('<d ')]
@@ -1215,21 +1280,23 @@ class FindReflectorCT(object):
     self.dAproxDistance = float(0)
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.dAproxDistance = packet_elements[0]
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.dAproxDistance,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class FindReflectorRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
@@ -1239,16 +1306,18 @@ class FindReflectorRT(object):
     self.packetInfo.command = ES_C_FindReflector
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class SetCoordinateSystemTypeCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = [4]
     self.__formats = [('<I ')]
@@ -1259,21 +1328,23 @@ class SetCoordinateSystemTypeCT(object):
     self.coordSysType = int(0)  # ES_CoordinateSystemType
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.coordSysType = packet_elements[0]
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.coordSysType,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class SetCoordinateSystemTypeRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
@@ -1283,16 +1354,18 @@ class SetCoordinateSystemTypeRT(object):
     self.packetInfo.command = ES_C_SetCoordinateSystemType
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetCoordinateSystemTypeCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = []
     self.__formats = []
@@ -1302,16 +1375,18 @@ class GetCoordinateSystemTypeCT(object):
     self.packetInfo.command = ES_C_GetCoordinateSystemType
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetCoordinateSystemTypeRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 20
     self.__sizes = [4]
     self.__formats = [('<I ')]
@@ -1322,21 +1397,23 @@ class GetCoordinateSystemTypeRT(object):
     self.coordSysType = int(0)  # ES_CoordinateSystemType
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.coordSysType = packet_elements[0]
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.coordSysType,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class SetMeasurementModeCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = [4]
     self.__formats = [('<I ')]
@@ -1347,21 +1424,23 @@ class SetMeasurementModeCT(object):
     self.measMode = int(0)  # ES_MeasMode
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.measMode = packet_elements[0]
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.measMode,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class SetMeasurementModeRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
@@ -1371,16 +1450,18 @@ class SetMeasurementModeRT(object):
     self.packetInfo.command = ES_C_SetMeasurementMode
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetMeasurementModeCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = []
     self.__formats = []
@@ -1390,16 +1471,18 @@ class GetMeasurementModeCT(object):
     self.packetInfo.command = ES_C_GetMeasurementMode
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetMeasurementModeRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 20
     self.__sizes = [4]
     self.__formats = [('<I ')]
@@ -1410,21 +1493,23 @@ class GetMeasurementModeRT(object):
     self.measMode = int(0)  # ES_MeasMode
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.measMode = packet_elements[0]
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.measMode,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class SearchParamsDataT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = [12]
     self.__formats = [('<d i ')]
@@ -1432,21 +1517,23 @@ class SearchParamsDataT(object):
     self.lTimeOut = int(0)
 
   def unpack(self, packet):
+    self.packet = packet
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.dSearchRadius = packet_elements[0]
     self.lTimeOut = packet_elements[1]
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
+    self.packet = b''
     packet_elements = ()
     packet_elements += (self.dSearchRadius,)
     packet_elements += (self.lTimeOut,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class SetSearchParamsCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 24
     self.__sizes = []
     self.__formats = []
@@ -1457,18 +1544,20 @@ class SetSearchParamsCT(object):
     self.searchParams = SearchParamsDataT()
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet = self.searchParams.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    packet += self.searchParams.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    self.packet += self.searchParams.pack()
+    return self.packet
 
 class SetSearchParamsRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
@@ -1478,16 +1567,18 @@ class SetSearchParamsRT(object):
     self.packetInfo.command = ES_C_SetSearchParams
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetSearchParamsCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = []
     self.__formats = []
@@ -1497,16 +1588,18 @@ class GetSearchParamsCT(object):
     self.packetInfo.command = ES_C_GetSearchParams
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetSearchParamsRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 28
     self.__sizes = []
     self.__formats = []
@@ -1517,18 +1610,20 @@ class GetSearchParamsRT(object):
     self.searchParams = SearchParamsDataT()
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet = self.searchParams.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    packet += self.searchParams.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    self.packet += self.searchParams.pack()
+    return self.packet
 
 class StationaryModeDataT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 8
     self.__sizes = [8]
     self.__formats = [('<i i ')]
@@ -1536,21 +1631,23 @@ class StationaryModeDataT(object):
     self.bUseADM = int(0)
 
   def unpack(self, packet):
+    self.packet = packet
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.lMeasTime = packet_elements[0]
     self.bUseADM = packet_elements[1]
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
+    self.packet = b''
     packet_elements = ()
     packet_elements += (self.lMeasTime,)
     packet_elements += (self.bUseADM,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class SetStationaryModeParamsCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 20
     self.__sizes = []
     self.__formats = []
@@ -1561,18 +1658,20 @@ class SetStationaryModeParamsCT(object):
     self.stationaryModeData = StationaryModeDataT()
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet = self.stationaryModeData.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    packet += self.stationaryModeData.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    self.packet += self.stationaryModeData.pack()
+    return self.packet
 
 class SetStationaryModeParamsRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
@@ -1582,16 +1681,18 @@ class SetStationaryModeParamsRT(object):
     self.packetInfo.command = ES_C_SetStationaryModeParams
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetStationaryModeParamsCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = []
     self.__formats = []
@@ -1601,16 +1702,18 @@ class GetStationaryModeParamsCT(object):
     self.packetInfo.command = ES_C_GetStationaryModeParams
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetStationaryModeParamsRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 24
     self.__sizes = []
     self.__formats = []
@@ -1621,18 +1724,20 @@ class GetStationaryModeParamsRT(object):
     self.stationaryModeData = StationaryModeDataT()
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet = self.stationaryModeData.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    packet += self.stationaryModeData.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    self.packet += self.stationaryModeData.pack()
+    return self.packet
 
 class SystemSettingsDataT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 36
     self.__sizes = [36]
     self.__formats = [('<I i i i i i i i i ')]
@@ -1647,6 +1752,7 @@ class SystemSettingsDataT(object):
     self.bHasVideoCamera = int(0)
 
   def unpack(self, packet):
+    self.packet = packet
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.weatherMonitorStatus = packet_elements[0]
     self.bApplyTransformationParams = packet_elements[1]
@@ -1660,7 +1766,7 @@ class SystemSettingsDataT(object):
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
+    self.packet = b''
     packet_elements = ()
     packet_elements += (self.weatherMonitorStatus,)
     packet_elements += (self.bApplyTransformationParams,)
@@ -1671,11 +1777,12 @@ class SystemSettingsDataT(object):
     packet_elements += (self.bTryMeasurementMode,)
     packet_elements += (self.bHasNivel,)
     packet_elements += (self.bHasVideoCamera,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class SetSystemSettingsCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 48
     self.__sizes = []
     self.__formats = []
@@ -1686,18 +1793,20 @@ class SetSystemSettingsCT(object):
     self.systemSettings = SystemSettingsDataT()
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet = self.systemSettings.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    packet += self.systemSettings.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    self.packet += self.systemSettings.pack()
+    return self.packet
 
 class SetSystemSettingsRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
@@ -1707,16 +1816,18 @@ class SetSystemSettingsRT(object):
     self.packetInfo.command = ES_C_SetSystemSettings
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetSystemSettingsCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = []
     self.__formats = []
@@ -1726,16 +1837,18 @@ class GetSystemSettingsCT(object):
     self.packetInfo.command = ES_C_GetSystemSettings
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetSystemSettingsRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 52
     self.__sizes = []
     self.__formats = []
@@ -1746,18 +1859,20 @@ class GetSystemSettingsRT(object):
     self.systemSettings = SystemSettingsDataT()
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet = self.systemSettings.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    packet += self.systemSettings.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    self.packet += self.systemSettings.pack()
+    return self.packet
 
 class SystemUnitsDataT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 20
     self.__sizes = [20]
     self.__formats = [('<I I I I I ')]
@@ -1768,6 +1883,7 @@ class SystemUnitsDataT(object):
     self.humUnitType = int(0)  # ES_HumidityUnit
 
   def unpack(self, packet):
+    self.packet = packet
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.lenUnitType = packet_elements[0]
     self.angUnitType = packet_elements[1]
@@ -1777,18 +1893,19 @@ class SystemUnitsDataT(object):
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
+    self.packet = b''
     packet_elements = ()
     packet_elements += (self.lenUnitType,)
     packet_elements += (self.angUnitType,)
     packet_elements += (self.tempUnitType,)
     packet_elements += (self.pressUnitType,)
     packet_elements += (self.humUnitType,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class SetUnitsCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 32
     self.__sizes = []
     self.__formats = []
@@ -1799,18 +1916,20 @@ class SetUnitsCT(object):
     self.unitsSettings = SystemUnitsDataT()
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet = self.unitsSettings.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    packet += self.unitsSettings.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    self.packet += self.unitsSettings.pack()
+    return self.packet
 
 class SetUnitsRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
@@ -1820,16 +1939,18 @@ class SetUnitsRT(object):
     self.packetInfo.command = ES_C_SetUnits
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetUnitsCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = []
     self.__formats = []
@@ -1839,16 +1960,18 @@ class GetUnitsCT(object):
     self.packetInfo.command = ES_C_GetUnits
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetUnitsRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 36
     self.__sizes = []
     self.__formats = []
@@ -1859,18 +1982,20 @@ class GetUnitsRT(object):
     self.unitsSettings = SystemUnitsDataT()
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet = self.unitsSettings.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    packet += self.unitsSettings.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    self.packet += self.unitsSettings.pack()
+    return self.packet
 
 class ESVersionNumberT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = [12]
     self.__formats = [('<i i i ')]
@@ -1879,6 +2004,7 @@ class ESVersionNumberT(object):
     self.iBuildNumber = int(0)
 
   def unpack(self, packet):
+    self.packet = packet
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.iMajorVersionNumber = packet_elements[0]
     self.iMinorVersionNumber = packet_elements[1]
@@ -1886,16 +2012,17 @@ class ESVersionNumberT(object):
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
+    self.packet = b''
     packet_elements = ()
     packet_elements += (self.iMajorVersionNumber,)
     packet_elements += (self.iMinorVersionNumber,)
     packet_elements += (self.iBuildNumber,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class GetSystemStatusCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = []
     self.__formats = []
@@ -1905,16 +2032,18 @@ class GetSystemStatusCT(object):
     self.packetInfo.command = ES_C_GetSystemStatus
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetSystemStatusRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 56
     self.__sizes = [16,12]
     self.__formats = [('<I I I I '),('<I i i ')]
@@ -1932,13 +2061,14 @@ class GetSystemStatusRT(object):
     self.lTrackerSerialNumber = int(0)
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.lastResultStatus = packet_elements[0]
     self.trackerProcessorStatus = packet_elements[1]
     self.laserStatus = packet_elements[2]
     self.admStatus = packet_elements[3]
-    packet = self.esVersionNumber.unpack(packet)
+    packet = self.esVersionNumber.unpack(packet[self.__sizes[0]:])
     packet_elements = struct.Struct(self.__formats[1]).unpack(packet[:self.__sizes[1]])
     self.weatherMonitorStatus = packet_elements[0]
     self.lFlagsValue = packet_elements[1]
@@ -1946,24 +2076,25 @@ class GetSystemStatusRT(object):
     return packet[self.__sizes[1]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.lastResultStatus,)
     packet_elements += (self.trackerProcessorStatus,)
     packet_elements += (self.laserStatus,)
     packet_elements += (self.admStatus,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    packet += self.esVersionNumber.pack()
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    self.packet += self.esVersionNumber.pack()
     packet_elements = ()
     packet_elements += (self.weatherMonitorStatus,)
     packet_elements += (self.lFlagsValue,)
     packet_elements += (self.lTrackerSerialNumber,)
-    packet += struct.Struct(self.__formats[1]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[1]).pack(*packet_elements)
+    return self.packet
 
 class GetMeasurementStatusInfoCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = []
     self.__formats = []
@@ -1973,16 +2104,18 @@ class GetMeasurementStatusInfoCT(object):
     self.packetInfo.command = ES_C_GetMeasurementStatusInfo
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetMeasurementStatusInfoRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 24
     self.__sizes = [8]
     self.__formats = [('<I i ')]
@@ -1994,6 +2127,7 @@ class GetMeasurementStatusInfoRT(object):
     self.lMeasurementStatusInfo = int(0)
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.lastResultStatus = packet_elements[0]
@@ -2001,16 +2135,17 @@ class GetMeasurementStatusInfoRT(object):
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.lastResultStatus,)
     packet_elements += (self.lMeasurementStatusInfo,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class GetTrackerStatusCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = []
     self.__formats = []
@@ -2020,16 +2155,18 @@ class GetTrackerStatusCT(object):
     self.packetInfo.command = ES_C_GetTrackerStatus
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetTrackerStatusRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 20
     self.__sizes = [4]
     self.__formats = [('<I ')]
@@ -2040,21 +2177,23 @@ class GetTrackerStatusRT(object):
     self.trackerStatus = int(0)  # ES_TrackerStatus
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.trackerStatus = packet_elements[0]
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.trackerStatus,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class SetReflectorCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = [4]
     self.__formats = [('<i ')]
@@ -2065,21 +2204,23 @@ class SetReflectorCT(object):
     self.iInternalReflectorId = int(0)
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.iInternalReflectorId = packet_elements[0]
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.iInternalReflectorId,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class SetReflectorRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
@@ -2089,16 +2230,18 @@ class SetReflectorRT(object):
     self.packetInfo.command = ES_C_SetReflector
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetReflectorsCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = []
     self.__formats = []
@@ -2108,19 +2251,21 @@ class GetReflectorsCT(object):
     self.packetInfo.command = ES_C_GetReflectors
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetReflectorsRT(object):
   def __init__(self):
-    self.__packet_size = 68
-    self.__sizes = [52]
-    self.__formats = [('<i i I d 32s ')]
+    self.packet = b''
+    self.__packet_size = 100
+    self.__sizes = [84]
+    self.__formats = [('<i i I d 64s ')]
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
@@ -2129,9 +2274,10 @@ class GetReflectorsRT(object):
     self.iInternalReflectorId = int(0)
     self.targetType = int(0)  # ES_TargetType
     self.dSurfaceOffset = float(0)
-    self.cReflectorName = b''  # 32 bytes max
+    self.cReflectorName = b''  # 64 bytes max
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.iTotalReflectors = packet_elements[0]
@@ -2142,19 +2288,20 @@ class GetReflectorsRT(object):
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.iTotalReflectors,)
     packet_elements += (self.iInternalReflectorId,)
     packet_elements += (self.targetType,)
     packet_elements += (self.dSurfaceOffset,)
     packet_elements += (self.cReflectorName,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class GetReflectorCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = []
     self.__formats = []
@@ -2164,16 +2311,18 @@ class GetReflectorCT(object):
     self.packetInfo.command = ES_C_GetReflector
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetReflectorRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 20
     self.__sizes = [4]
     self.__formats = [('<i ')]
@@ -2184,21 +2333,23 @@ class GetReflectorRT(object):
     self.iInternalReflectorId = int(0)
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.iInternalReflectorId = packet_elements[0]
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.iInternalReflectorId,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class EnvironmentDataT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 24
     self.__sizes = [24]
     self.__formats = [('<d d d ')]
@@ -2207,6 +2358,7 @@ class EnvironmentDataT(object):
     self.dHumidity = float(0)
 
   def unpack(self, packet):
+    self.packet = packet
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.dTemperature = packet_elements[0]
     self.dPressure = packet_elements[1]
@@ -2214,16 +2366,17 @@ class EnvironmentDataT(object):
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
+    self.packet = b''
     packet_elements = ()
     packet_elements += (self.dTemperature,)
     packet_elements += (self.dPressure,)
     packet_elements += (self.dHumidity,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class SetEnvironmentParamsCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 36
     self.__sizes = []
     self.__formats = []
@@ -2234,18 +2387,20 @@ class SetEnvironmentParamsCT(object):
     self.environmentData = EnvironmentDataT()
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet = self.environmentData.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    packet += self.environmentData.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    self.packet += self.environmentData.pack()
+    return self.packet
 
 class SetEnvironmentParamsRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
@@ -2255,16 +2410,18 @@ class SetEnvironmentParamsRT(object):
     self.packetInfo.command = ES_C_SetEnvironmentParams
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetEnvironmentParamsCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = []
     self.__formats = []
@@ -2274,16 +2431,18 @@ class GetEnvironmentParamsCT(object):
     self.packetInfo.command = ES_C_GetEnvironmentParams
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetEnvironmentParamsRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 40
     self.__sizes = []
     self.__formats = []
@@ -2294,18 +2453,20 @@ class GetEnvironmentParamsRT(object):
     self.environmentData = EnvironmentDataT()
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet = self.environmentData.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    packet += self.environmentData.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    self.packet += self.environmentData.pack()
+    return self.packet
 
 class RefractionDataT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = [16]
     self.__formats = [('<d d ')]
@@ -2313,21 +2474,23 @@ class RefractionDataT(object):
     self.dAdmRefractionIndex = float(0)
 
   def unpack(self, packet):
+    self.packet = packet
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.dIfmRefractionIndex = packet_elements[0]
     self.dAdmRefractionIndex = packet_elements[1]
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
+    self.packet = b''
     packet_elements = ()
     packet_elements += (self.dIfmRefractionIndex,)
     packet_elements += (self.dAdmRefractionIndex,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class SetRefractionParamsCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 28
     self.__sizes = []
     self.__formats = []
@@ -2338,18 +2501,20 @@ class SetRefractionParamsCT(object):
     self.refractionData = RefractionDataT()
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet = self.refractionData.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    packet += self.refractionData.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    self.packet += self.refractionData.pack()
+    return self.packet
 
 class SetRefractionParamsRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
@@ -2359,16 +2524,18 @@ class SetRefractionParamsRT(object):
     self.packetInfo.command = ES_C_SetRefractionParams
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetRefractionParamsCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = []
     self.__formats = []
@@ -2378,16 +2545,18 @@ class GetRefractionParamsCT(object):
     self.packetInfo.command = ES_C_GetRefractionParams
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetRefractionParamsRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 32
     self.__sizes = []
     self.__formats = []
@@ -2398,18 +2567,20 @@ class GetRefractionParamsRT(object):
     self.refractionData = RefractionDataT()
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet = self.refractionData.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    packet += self.refractionData.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    self.packet += self.refractionData.pack()
+    return self.packet
 
 class StationOrientationDataT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 48
     self.__sizes = [48]
     self.__formats = [('<d d d d d d ')]
@@ -2421,6 +2592,7 @@ class StationOrientationDataT(object):
     self.dRot3 = float(0)
 
   def unpack(self, packet):
+    self.packet = packet
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.dVal1 = packet_elements[0]
     self.dVal2 = packet_elements[1]
@@ -2431,7 +2603,7 @@ class StationOrientationDataT(object):
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
+    self.packet = b''
     packet_elements = ()
     packet_elements += (self.dVal1,)
     packet_elements += (self.dVal2,)
@@ -2439,11 +2611,12 @@ class StationOrientationDataT(object):
     packet_elements += (self.dRot1,)
     packet_elements += (self.dRot2,)
     packet_elements += (self.dRot3,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class SetStationOrientationParamsCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 60
     self.__sizes = []
     self.__formats = []
@@ -2454,18 +2627,20 @@ class SetStationOrientationParamsCT(object):
     self.stationOrientation = StationOrientationDataT()
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet = self.stationOrientation.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    packet += self.stationOrientation.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    self.packet += self.stationOrientation.pack()
+    return self.packet
 
 class SetStationOrientationParamsRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
@@ -2475,16 +2650,18 @@ class SetStationOrientationParamsRT(object):
     self.packetInfo.command = ES_C_SetStationOrientationParams
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetStationOrientationParamsCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = []
     self.__formats = []
@@ -2494,16 +2671,18 @@ class GetStationOrientationParamsCT(object):
     self.packetInfo.command = ES_C_GetStationOrientationParams
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetStationOrientationParamsRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 64
     self.__sizes = []
     self.__formats = []
@@ -2514,18 +2693,20 @@ class GetStationOrientationParamsRT(object):
     self.stationOrientation = StationOrientationDataT()
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet = self.stationOrientation.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    packet += self.stationOrientation.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    self.packet += self.stationOrientation.pack()
+    return self.packet
 
 class TransformationDataT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 56
     self.__sizes = [56]
     self.__formats = [('<d d d d d d d ')]
@@ -2538,6 +2719,7 @@ class TransformationDataT(object):
     self.dScale = float(0)
 
   def unpack(self, packet):
+    self.packet = packet
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.dVal1 = packet_elements[0]
     self.dVal2 = packet_elements[1]
@@ -2549,7 +2731,7 @@ class TransformationDataT(object):
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
+    self.packet = b''
     packet_elements = ()
     packet_elements += (self.dVal1,)
     packet_elements += (self.dVal2,)
@@ -2558,11 +2740,12 @@ class TransformationDataT(object):
     packet_elements += (self.dRot2,)
     packet_elements += (self.dRot3,)
     packet_elements += (self.dScale,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class SetTransformationParamsCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 68
     self.__sizes = []
     self.__formats = []
@@ -2573,18 +2756,20 @@ class SetTransformationParamsCT(object):
     self.transformationData = TransformationDataT()
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet = self.transformationData.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    packet += self.transformationData.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    self.packet += self.transformationData.pack()
+    return self.packet
 
 class SetTransformationParamsRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
@@ -2594,16 +2779,18 @@ class SetTransformationParamsRT(object):
     self.packetInfo.command = ES_C_SetTransformationParams
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetTransformationParamsCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = []
     self.__formats = []
@@ -2613,16 +2800,18 @@ class GetTransformationParamsCT(object):
     self.packetInfo.command = ES_C_GetTransformationParams
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetTransformationParamsRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 72
     self.__sizes = []
     self.__formats = []
@@ -2633,18 +2822,20 @@ class GetTransformationParamsRT(object):
     self.transformationData = TransformationDataT()
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet = self.transformationData.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    packet += self.transformationData.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    self.packet += self.transformationData.pack()
+    return self.packet
 
 class GoPositionCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 40
     self.__sizes = [28]
     self.__formats = [('<d d d i ')]
@@ -2658,6 +2849,7 @@ class GoPositionCT(object):
     self.bUseADM = int(0)
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.dVal1 = packet_elements[0]
@@ -2667,18 +2859,19 @@ class GoPositionCT(object):
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.dVal1,)
     packet_elements += (self.dVal2,)
     packet_elements += (self.dVal3,)
     packet_elements += (self.bUseADM,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class GoPositionRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
@@ -2688,16 +2881,18 @@ class GoPositionRT(object):
     self.packetInfo.command = ES_C_GoPosition
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetDirectionCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = []
     self.__formats = []
@@ -2707,16 +2902,18 @@ class GetDirectionCT(object):
     self.packetInfo.command = ES_C_GetDirection
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetDirectionRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 32
     self.__sizes = [16]
     self.__formats = [('<d d ')]
@@ -2728,6 +2925,7 @@ class GetDirectionRT(object):
     self.dVtAngle = float(0)
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.dHzAngle = packet_elements[0]
@@ -2735,16 +2933,17 @@ class GetDirectionRT(object):
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.dHzAngle,)
     packet_elements += (self.dVtAngle,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class GoPositionHVDCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 40
     self.__sizes = [28]
     self.__formats = [('<d d d i ')]
@@ -2758,6 +2957,7 @@ class GoPositionHVDCT(object):
     self.bUseADM = int(0)
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.dHzAngle = packet_elements[0]
@@ -2767,18 +2967,19 @@ class GoPositionHVDCT(object):
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.dHzAngle,)
     packet_elements += (self.dVtAngle,)
     packet_elements += (self.dDistance,)
     packet_elements += (self.bUseADM,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class GoPositionHVDRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
@@ -2788,16 +2989,18 @@ class GoPositionHVDRT(object):
     self.packetInfo.command = ES_C_GoPositionHVD
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class PointLaserCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 36
     self.__sizes = [24]
     self.__formats = [('<d d d ')]
@@ -2810,6 +3013,7 @@ class PointLaserCT(object):
     self.dVal3 = float(0)
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.dVal1 = packet_elements[0]
@@ -2818,17 +3022,18 @@ class PointLaserCT(object):
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.dVal1,)
     packet_elements += (self.dVal2,)
     packet_elements += (self.dVal3,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class PointLaserRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
@@ -2838,16 +3043,18 @@ class PointLaserRT(object):
     self.packetInfo.command = ES_C_PointLaser
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class PositionRelativeHVCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 28
     self.__sizes = [16]
     self.__formats = [('<d d ')]
@@ -2859,6 +3066,7 @@ class PositionRelativeHVCT(object):
     self.dVtVal = float(0)
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.dHzVal = packet_elements[0]
@@ -2866,16 +3074,17 @@ class PositionRelativeHVCT(object):
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.dHzVal,)
     packet_elements += (self.dVtVal,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class PositionRelativeHVRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
@@ -2885,16 +3094,18 @@ class PositionRelativeHVRT(object):
     self.packetInfo.command = ES_C_PositionRelativeHV
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class PointLaserHVDCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 36
     self.__sizes = [24]
     self.__formats = [('<d d d ')]
@@ -2907,6 +3118,7 @@ class PointLaserHVDCT(object):
     self.dDistance = float(0)
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.dHzAngle = packet_elements[0]
@@ -2915,17 +3127,18 @@ class PointLaserHVDCT(object):
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.dHzAngle,)
     packet_elements += (self.dVtAngle,)
     packet_elements += (self.dDistance,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class PointLaserHVDRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
@@ -2935,16 +3148,18 @@ class PointLaserHVDRT(object):
     self.packetInfo.command = ES_C_PointLaserHVD
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class MoveHVCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 20
     self.__sizes = [8]
     self.__formats = [('<i i ')]
@@ -2956,6 +3171,7 @@ class MoveHVCT(object):
     self.iVtSpeed = int(0)
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.iHzSpeed = packet_elements[0]
@@ -2963,16 +3179,17 @@ class MoveHVCT(object):
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.iHzSpeed,)
     packet_elements += (self.iVtSpeed,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class MoveHVRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
@@ -2982,16 +3199,18 @@ class MoveHVRT(object):
     self.packetInfo.command = ES_C_MoveHV
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GoNivelPositionCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = [4]
     self.__formats = [('<I ')]
@@ -3002,21 +3221,23 @@ class GoNivelPositionCT(object):
     self.nivelPosition = int(0)  # ES_NivelPosition
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.nivelPosition = packet_elements[0]
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.nivelPosition,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class GoNivelPositionRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
@@ -3026,16 +3247,18 @@ class GoNivelPositionRT(object):
     self.packetInfo.command = ES_C_GoNivelPosition
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class CallOrientToGravityCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = []
     self.__formats = []
@@ -3045,16 +3268,18 @@ class CallOrientToGravityCT(object):
     self.packetInfo.command = ES_C_CallOrientToGravity
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class CallOrientToGravityRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 32
     self.__sizes = [16]
     self.__formats = [('<d d ')]
@@ -3066,6 +3291,7 @@ class CallOrientToGravityRT(object):
     self.dPhi = float(0)
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.dOmega = packet_elements[0]
@@ -3073,16 +3299,17 @@ class CallOrientToGravityRT(object):
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.dOmega,)
     packet_elements += (self.dPhi,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class SetCompensationCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = [4]
     self.__formats = [('<i ')]
@@ -3093,21 +3320,23 @@ class SetCompensationCT(object):
     self.iInternalCompensationId = int(0)
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.iInternalCompensationId = packet_elements[0]
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.iInternalCompensationId,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class SetCompensationRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
@@ -3117,16 +3346,18 @@ class SetCompensationRT(object):
     self.packetInfo.command = ES_C_SetCompensation
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetCompensationCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = []
     self.__formats = []
@@ -3136,16 +3367,18 @@ class GetCompensationCT(object):
     self.packetInfo.command = ES_C_GetCompensation
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetCompensationRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 20
     self.__sizes = [4]
     self.__formats = [('<i ')]
@@ -3156,21 +3389,23 @@ class GetCompensationRT(object):
     self.iInternalCompensationId = int(0)
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.iInternalCompensationId = packet_elements[0]
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.iInternalCompensationId,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class GetCompensationsCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = []
     self.__formats = []
@@ -3180,31 +3415,34 @@ class GetCompensationsCT(object):
     self.packetInfo.command = ES_C_GetCompensations
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetCompensationsRT(object):
   def __init__(self):
-    self.__packet_size = 220
-    self.__sizes = [204]
-    self.__formats = [('<i i 32s 128s 32s i ')]
+    self.packet = b''
+    self.__packet_size = 412
+    self.__sizes = [396]
+    self.__formats = [('<i i 64s 256s 64s i ')]
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
     self.packetInfo.command = ES_C_GetCompensations
     self.iTotalCompensations = int(0)
     self.iInternalCompensationId = int(0)
-    self.cTrackerCompensationName = b''  # 32 bytes max
-    self.cTrackerCompensationComment = b''  # 128 bytes max
-    self.cADMCompensationName = b''  # 32 bytes max
+    self.cTrackerCompensationName = b''  # 64 bytes max
+    self.cTrackerCompensationComment = b''  # 256 bytes max
+    self.cADMCompensationName = b''  # 64 bytes max
     self.bHasMeasurementCameraMounted = int(0)
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.iTotalCompensations = packet_elements[0]
@@ -3216,8 +3454,8 @@ class GetCompensationsRT(object):
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.iTotalCompensations,)
     packet_elements += (self.iInternalCompensationId,)
@@ -3225,11 +3463,12 @@ class GetCompensationsRT(object):
     packet_elements += (self.cTrackerCompensationComment,)
     packet_elements += (self.cADMCompensationName,)
     packet_elements += (self.bHasMeasurementCameraMounted,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class GetCompensations2CT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = []
     self.__formats = []
@@ -3239,33 +3478,36 @@ class GetCompensations2CT(object):
     self.packetInfo.command = ES_C_GetCompensations2
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetCompensations2RT(object):
   def __init__(self):
-    self.__packet_size = 352
-    self.__sizes = [336]
-    self.__formats = [('<i i 32s 128s 32s 128s i i ')]
+    self.packet = b''
+    self.__packet_size = 672
+    self.__sizes = [656]
+    self.__formats = [('<i i 64s 256s 64s 256s i i ')]
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
     self.packetInfo.command = ES_C_GetCompensations2
     self.iTotalCompensations = int(0)
     self.iInternalCompensationId = int(0)
-    self.cTrackerCompensationName = b''  # 32 bytes max
-    self.cTrackerCompensationComment = b''  # 128 bytes max
-    self.cADMCompensationName = b''  # 32 bytes max
-    self.cADMCompensationComment = b''  # 128 bytes max
+    self.cTrackerCompensationName = b''  # 64 bytes max
+    self.cTrackerCompensationComment = b''  # 256 bytes max
+    self.cADMCompensationName = b''  # 64 bytes max
+    self.cADMCompensationComment = b''  # 256 bytes max
     self.bHasMeasurementCameraMounted = int(0)
     self.bIsActive = int(0)
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.iTotalCompensations = packet_elements[0]
@@ -3279,8 +3521,8 @@ class GetCompensations2RT(object):
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.iTotalCompensations,)
     packet_elements += (self.iInternalCompensationId,)
@@ -3290,11 +3532,12 @@ class GetCompensations2RT(object):
     packet_elements += (self.cADMCompensationComment,)
     packet_elements += (self.bHasMeasurementCameraMounted,)
     packet_elements += (self.bIsActive,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class SetStatisticModeCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 20
     self.__sizes = [8]
     self.__formats = [('<I I ')]
@@ -3306,6 +3549,7 @@ class SetStatisticModeCT(object):
     self.continuousMeasurements = int(0)  # ES_StatisticMode
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.stationaryMeasurements = packet_elements[0]
@@ -3313,16 +3557,17 @@ class SetStatisticModeCT(object):
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.stationaryMeasurements,)
     packet_elements += (self.continuousMeasurements,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class SetStatisticModeRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
@@ -3332,16 +3577,18 @@ class SetStatisticModeRT(object):
     self.packetInfo.command = ES_C_SetStatisticMode
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetStatisticModeCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = []
     self.__formats = []
@@ -3351,16 +3598,18 @@ class GetStatisticModeCT(object):
     self.packetInfo.command = ES_C_GetStatisticMode
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetStatisticModeRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 24
     self.__sizes = [8]
     self.__formats = [('<I I ')]
@@ -3372,6 +3621,7 @@ class GetStatisticModeRT(object):
     self.continuousMeasurements = int(0)  # ES_StatisticMode
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.stationaryMeasurements = packet_elements[0]
@@ -3379,16 +3629,17 @@ class GetStatisticModeRT(object):
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.stationaryMeasurements,)
     packet_elements += (self.continuousMeasurements,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class CameraParamsDataT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = [12]
     self.__formats = [('<i i i ')]
@@ -3397,6 +3648,7 @@ class CameraParamsDataT(object):
     self.iSaturation = int(0)
 
   def unpack(self, packet):
+    self.packet = packet
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.iContrast = packet_elements[0]
     self.iBrightness = packet_elements[1]
@@ -3404,16 +3656,17 @@ class CameraParamsDataT(object):
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
+    self.packet = b''
     packet_elements = ()
     packet_elements += (self.iContrast,)
     packet_elements += (self.iBrightness,)
     packet_elements += (self.iSaturation,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class SetCameraParamsCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 24
     self.__sizes = []
     self.__formats = []
@@ -3424,18 +3677,20 @@ class SetCameraParamsCT(object):
     self.cameraParams = CameraParamsDataT()
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet = self.cameraParams.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    packet += self.cameraParams.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    self.packet += self.cameraParams.pack()
+    return self.packet
 
 class SetCameraParamsRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
@@ -3445,16 +3700,18 @@ class SetCameraParamsRT(object):
     self.packetInfo.command = ES_C_SetCameraParams
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetCameraParamsCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = []
     self.__formats = []
@@ -3464,16 +3721,18 @@ class GetCameraParamsCT(object):
     self.packetInfo.command = ES_C_GetCameraParams
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetCameraParamsRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 28
     self.__sizes = []
     self.__formats = []
@@ -3484,18 +3743,20 @@ class GetCameraParamsRT(object):
     self.cameraParams = CameraParamsDataT()
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet = self.cameraParams.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    packet += self.cameraParams.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    self.packet += self.cameraParams.pack()
+    return self.packet
 
 class GetADMInfo2CT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = []
     self.__formats = []
@@ -3505,25 +3766,27 @@ class GetADMInfo2CT(object):
     self.packetInfo.command = ES_C_GetADMInfo2
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetADMInfo2RT(object):
   def __init__(self):
-    self.__packet_size = 92
-    self.__sizes = [76]
-    self.__formats = [('<I 32s i i i d d i d ')]
+    self.packet = b''
+    self.__packet_size = 124
+    self.__sizes = [108]
+    self.__formats = [('<I 64s i i i d d i d ')]
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
     self.packetInfo.command = ES_C_GetADMInfo2
     self.admType = int(0)  # ES_ADMType
-    self.cADMName = b''  # 32 bytes max
+    self.cADMName = b''  # 64 bytes max
     self.lSerialNumber = int(0)
     self.iFirmwareMajorVersionNumber = int(0)
     self.iFirmwareMinorVersionNumber = int(0)
@@ -3533,6 +3796,7 @@ class GetADMInfo2RT(object):
     self.dAccuracyADMDistance = float(0)
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.admType = packet_elements[0]
@@ -3547,8 +3811,8 @@ class GetADMInfo2RT(object):
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.admType,)
     packet_elements += (self.cADMName,)
@@ -3559,11 +3823,12 @@ class GetADMInfo2RT(object):
     packet_elements += (self.dMinDistance,)
     packet_elements += (self.iMaxDataRate,)
     packet_elements += (self.dAccuracyADMDistance,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class GetNivelInfoCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = []
     self.__formats = []
@@ -3573,16 +3838,18 @@ class GetNivelInfoCT(object):
     self.packetInfo.command = ES_C_GetNivelInfo
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetNivelInfoRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 28
     self.__sizes = [12]
     self.__formats = [('<i i i ')]
@@ -3595,6 +3862,7 @@ class GetNivelInfoRT(object):
     self.lSerialNumber = int(0)
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.iFirmwareMajorVersionNumber = packet_elements[0]
@@ -3603,17 +3871,18 @@ class GetNivelInfoRT(object):
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.iFirmwareMajorVersionNumber,)
     packet_elements += (self.iFirmwareMinorVersionNumber,)
     packet_elements += (self.lSerialNumber,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class GetNivelInfo2CT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = []
     self.__formats = []
@@ -3623,25 +3892,27 @@ class GetNivelInfo2CT(object):
     self.packetInfo.command = ES_C_GetNivelInfo2
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetNivelInfo2RT(object):
   def __init__(self):
-    self.__packet_size = 88
-    self.__sizes = [72]
-    self.__formats = [('<I 32s i i i d d d ')]
+    self.packet = b''
+    self.__packet_size = 120
+    self.__sizes = [104]
+    self.__formats = [('<I 64s i i i d d d ')]
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
     self.packetInfo.command = ES_C_GetNivelInfo2
     self.nivelType = int(0)  # ES_NivelType
-    self.cNivelName = b''  # 32 bytes max
+    self.cNivelName = b''  # 64 bytes max
     self.lSerialNumber = int(0)
     self.iFirmwareMajorVersionNumber = int(0)
     self.iFirmwareMinorVersionNumber = int(0)
@@ -3650,6 +3921,7 @@ class GetNivelInfo2RT(object):
     self.dMeasurementAccuracyFactor = float(0)
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.nivelType = packet_elements[0]
@@ -3663,8 +3935,8 @@ class GetNivelInfo2RT(object):
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.nivelType,)
     packet_elements += (self.cNivelName,)
@@ -3674,11 +3946,12 @@ class GetNivelInfo2RT(object):
     packet_elements += (self.dMeasurementRange,)
     packet_elements += (self.dMeasurementAccuracyOffset,)
     packet_elements += (self.dMeasurementAccuracyFactor,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class GetTPInfoCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = []
     self.__formats = []
@@ -3688,16 +3961,18 @@ class GetTPInfoCT(object):
     self.packetInfo.command = ES_C_GetTPInfo
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetTPInfoRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 56
     self.__sizes = [40]
     self.__formats = [('<i i i i i i I I i I ')]
@@ -3717,6 +3992,7 @@ class GetTPInfoRT(object):
     self.laserTrackerSensorType = int(0)  # ES_LTSensorType
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.iTPBootMajorVersionNumber = packet_elements[0]
@@ -3732,8 +4008,8 @@ class GetTPInfoRT(object):
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.iTPBootMajorVersionNumber,)
     packet_elements += (self.iTPBootMinorVersionNumber,)
@@ -3745,11 +4021,12 @@ class GetTPInfoRT(object):
     packet_elements += (self.microProcessorType,)
     packet_elements += (self.iMicroProcessorClockSpeed,)
     packet_elements += (self.laserTrackerSensorType,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class GetTrackerInfoCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = []
     self.__formats = []
@@ -3759,25 +4036,27 @@ class GetTrackerInfoCT(object):
     self.packetInfo.command = ES_C_GetTrackerInfo
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetTrackerInfoRT(object):
   def __init__(self):
-    self.__packet_size = 132
-    self.__sizes = [116]
-    self.__formats = [('<I 32s i i i i i d d d i i d d I i i ')]
+    self.packet = b''
+    self.__packet_size = 164
+    self.__sizes = [148]
+    self.__formats = [('<I 64s i i i i i d d d i i d d I i i ')]
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
     self.packetInfo.command = ES_C_GetTrackerInfo
     self.trackerType = int(0)  # ES_LTSensorType
-    self.cTrackerName = b''  # 32 bytes max
+    self.cTrackerName = b''  # 64 bytes max
     self.lSerialNumber = int(0)
     self.lCompensationIdNumber = int(0)
     self.bHasADM = int(0)
@@ -3795,6 +4074,7 @@ class GetTrackerInfoRT(object):
     self.iMinLCPFirmwareVersion = int(0)
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.trackerType = packet_elements[0]
@@ -3817,8 +4097,8 @@ class GetTrackerInfoRT(object):
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.trackerType,)
     packet_elements += (self.cTrackerName,)
@@ -3837,11 +4117,12 @@ class GetTrackerInfoRT(object):
     packet_elements += (self.accuracyModel,)
     packet_elements += (self.iMajLCPFirmwareVersion,)
     packet_elements += (self.iMinLCPFirmwareVersion,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class GetATRInfoCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = []
     self.__formats = []
@@ -3851,25 +4132,27 @@ class GetATRInfoCT(object):
     self.packetInfo.command = ES_C_GetATRInfo
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetATRInfoRT(object):
   def __init__(self):
-    self.__packet_size = 108
-    self.__sizes = [92]
-    self.__formats = [('<I 32s i i i i i i d d d d ')]
+    self.packet = b''
+    self.__packet_size = 140
+    self.__sizes = [124]
+    self.__formats = [('<I 64s i i i i i i d d d d ')]
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
     self.packetInfo.command = ES_C_GetATRInfo
     self.atrType = int(0)  # ES_ATRType
-    self.cATRName = b''  # 32 bytes max
+    self.cATRName = b''  # 64 bytes max
     self.lMajFirmwareVersion = int(0)
     self.lMinFirmwareVersion = int(0)
     self.lBuildFirmwareVersion = int(0)
@@ -3882,6 +4165,7 @@ class GetATRInfoRT(object):
     self.dMaxTrackingSpeed = float(0)
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.atrType = packet_elements[0]
@@ -3899,8 +4183,8 @@ class GetATRInfoRT(object):
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.atrType,)
     packet_elements += (self.cATRName,)
@@ -3914,11 +4198,12 @@ class GetATRInfoRT(object):
     packet_elements += (self.dMinDistance,)
     packet_elements += (self.dFieldOfView,)
     packet_elements += (self.dMaxTrackingSpeed,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class SetLaserOnTimerCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 20
     self.__sizes = [8]
     self.__formats = [('<i i ')]
@@ -3930,6 +4215,7 @@ class SetLaserOnTimerCT(object):
     self.iLaserOnTimeOffsetMinute = int(0)
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.iLaserOnTimeOffsetHour = packet_elements[0]
@@ -3937,16 +4223,17 @@ class SetLaserOnTimerCT(object):
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.iLaserOnTimeOffsetHour,)
     packet_elements += (self.iLaserOnTimeOffsetMinute,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class SetLaserOnTimerRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
@@ -3956,16 +4243,18 @@ class SetLaserOnTimerRT(object):
     self.packetInfo.command = ES_C_SetLaserOnTimer
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetLaserOnTimerCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = []
     self.__formats = []
@@ -3975,16 +4264,18 @@ class GetLaserOnTimerCT(object):
     self.packetInfo.command = ES_C_GetLaserOnTimer
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetLaserOnTimerRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 24
     self.__sizes = [8]
     self.__formats = [('<i i ')]
@@ -3996,6 +4287,7 @@ class GetLaserOnTimerRT(object):
     self.iLaserOnTimeOffsetMinute = int(0)
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.iLaserOnTimeOffsetHour = packet_elements[0]
@@ -4003,16 +4295,17 @@ class GetLaserOnTimerRT(object):
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.iLaserOnTimeOffsetHour,)
     packet_elements += (self.iLaserOnTimeOffsetMinute,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class GetFaceCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = []
     self.__formats = []
@@ -4022,16 +4315,18 @@ class GetFaceCT(object):
     self.packetInfo.command = ES_C_GetFace
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetFaceRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 20
     self.__sizes = [4]
     self.__formats = [('<I ')]
@@ -4042,21 +4337,23 @@ class GetFaceRT(object):
     self.trackerFace = int(0)  # ES_TrackerFace
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.trackerFace = packet_elements[0]
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.trackerFace,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class SetLongSystemParamCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 20
     self.__sizes = [8]
     self.__formats = [('<I i ')]
@@ -4068,6 +4365,7 @@ class SetLongSystemParamCT(object):
     self.lParameter = int(0)
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.systemParam = packet_elements[0]
@@ -4075,16 +4373,17 @@ class SetLongSystemParamCT(object):
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.systemParam,)
     packet_elements += (self.lParameter,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class SetLongSystemParamRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
@@ -4094,16 +4393,18 @@ class SetLongSystemParamRT(object):
     self.packetInfo.command = ES_C_SetLongSystemParameter
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetLongSystemParamCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = [4]
     self.__formats = [('<I ')]
@@ -4114,21 +4415,23 @@ class GetLongSystemParamCT(object):
     self.systemParam = int(0)  # ES_SystemParameter
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.systemParam = packet_elements[0]
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.systemParam,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class GetLongSystemParamRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 24
     self.__sizes = [8]
     self.__formats = [('<I i ')]
@@ -4140,6 +4443,7 @@ class GetLongSystemParamRT(object):
     self.lParameter = int(0)
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.systemParam = packet_elements[0]
@@ -4147,16 +4451,17 @@ class GetLongSystemParamRT(object):
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.systemParam,)
     packet_elements += (self.lParameter,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class GetObjectTemperatureCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = []
     self.__formats = []
@@ -4166,16 +4471,18 @@ class GetObjectTemperatureCT(object):
     self.packetInfo.command = ES_C_GetObjectTemperature
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetObjectTemperatureRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 24
     self.__sizes = [8]
     self.__formats = [('<d ')]
@@ -4186,21 +4493,23 @@ class GetObjectTemperatureRT(object):
     self.dObjectTemperature = float(0)
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.dObjectTemperature = packet_elements[0]
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.dObjectTemperature,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class ClearCommandQueueCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = [4]
     self.__formats = [('<I ')]
@@ -4211,21 +4520,23 @@ class ClearCommandQueueCT(object):
     self.clearQueueType = int(0)  # ES_ClearCommandQueueType
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.clearQueueType = packet_elements[0]
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.clearQueueType,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class ClearCommandQueueRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
@@ -4235,16 +4546,18 @@ class ClearCommandQueueRT(object):
     self.packetInfo.command = ES_C_ClearCommandQueue
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetOverviewCameraInfoCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = []
     self.__formats = []
@@ -4254,25 +4567,27 @@ class GetOverviewCameraInfoCT(object):
     self.packetInfo.command = ES_C_GetOverviewCameraInfo
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetOverviewCameraInfoRT(object):
   def __init__(self):
-    self.__packet_size = 88
-    self.__sizes = [72]
-    self.__formats = [('<I 32s i d d d i i ')]
+    self.packet = b''
+    self.__packet_size = 120
+    self.__sizes = [104]
+    self.__formats = [('<I 64s i d d d i i ')]
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
     self.packetInfo.command = ES_C_GetOverviewCameraInfo
     self.cameraType = int(0)  # ES_OverviewCameraType
-    self.cCameraName = b''  # 32 bytes max
+    self.cCameraName = b''  # 64 bytes max
     self.bIsColorCamera = int(0)
     self.dFocalLength = float(0)
     self.dHorizontalChipSize = float(0)
@@ -4281,6 +4596,7 @@ class GetOverviewCameraInfoRT(object):
     self.bMirrorImageVt = int(0)
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.cameraType = packet_elements[0]
@@ -4294,8 +4610,8 @@ class GetOverviewCameraInfoRT(object):
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.cameraType,)
     packet_elements += (self.cCameraName,)
@@ -4305,11 +4621,12 @@ class GetOverviewCameraInfoRT(object):
     packet_elements += (self.dVerticalChipSize,)
     packet_elements += (self.bMirrorImageHz,)
     packet_elements += (self.bMirrorImageVt,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class GetDoubleSystemParamCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = [4]
     self.__formats = [('<I ')]
@@ -4320,21 +4637,23 @@ class GetDoubleSystemParamCT(object):
     self.systemParam = int(0)  # ES_SystemParameter
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.systemParam = packet_elements[0]
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.systemParam,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class GetDoubleSystemParamRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 28
     self.__sizes = [12]
     self.__formats = [('<I d ')]
@@ -4346,6 +4665,7 @@ class GetDoubleSystemParamRT(object):
     self.dParameter = float(0)
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.systemParam = packet_elements[0]
@@ -4353,16 +4673,17 @@ class GetDoubleSystemParamRT(object):
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.systemParam,)
     packet_elements += (self.dParameter,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class SetDoubleSystemParamCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 24
     self.__sizes = [12]
     self.__formats = [('<I d ')]
@@ -4374,6 +4695,7 @@ class SetDoubleSystemParamCT(object):
     self.dParameter = float(0)
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.systemParam = packet_elements[0]
@@ -4381,16 +4703,17 @@ class SetDoubleSystemParamCT(object):
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.systemParam,)
     packet_elements += (self.dParameter,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class SetDoubleSystemParamRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
@@ -4400,16 +4723,18 @@ class SetDoubleSystemParamRT(object):
     self.packetInfo.command = ES_C_SetDoubleSystemParameter
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class RestoreStartupConditionsCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = []
     self.__formats = []
@@ -4419,16 +4744,18 @@ class RestoreStartupConditionsCT(object):
     self.packetInfo.command = ES_C_RestoreStartupConditions
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class RestoreStartupConditionsRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
@@ -4438,16 +4765,18 @@ class RestoreStartupConditionsRT(object):
     self.packetInfo.command = ES_C_RestoreStartupConditions
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GoAndMeasureCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 36
     self.__sizes = [24]
     self.__formats = [('<d d d ')]
@@ -4460,6 +4789,7 @@ class GoAndMeasureCT(object):
     self.dVal3 = float(0)
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.dVal1 = packet_elements[0]
@@ -4468,17 +4798,18 @@ class GoAndMeasureCT(object):
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.dVal1,)
     packet_elements += (self.dVal2,)
     packet_elements += (self.dVal3,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class GoAndMeasureRT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 16
     self.__sizes = []
     self.__formats = []
@@ -4488,16 +4819,18 @@ class GoAndMeasureRT(object):
     self.packetInfo.command = ES_C_GoAndMeasure
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetMeteoStationInfoCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = []
     self.__formats = []
@@ -4507,29 +4840,32 @@ class GetMeteoStationInfoCT(object):
     self.packetInfo.command = ES_C_GetMeteoStationInfo
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetMeteoStationInfoRT(object):
   def __init__(self):
-    self.__packet_size = 60
-    self.__sizes = [44]
-    self.__formats = [('<I 32s i i ')]
+    self.packet = b''
+    self.__packet_size = 92
+    self.__sizes = [76]
+    self.__formats = [('<I 64s i i ')]
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
     self.packetInfo.command = ES_C_GetMeteoStationInfo
     self.meteoStationType = int(0)  # ES_MeteoStationType
-    self.cIdentifier = b''  # 32 bytes max
+    self.cIdentifier = b''  # 64 bytes max
     self.iFirmwareMajorVersionNumber = int(0)
     self.iFirmwareMinorVersionNumber = int(0)
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.meteoStationType = packet_elements[0]
@@ -4539,18 +4875,19 @@ class GetMeteoStationInfoRT(object):
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.meteoStationType,)
     packet_elements += (self.cIdentifier,)
     packet_elements += (self.iFirmwareMajorVersionNumber,)
     packet_elements += (self.iFirmwareMinorVersionNumber,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class GetAT4xxInfoCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = []
     self.__formats = []
@@ -4560,25 +4897,27 @@ class GetAT4xxInfoCT(object):
     self.packetInfo.command = ES_C_GetAT4xxInfo
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetAT4xxInfoRT(object):
   def __init__(self):
-    self.__packet_size = 152
-    self.__sizes = [136]
-    self.__formats = [('<I 32s i i i i i i i i i i I I i d d d d d d ')]
+    self.packet = b''
+    self.__packet_size = 184
+    self.__sizes = [168]
+    self.__formats = [('<I 64s i i i i i i i i i i I I i d d d d d d ')]
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
     self.packetInfo.command = ES_C_GetAT4xxInfo
     self.trackerType = int(0)  # ES_LTSensorType
-    self.cTrackerName = b''  # 32 bytes max
+    self.cTrackerName = b''  # 64 bytes max
     self.lSerialNumber = int(0)
     self.lMajorFirmwareVersion = int(0)
     self.lMinorFirmwareVersion = int(0)
@@ -4600,6 +4939,7 @@ class GetAT4xxInfoRT(object):
     self.dStdDevAngleFactor = float(0)
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.trackerType = packet_elements[0]
@@ -4626,8 +4966,8 @@ class GetAT4xxInfoRT(object):
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.trackerType,)
     packet_elements += (self.cTrackerName,)
@@ -4650,11 +4990,12 @@ class GetAT4xxInfoRT(object):
     packet_elements += (self.dStdDevAngleConst,)
     packet_elements += (self.dStdDevAngleOffset,)
     packet_elements += (self.dStdDevAngleFactor,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 class GetSystemSoftwareVersionCT(object):
   def __init__(self):
+    self.packet = b''
     self.__packet_size = 12
     self.__sizes = []
     self.__formats = []
@@ -4664,38 +5005,41 @@ class GetSystemSoftwareVersionCT(object):
     self.packetInfo.command = ES_C_GetSystemSoftwareVersion
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     return packet
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
-    return packet
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
+    return self.packet
 
 class GetSystemSoftwareVersionRT(object):
   def __init__(self):
-    self.__packet_size = 48
-    self.__sizes = [32]
-    self.__formats = [('<32s ')]
+    self.packet = b''
+    self.__packet_size = 80
+    self.__sizes = [64]
+    self.__formats = [('<64s ')]
     self.packetInfo = BasicCommandRT()
     self.packetInfo.packetHeader.lPacketSize = self.__packet_size
     self.packetInfo.packetHeader.type = ES_DT_Command
     self.packetInfo.command = ES_C_GetSystemSoftwareVersion
-    self.cSoftwareVersion = b''  # 32 bytes max
+    self.cSoftwareVersion = b''  # 64 bytes max
 
   def unpack(self, packet):
+    self.packet = packet
     packet = self.packetInfo.unpack(packet)
     packet_elements = struct.Struct(self.__formats[0]).unpack(packet[:self.__sizes[0]])
     self.cSoftwareVersion = packet_elements[0]
     return packet[self.__sizes[0]:]
 
   def pack(self):
-    packet = b''
-    packet += self.packetInfo.pack()
+    self.packet = b''
+    self.packet += self.packetInfo.pack()
     packet_elements = ()
     packet_elements += (self.cSoftwareVersion,)
-    packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
-    return packet
+    self.packet += struct.Struct(self.__formats[0]).pack(*packet_elements)
+    return self.packet
 
 
 def packetType(packet):
@@ -4709,10 +5053,13 @@ def packetType(packet):
 
     
 class PacketFactory(object):
-  def packet(self, data):
+  def packet(self, data, return_type=True):
     packet_header = PacketHeaderT()
     packet_header.unpack(data)
-    packet_info = BasicCommandRT()
+    if return_type:
+      packet_info = BasicCommandRT()
+    else:
+      packet_info = BasicCommandCT()
     packet = None
     if packet_header.type == ES_DT_Command:
       packet_info.unpack(data)
@@ -4731,157 +5078,385 @@ class PacketFactory(object):
     elif packet_header.type == ES_DT_Error:
       packet = ErrorResponseT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_Initialize:
-      packet = InitializeRT()
+      if return_type:
+        packet = InitializeRT()
+      else:
+        packet = InitializeCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_ActivateCameraView:
-      packet = ActivateCameraViewRT()
+      if return_type:
+        packet = ActivateCameraViewRT()
+      else:
+        packet = ActivateCameraViewCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_Park:
-      packet = ParkRT()
+      if return_type:
+        packet = ParkRT()
+      else:
+        packet = ParkCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GoBirdBath:
-      packet = GoBirdBathRT()
+      if return_type:
+        packet = GoBirdBathRT()
+      else:
+        packet = GoBirdBathCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GoBirdBath2:
-      packet = GoBirdBath2RT()
+      if return_type:
+        packet = GoBirdBath2RT()
+      else:
+        packet = GoBirdBath2CT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_ChangeFace:
-      packet = ChangeFaceRT()
+      if return_type:
+        packet = ChangeFaceRT()
+      else:
+        packet = ChangeFaceCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_StartNivelMeasurement:
-      packet = StartNivelMeasurementRT()
+      if return_type:
+        packet = StartNivelMeasurementRT()
+      else:
+        packet = StartNivelMeasurementCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_StartMeasurement:
-      packet = StartMeasurementRT()
+      if return_type:
+        packet = StartMeasurementRT()
+      else:
+        packet = StartMeasurementCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_StopMeasurement:
-      packet = StopMeasurementRT()
+      if return_type:
+        packet = StopMeasurementRT()
+      else:
+        packet = StopMeasurementCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_ExitApplication:
-      packet = ExitApplicationRT()
+      if return_type:
+        packet = ExitApplicationRT()
+      else:
+        packet = ExitApplicationCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GoLastMeasuredPoint:
-      packet = GoLastMeasuredPointRT()
+      if return_type:
+        packet = GoLastMeasuredPointRT()
+      else:
+        packet = GoLastMeasuredPointCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_FindReflector:
-      packet = FindReflectorRT()
+      if return_type:
+        packet = FindReflectorRT()
+      else:
+        packet = FindReflectorCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_SetCoordinateSystemType:
-      packet = SetCoordinateSystemTypeRT()
+      if return_type:
+        packet = SetCoordinateSystemTypeRT()
+      else:
+        packet = SetCoordinateSystemTypeCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetCoordinateSystemType:
-      packet = GetCoordinateSystemTypeRT()
+      if return_type:
+        packet = GetCoordinateSystemTypeRT()
+      else:
+        packet = GetCoordinateSystemTypeCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_SetMeasurementMode:
-      packet = SetMeasurementModeRT()
+      if return_type:
+        packet = SetMeasurementModeRT()
+      else:
+        packet = SetMeasurementModeCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetMeasurementMode:
-      packet = GetMeasurementModeRT()
+      if return_type:
+        packet = GetMeasurementModeRT()
+      else:
+        packet = GetMeasurementModeCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_SetSearchParams:
-      packet = SetSearchParamsRT()
+      if return_type:
+        packet = SetSearchParamsRT()
+      else:
+        packet = SetSearchParamsCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetSearchParams:
-      packet = GetSearchParamsRT()
+      if return_type:
+        packet = GetSearchParamsRT()
+      else:
+        packet = GetSearchParamsCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_SetStationaryModeParams:
-      packet = SetStationaryModeParamsRT()
+      if return_type:
+        packet = SetStationaryModeParamsRT()
+      else:
+        packet = SetStationaryModeParamsCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetStationaryModeParams:
-      packet = GetStationaryModeParamsRT()
+      if return_type:
+        packet = GetStationaryModeParamsRT()
+      else:
+        packet = GetStationaryModeParamsCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_SetSystemSettings:
-      packet = SetSystemSettingsRT()
+      if return_type:
+        packet = SetSystemSettingsRT()
+      else:
+        packet = SetSystemSettingsCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetSystemSettings:
-      packet = GetSystemSettingsRT()
+      if return_type:
+        packet = GetSystemSettingsRT()
+      else:
+        packet = GetSystemSettingsCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_SetUnits:
-      packet = SetUnitsRT()
+      if return_type:
+        packet = SetUnitsRT()
+      else:
+        packet = SetUnitsCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetUnits:
-      packet = GetUnitsRT()
+      if return_type:
+        packet = GetUnitsRT()
+      else:
+        packet = GetUnitsCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetSystemStatus:
-      packet = GetSystemStatusRT()
+      if return_type:
+        packet = GetSystemStatusRT()
+      else:
+        packet = GetSystemStatusCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetMeasurementStatusInfo:
-      packet = GetMeasurementStatusInfoRT()
+      if return_type:
+        packet = GetMeasurementStatusInfoRT()
+      else:
+        packet = GetMeasurementStatusInfoCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetTrackerStatus:
-      packet = GetTrackerStatusRT()
+      if return_type:
+        packet = GetTrackerStatusRT()
+      else:
+        packet = GetTrackerStatusCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_SetReflector:
-      packet = SetReflectorRT()
+      if return_type:
+        packet = SetReflectorRT()
+      else:
+        packet = SetReflectorCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetReflectors:
-      packet = GetReflectorsRT()
+      if return_type:
+        packet = GetReflectorsRT()
+      else:
+        packet = GetReflectorsCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetReflector:
-      packet = GetReflectorRT()
+      if return_type:
+        packet = GetReflectorRT()
+      else:
+        packet = GetReflectorCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_SetEnvironmentParams:
-      packet = SetEnvironmentParamsRT()
+      if return_type:
+        packet = SetEnvironmentParamsRT()
+      else:
+        packet = SetEnvironmentParamsCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetEnvironmentParams:
-      packet = GetEnvironmentParamsRT()
+      if return_type:
+        packet = GetEnvironmentParamsRT()
+      else:
+        packet = GetEnvironmentParamsCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_SetRefractionParams:
-      packet = SetRefractionParamsRT()
+      if return_type:
+        packet = SetRefractionParamsRT()
+      else:
+        packet = SetRefractionParamsCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetRefractionParams:
-      packet = GetRefractionParamsRT()
+      if return_type:
+        packet = GetRefractionParamsRT()
+      else:
+        packet = GetRefractionParamsCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_SetStationOrientationParams:
-      packet = SetStationOrientationParamsRT()
+      if return_type:
+        packet = SetStationOrientationParamsRT()
+      else:
+        packet = SetStationOrientationParamsCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetStationOrientationParams:
-      packet = GetStationOrientationParamsRT()
+      if return_type:
+        packet = GetStationOrientationParamsRT()
+      else:
+        packet = GetStationOrientationParamsCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_SetTransformationParams:
-      packet = SetTransformationParamsRT()
+      if return_type:
+        packet = SetTransformationParamsRT()
+      else:
+        packet = SetTransformationParamsCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetTransformationParams:
-      packet = GetTransformationParamsRT()
+      if return_type:
+        packet = GetTransformationParamsRT()
+      else:
+        packet = GetTransformationParamsCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GoPosition:
-      packet = GoPositionRT()
+      if return_type:
+        packet = GoPositionRT()
+      else:
+        packet = GoPositionCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetDirection:
-      packet = GetDirectionRT()
+      if return_type:
+        packet = GetDirectionRT()
+      else:
+        packet = GetDirectionCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GoPositionHVD:
-      packet = GoPositionHVDRT()
+      if return_type:
+        packet = GoPositionHVDRT()
+      else:
+        packet = GoPositionHVDCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_PointLaser:
-      packet = PointLaserRT()
+      if return_type:
+        packet = PointLaserRT()
+      else:
+        packet = PointLaserCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_PositionRelativeHV:
-      packet = PositionRelativeHVRT()
+      if return_type:
+        packet = PositionRelativeHVRT()
+      else:
+        packet = PositionRelativeHVCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_PointLaserHVD:
-      packet = PointLaserHVDRT()
+      if return_type:
+        packet = PointLaserHVDRT()
+      else:
+        packet = PointLaserHVDCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_MoveHV:
-      packet = MoveHVRT()
+      if return_type:
+        packet = MoveHVRT()
+      else:
+        packet = MoveHVCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GoNivelPosition:
-      packet = GoNivelPositionRT()
+      if return_type:
+        packet = GoNivelPositionRT()
+      else:
+        packet = GoNivelPositionCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_CallOrientToGravity:
-      packet = CallOrientToGravityRT()
+      if return_type:
+        packet = CallOrientToGravityRT()
+      else:
+        packet = CallOrientToGravityCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_SetCompensation:
-      packet = SetCompensationRT()
+      if return_type:
+        packet = SetCompensationRT()
+      else:
+        packet = SetCompensationCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetCompensation:
-      packet = GetCompensationRT()
+      if return_type:
+        packet = GetCompensationRT()
+      else:
+        packet = GetCompensationCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetCompensations:
-      packet = GetCompensationsRT()
+      if return_type:
+        packet = GetCompensationsRT()
+      else:
+        packet = GetCompensationsCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetCompensations2:
-      packet = GetCompensations2RT()
+      if return_type:
+        packet = GetCompensations2RT()
+      else:
+        packet = GetCompensations2CT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_SetStatisticMode:
-      packet = SetStatisticModeRT()
+      if return_type:
+        packet = SetStatisticModeRT()
+      else:
+        packet = SetStatisticModeCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetStatisticMode:
-      packet = GetStatisticModeRT()
+      if return_type:
+        packet = GetStatisticModeRT()
+      else:
+        packet = GetStatisticModeCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_SetCameraParams:
-      packet = SetCameraParamsRT()
+      if return_type:
+        packet = SetCameraParamsRT()
+      else:
+        packet = SetCameraParamsCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetCameraParams:
-      packet = GetCameraParamsRT()
+      if return_type:
+        packet = GetCameraParamsRT()
+      else:
+        packet = GetCameraParamsCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetADMInfo2:
-      packet = GetADMInfo2RT()
+      if return_type:
+        packet = GetADMInfo2RT()
+      else:
+        packet = GetADMInfo2CT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetNivelInfo:
-      packet = GetNivelInfoRT()
+      if return_type:
+        packet = GetNivelInfoRT()
+      else:
+        packet = GetNivelInfoCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetNivelInfo2:
-      packet = GetNivelInfo2RT()
+      if return_type:
+        packet = GetNivelInfo2RT()
+      else:
+        packet = GetNivelInfo2CT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetTPInfo:
-      packet = GetTPInfoRT()
+      if return_type:
+        packet = GetTPInfoRT()
+      else:
+        packet = GetTPInfoCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetTrackerInfo:
-      packet = GetTrackerInfoRT()
+      if return_type:
+        packet = GetTrackerInfoRT()
+      else:
+        packet = GetTrackerInfoCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetATRInfo:
-      packet = GetATRInfoRT()
+      if return_type:
+        packet = GetATRInfoRT()
+      else:
+        packet = GetATRInfoCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_SetLaserOnTimer:
-      packet = SetLaserOnTimerRT()
+      if return_type:
+        packet = SetLaserOnTimerRT()
+      else:
+        packet = SetLaserOnTimerCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetLaserOnTimer:
-      packet = GetLaserOnTimerRT()
+      if return_type:
+        packet = GetLaserOnTimerRT()
+      else:
+        packet = GetLaserOnTimerCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetFace:
-      packet = GetFaceRT()
+      if return_type:
+        packet = GetFaceRT()
+      else:
+        packet = GetFaceCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_SetLongSystemParameter:
-      packet = SetLongSystemParamRT()
+      if return_type:
+        packet = SetLongSystemParamRT()
+      else:
+        packet = SetLongSystemParamCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetLongSystemParameter:
-      packet = GetLongSystemParamRT()
+      if return_type:
+        packet = GetLongSystemParamRT()
+      else:
+        packet = GetLongSystemParamCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetObjectTemperature:
-      packet = GetObjectTemperatureRT()
+      if return_type:
+        packet = GetObjectTemperatureRT()
+      else:
+        packet = GetObjectTemperatureCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_ClearCommandQueue:
-      packet = ClearCommandQueueRT()
+      if return_type:
+        packet = ClearCommandQueueRT()
+      else:
+        packet = ClearCommandQueueCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetOverviewCameraInfo:
-      packet = GetOverviewCameraInfoRT()
+      if return_type:
+        packet = GetOverviewCameraInfoRT()
+      else:
+        packet = GetOverviewCameraInfoCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetDoubleSystemParameter:
-      packet = GetDoubleSystemParamRT()
+      if return_type:
+        packet = GetDoubleSystemParamRT()
+      else:
+        packet = GetDoubleSystemParamCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_SetDoubleSystemParameter:
-      packet = SetDoubleSystemParamRT()
+      if return_type:
+        packet = SetDoubleSystemParamRT()
+      else:
+        packet = SetDoubleSystemParamCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_RestoreStartupConditions:
-      packet = RestoreStartupConditionsRT()
+      if return_type:
+        packet = RestoreStartupConditionsRT()
+      else:
+        packet = RestoreStartupConditionsCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GoAndMeasure:
-      packet = GoAndMeasureRT()
+      if return_type:
+        packet = GoAndMeasureRT()
+      else:
+        packet = GoAndMeasureCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetMeteoStationInfo:
-      packet = GetMeteoStationInfoRT()
+      if return_type:
+        packet = GetMeteoStationInfoRT()
+      else:
+        packet = GetMeteoStationInfoCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetAT4xxInfo:
-      packet = GetAT4xxInfoRT()
+      if return_type:
+        packet = GetAT4xxInfoRT()
+      else:
+        packet = GetAT4xxInfoCT()
     elif packet_header.type == ES_DT_Command and packet_info.command == ES_C_GetSystemSoftwareVersion:
-      packet = GetSystemSoftwareVersionRT()
+      if return_type:
+        packet = GetSystemSoftwareVersionRT()
+      else:
+        packet = GetSystemSoftwareVersionCT()
 
     packet.unpack(data)
     return packet

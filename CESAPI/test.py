@@ -244,7 +244,8 @@ class LTSimulator(threading.Thread):
             elif packet_info.command == ES_C_GetCompensations2:
               packet = GetCompensations2CT()
               packet.unpack(data)
-              packets = (packet, GetCompensations2RT())
+              # packets = (packet, GetCompensations2RT())
+              packets = (packet, GetCompensationsRT())
             elif packet_info.command == ES_C_SetStatisticMode:
               packet = SetStatisticModeCT()
               packet.unpack(data)
@@ -391,13 +392,16 @@ class LTSimulator(threading.Thread):
                 if self.initialized:
                     thing.trackerProcessorStatus = ES_TPS_Initialized  # ES_TrackerProcessorStatus
                 else:
-                    thing.trackerProcessorStatus = ES_TPS_CompensationSet  # ES_TrackerProcessorStatus
+                    thing.trackerProcessorStatus = ES_TPS_Booted  # ES_TrackerProcessorStatus
+                thing.lastResultStatus = 0
                 thing.laserStatus = ES_LPS_LaserReady  # ES_LaserProcessorStatus
                 thing.admStatus = ES_AS_ADMReady  # ES_ADMStatus
-                thing.esVersionNumber.iMajorVersionNumber = 100  # ESVersionNumberT
-                thing.esVersionNumber.iMinorVersionNumber = 2
-                thing.esVersionNumber.iBuildNumber = 35530
+                thing.esVersionNumber.iMajorVersionNumber = 3  # ESVersionNumberT
+                thing.esVersionNumber.iMinorVersionNumber = 8
+                thing.esVersionNumber.iBuildNumber = 900
                 thing.weatherMonitorStatus = ES_WMS_ReadOnly  # ES_WeatherMonitorStatus
+                thing.lFlagsValue = 0
+                thing.lTrackerSerialNumber = 390793
             elif thing.packetInfo.command == ES_C_GetTrackerStatus:
                 thing.trackerStatus = ES_TS_Ready  # ES_TrackerStatus
             elif thing.packetInfo.command == ES_C_GetEnvironmentParams:
@@ -409,7 +413,7 @@ class LTSimulator(threading.Thread):
                 thing.iInternalReflectorId = 0
                 thing.targetType = ES_TT_Unknown  # ES_TargetType
                 thing.dSurfaceOffset = 3.14
-                thing.cReflectorName = 'Rocinante'.encode()  # 32 bytes max
+                thing.cReflectorName = 'Rocinante'.encode('UTF-16')[2:]  # 32 bytes max
             elif thing.packetInfo.command == ES_C_GetFace:
                 thing.trackerFace = ES_TF_Face1
             elif thing.packetInfo.command == ES_C_GetMeasurementStatusInfo:
@@ -417,10 +421,10 @@ class LTSimulator(threading.Thread):
             elif thing.packetInfo.command == ES_C_GetCompensations2:
                 thing.iTotalCompensations = 0
                 thing.iInternalCompensationId = 0
-                thing.cTrackerCompensationName = 'DarkSword'.encode()  # 32 bytes max
-                thing.cTrackerCompensationComment = 'There are bats in the belfry.'.encode()  # 128 bytes max
-                thing.cADMCompensationName = 'Talladega'.encode()  # 32 bytes max
-                thing.cADMCompensationComment = " I'm all jacked up on Mountain Dew!".encode()  # 128 bytes max
+                thing.cTrackerCompensationName = 'DarkSword'.encode('UTF-16')[2:]  # 32 2-byte characters max
+                thing.cTrackerCompensationComment = 'There are bats in the belfry.'.encode('UTF-16')[2:]  # 128 2-byte characters max
+                thing.cADMCompensationName = 'Talladega'.encode('UTF-16')[2:]  # 32 bytes max
+                # thing.cADMCompensationComment = "I'm all jacked up on Mountain Dew!".encode('UTF-16')[2:]  # 128 2-byte characters max
                 thing.bHasMeasurementCameraMounted = 0
                 thing.bIsActive = 0
             elif thing.packetInfo.command == ES_C_GetRefractionParams:
@@ -475,9 +479,9 @@ class LTSimulator(threading.Thread):
                             if command_packet.packetInfo.command == ES_C_StartNivelMeasurement:
                                 nivel_result = NivelResultT()
                                 nivel_result.nivelStatus = ES_NS_AllOK  # ES_NivelStatus
-                                nivel_result.dXTilt = 0.0
-                                nivel_result.dYTilt = 0.0
-                                nivel_result.dNivelTemperature = 22.0
+                                nivel_result.dXTilt = -0.00010258352964641699
+                                nivel_result.dYTilt = -3.748960724910917e-05
+                                nivel_result.dNivelTemperature = 0.0
                                 return_data = nivel_result.pack()
                                 connection.sendall(return_data)
                                 logger.debug('Laser tracker nivel result data out {}.'.format(return_data))

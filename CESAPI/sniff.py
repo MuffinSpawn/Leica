@@ -43,7 +43,7 @@ class ClientRelay(threading.Thread):
                     header_data = self.packet_sniffer.client_connection.recv(PACKET_HEADER_SIZE)
                     if len(header_data) == 0:
                         logger.debug('Laser Tracker Packet Sniffer is waiting to receive client data...')
-                        time.sleep(0.2)
+                        # time.sleep(0.2)
                         continue
                     logger.debug('header data: {}'.format(header_data))
                     packet_header = PacketHeaderT()
@@ -87,19 +87,32 @@ class LaserTrackerRelay(threading.Thread):
             while self.__running:
                 # Relay client -> LT packets
                 unread_count = self.packet_sniffer.lt_stream.unreadCount()
-                logger.debug('Unread packet count: {}'.format(unread_count))
+                # logger.debug('Unread packet count: {}'.format(unread_count))
                 while self.__running and unread_count > 0:
                     packet = self.packet_sniffer.lt_stream.read()
                     logger.info('Recevied {} packet from the LASER TRACKER'.format(str(packet.__class__)[22:-2]))
 
                     data = packet.packet
                     logger.debug('Received {} byte packet from the LASER TRACKER:\n{}'.format(len(data), data))
-                    
+
                     if packet.__class__ == NivelResultT:
                         logger.info('Nivel Status: {}'.format(packet.nivelStatus))  # ES_NivelStatus
                         logger.info('Nivel X-Tilt: {}'.format(packet.dXTilt))
                         logger.info('Nivel Y-Tilt: {}'.format(packet.dYTilt))
                         logger.info('Nivel Temperature: {}'.format(packet.dNivelTemperature))
+                    elif packet.__class__ == GetSystemStatusRT:
+                        logger.info('Last Result Status: {}'.format(packet.lastResultStatus))
+                        logger.info('Tracker Processor Status: {}'.format(packet.trackerProcessorStatus))
+                        logger.info('Laser Processor Status: {}'.format(packet.laserStatus))
+                        logger.info('ADM Status: {}'.format(packet.admStatus))
+                        logger.info('ES Version: {}.{} Build {}'.format(packet.esVersionNumber.iMajorVersionNumber, packet.esVersionNumber.iMinorVersionNumber, packet.esVersionNumber.iBuildNumber))
+                        logger.info('Weather Monitor Status: {}'.format(packet.weatherMonitorStatus))
+                        logger.info('Flags: {}'.format(packet.lFlagsValue))
+                        logger.info('Serial Number: {}'.format(packet.lTrackerSerialNumber))
+                    elif packet.__class__ == SystemStatusChangeT:
+                        logger.info('Status Change: {}'.format(packet.systemStatusChange))
+                    elif packet.__class__ == SetUnitsRT:
+                        logger.info('Status: {}'.format(packet.packetInfo.status))
 
                     self.packet_sniffer.client_connection.sendall(data)
                     logger.debug('sent {} byte packet to the client'.format(len(data)))
@@ -112,7 +125,7 @@ class LaserTrackerRelay(threading.Thread):
                             logger.info('Byte mismatch at index {}. Expected:\n{}\nActual:\n{}'.format(index, data, bad_data))
 
                     unread_count = self.packet_sniffer.lt_stream.unreadCount()
-                time.sleep(0.5)
+                time.sleep(0.1)
 
         except ConnectionResetError:
             logger.debug('Laser Tracker connection was reset.')
@@ -158,10 +171,10 @@ class LTPacketSniffer(threading.Thread):
                     try:
                         logger.debug('Waiting for client to connect...')
                         self.client_connection, client_address = sock.accept()
+                        self.client_connection.settimeout(1)
                     except socket.timeout as ste:
                         logger.debug('Client connection timed out.')
                         pass
-                self.client_connection.settimeout(1)
                 logger.debug('Laser Tracker Packet Sniffer accepted a client connection from {}.'.format(client_address))
         
                 lt_connection = Connection()
